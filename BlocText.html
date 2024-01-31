@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="Res/fichier-2.svg" type="image/x-icon">  
+<title>DeskWritter - PrismTools</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background-color: rgb(255, 255, 255);
+    }
+    #top-bar {
+      background-color: rgba(168, 168, 168, 0.801);
+      height: 5%;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding-left: 10px;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+      touch-action: manipulation; /* Empêche le zoom sur les appareils tactiles */
+      overflow: hidden; /* Cache tout contenu qui déborde de la div */
+    }
+    #tool-contener-line1 {
+        display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+    #tool-contener-line2 {
+        display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+    #middle-bar {
+      background-color: rgb(255, 255, 255);
+      height: 13%;
+      touch-action: manipulation; /* Empêche le zoom sur les appareils tactiles */
+      overflow: hidden; /* Cache tout contenu qui déborde de la div */
+    }
+    #content {
+      background: linear-gradient(to bottom, rgba(206, 206, 206, 0.521), rgba(104, 104, 104, 0.301));
+      height: 82%;
+      border-top-right-radius: 20px;
+      border-top-left-radius: 20px;
+      z-index: 9999;
+      touch-action: manipulation; /* Empêche le zoom sur les appareils tactiles */
+      overflow: auto; /* Cache tout contenu qui déborde de la div */
+    }
+    .button-with-image {
+      height: 45px;
+      width: 45px;
+      background-color: transparent;
+      border-color: transparent;
+      cursor: pointer;
+      display: inline-block;
+      margin-right: 10px;
+    }
+    .button-with-image img {
+      height: 30px;
+      width: 30px;
+    }
+    .class1-button {
+      height: 40px;
+      width: 40px;
+      background-color: transparent;
+      border-color: transparent;
+      cursor: pointer;
+      display: inline-block;
+      margin-left: 5px;
+      height: 40px;
+    }
+    .class1-button img {
+      height: 20px;
+      width: 20px;
+    }
+    #tool-container-text {
+        background-color: white;
+        width: 250px;
+        height: 40px;
+        border-radius: 50px;
+        margin-top: 10px;
+        margin-left: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+    }
+    .class2-button {
+      height: 40px;
+      width: 40px;
+      background-color: transparent;
+      border-color: transparent;
+      cursor: pointer;
+      display: inline-block;
+      margin-left: 5px;
+    }
+    .class2-button img {
+      height: 20px;
+      width: 20px;
+    }
+    #tool-container-text-adv {
+        background-color: white;
+        width: 153px;
+        border-radius: 50px;
+        margin-top: 10px;
+        margin-left: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+    }
+    #font-family {
+        background-color: white;
+        width: 200px;
+        border-radius: 50px;
+        margin-top: 10px;
+        margin-left: 10px;
+        height: 40px;
+        border-color: transparent;
+        text-align: center;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+    }
+    #font-size {
+        background-color: white;
+        width: 80px;
+        border-radius: 50px;
+        margin-top: 10px;
+        margin-left: 10px;
+        height: 40px;
+        border-color: transparent;
+        text-align: center;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+    }
+    #editor {
+            background-color: #ffffff;
+            border: 30px solid #ffffff;
+            padding: 15px;
+            font-family: Arial, sans-serif;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+            border-radius: 20px;
+            width: 40%; /* Largeur A4 en millimètres */
+            height: 100%; /* Hauteur A4 en millimètres */
+            margin-top: 50px;
+            margin-left: 50%;
+            transform: translateX(-50%);
+            
+        }
+      .class2-button-solo {
+      height: 40px;
+      width: 40px;
+      margin-top: 15px;
+      background-color: transparent;
+      border-color: transparent;
+      cursor: pointer;
+      display: inline-block;
+    }
+    .class2-button-solo img {
+      height: 20px;
+      width: 20px;
+    }
+    #apply-stand {
+      margin-left: 12px;
+    }
+    #apply-stand-new-line {
+      margin-left: 6px;
+    }
+    #tool-container-color {
+      background-color: white;
+      width: 310px;
+      border-radius: 50px;
+      margin-top: 10px;
+      margin-left: 10px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+      padding: 7.5px;
+    }
+    .class1-color-button {
+      height: 25px;
+      width: 25px;
+      margin-left: 5px;
+      border-radius: 50px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+      border-color: transparent;
+    }
+    #black {
+      background-color: black;
+    }
+    #red {
+      background-color: rgb(202, 48, 48);
+    }
+    #orange {
+      background-color: rgb(243, 162, 10);
+    }
+    #yellow {
+      background-color: rgb(235, 235, 0);
+    }
+    #green {
+      background-color: rgb(0, 134, 0);
+    }
+    #bluef {
+      background-color: rgb(18, 18, 131);
+    }
+    #bluec {
+      background-color: rgb(20, 141, 172);
+    }
+    #pink {
+      background-color: pink;
+    }
+    #another {
+      background: radial-gradient(circle, rgb(7, 165, 177), rgb(191, 219, 159), rgb(201, 223, 7));
+    }
+    #zoom-contener {
+      background-color: rgba(255, 255, 255, 0.507);
+      width: 300px;
+      border-radius: 50px;
+      margin-top: 10px;
+      margin-left: 10px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+      padding: 7.5px;
+      height: 30px;
+      position: absolute;
+      bottom: 10px;
+      right: 35px;
+      z-index: 9999;
+    }
+    .barre-zoom {
+      position: absolute;
+      width: 60%;
+      left: 55px;
+      top: 13px;
+    }
+
+    #valeur-zoom {
+      position: absolute;
+      top: 14px;
+      right: 13px;
+    }
+    #zoom-image {
+      position: absolute;
+      top: 13px;
+      left: 20px;
+      height: 20px;
+      width: 20px;
+      opacity: 0.5;
+    }
+    #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+        }
+
+        #loader img {
+            width: 15%;
+        }
+
+        .bottom-content {
+            text-align: center;
+            margin: 20px 0;
+            position: absolute;
+            bottom: 0;
+        }
+        .modal {
+  display: none; /* Initialement cachée */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #ECEFF1; /* Fond semi-transparent */
+  z-index: 9999; /* Au-dessus du reste du contenu */
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 10% auto; /* Centrage vertical et horizontal */
+  padding: 20px;
+  border-radius: 5px;
+  max-width: 20%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+.container h1 {
+            text-align: center;
+            font-size: 160%;
+        }
+        .container h2 {
+          margin-top: -10px;
+            text-align: center;
+            font-size: 100%;
+        }
+        .container input {
+            width: 95%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: none;
+            background: #eee;
+            margin-top: 5%;
+        }
+
+        .container button {
+            width: 30%;
+            padding: 10px;
+            border: none;
+            background: #ff3333;
+            color: white;
+            cursor: pointer;
+        }
+
+        .container a {
+            color: rgb(0, 0, 0);
+            text-decoration: underline;
+            cursor: pointer;
+            border: none;
+        }
+        #createaccnt {
+          width: 50%;
+            padding: 10px;
+            border: none;
+            color: #ff3333;
+            background-color: transparent;
+            cursor: pointer;
+            text-align: left;
+        }
+        .buttons-container {
+    display: flex;
+    justify-content: space-between; /* Alignement horizontal au centre */
+    align-items: center; /* Alignement vertical au centre si nécessaire */
+    margin-top: 10%;
+    margin-bottom: 5%;
+}
+#image_logo {
+    margin-left: 50%;
+    transform: translateX(-50%);
+}
+#emailDisplayAt2 {
+    text-align: center;
+}
+#emailText {
+    color: grey;
+    text-align: left;
+    font-size: 12px;
+}
+  </style>
+</head>
+<body>
+  <div id="loader">
+    <img src="Res/fichier-2.svg">
+    <div class="bottom-content">
+        <img src="Res/logo-text-big.png">
+    </div>
+</div>
+  <div id="top-bar">
+    <button class="button-with-image"><img src="Res/applications.png" alt="Image 1"></button>
+    <button id="save" class="button-with-image"><img src="Res/save.png" alt="Image 2"></button>
+    <button id="open" class="button-with-image"><img src="Res/open.png" alt="Image 4"></button>
+    <input type="file" id="file-input" style="display: none;">
+    <button class="button-with-image"><img src="Res/settings-sliders.png" alt="Image 3"></button>
+    <button class="button-with-image" onclick="openModal()"><img src="Res/profile-user.png" alt="connexion au service"></button>
+
+</div>
+<div id="middle-bar">
+<div id="tool-contener-line1">
+    <div id="tool-container-text-adv">
+        <button class="class2-button"><img src="Res/copy.png" alt="img"></button>
+        <button class="class2-button"><img src="Res/paste.png" alt="img"></button>
+        <button class="class2-button"><img src="Res/scissors.png" alt="img"></button>
+    </div>
+    <select id="font-family">
+      <option value="Arial">Arial</option>
+      <option value="Times New Roman">Times New Roman</option>
+      <option value="Courier New">Courier New</option>
+      <option value="Verdana">Verdana</option>
+      <option value="Georgia">Georgia</option>
+      <option value="Tahoma">Tahoma</option>
+      <option value="Helvetica">Helvetica</option>
+      <option value="Palatino">Palatino</option>
+      <option value="Calibri">Calibri</option>
+      <option value="Lucida Sans">Lucida Sans</option>
+      <option value="Impact">Impact</option>
+      <option value="Comic Sans MS">Comic Sans MS</option>
+      <option value="Trebuchet MS">Trebuchet MS</option>
+      <option value="Garamond">Garamond</option>
+      <option value="Book Antiqua">Book Antiqua</option>
+      <option value="Century Gothic">Century Gothic</option>
+      <option value="Futura">Futura</option>
+      <option value="Myriad Pro">Myriad Pro</option>
+      <option value="Baskerville">Baskerville</option>
+      <option value="Rockwell">Rockwell</option>
+      <option value="Franklin Gothic">Franklin Gothic</option>
+      <option value="Copperplate">Copperplate</option>
+      <option value="Segoe UI">Segoe UI</option>
+      <option value="Consolas">Consolas</option>
+      <option value="Cambria">Cambria</option>
+      <option value="Brush Script">Brush Script</option>
+      <option vaue="Monospace">Monospace</option>
+      <option value="Roboto">Roboto</option>
+      <option value="Open Sans">Open Sans</option>
+      <option value="Lato">Lato</option>
+      <!-- autres polices ici -->
+  </select>
+  <select id="font-size">
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+      <option value="11">11</option>
+      <option value="12">12</option>
+      <option value="14">14</option>
+      <option value="16">16</option>
+      <option value="20">20</option>
+      <option value="22">22</option>
+      <option value="24">24</option>
+      <option value="26">26</option>
+      <option value="28">28</option>
+      <option value="36">36</option>
+      <option value="48">48</option>
+      <option value="72">72</option>
+  </select>
+  <button id="apply-stand" class="class2-button-solo"><img src="Res/bold.png" alt="img"></button>
+  <button class="class2-button-solo"><img src="Res/italic.png" alt="img"></button>
+  <button class="class2-button-solo"><img src="Res/underline.png" alt="img"></button>
+</div>
+<div id="tool-contener-line2">
+  <button id="apply-stand-new-line" class="class2-button-solo"><img src="Res/print.png" alt="img"></button>
+  <button class="class2-button-solo"><img src="Res/eraser.png" alt="img"></button>
+  <div id="tool-container-text">
+    <button class="class1-button"><img src="Res/align-left.png" alt="img"></button>
+    <button class="class1-button"><img src="Res/align-center.png" alt="img"></button>
+    <button class="class1-button"><img src="Res/align-right.png" alt="img"></button>
+    <button class="class1-button"><img src="Res/exposant.png" alt="img"></button>
+    <button class="class1-button"><img src="Res/indice.png" alt="img"></button>
+</div>
+<div id="tool-container-color">
+  <button id="black" class="class1-color-button" data-color="black"></button>
+  <button id="red" class="class1-color-button" data-color="red"></button>
+  <button id="orange" class="class1-color-button" data-color="orange"></button>
+  <button id="yellow" class="class1-color-button" data-color="yellow"></button>
+  <button id="green" class="class1-color-button" data-color="green"></button>
+  <button id="bluec" class="class1-color-button" data-color="blue"></button>
+  <button id="bluef" class="class1-color-button" data-color="blue"></button>
+  <button id="pink" class="class1-color-button" data-color="pink"></button>
+  <button id="another" class="class1-color-button"></button>
+  <input type="color" id="custom-color-picker" style="display: none;">
+</div>
+</div>
+</div>
+  <div id="content">
+    <div id="zoom-contener">
+      <img id="zoom-image" src="Res/magnifier.png" alt="Zomm1">
+      <input type="range" min="50" max="200" value="100" class="barre-zoom" id="zoomBar">
+      <span id="valeur-zoom">100%</span>
+    </div>
+    <div id="editor" contenteditable="true"></div>
+  </div>
+  <div id="modal" class="modal">
+    <div class="modal-content">
+<div id="message">
+    <div class="container">
+    <img id="image_logo" src="Res/logo-text-small-100px.png">
+    <h1>Connexion - PRISMID</h1>
+    <h2>Accedez a vos service PRISM</h2>
+      <form id="emailForm">
+          <input type="email" id="email" placeholder="Adresse e-mail" required>
+          <p id="emailText">Déconnectez-vous après chaque utilisation, surtout sur des appareils partagés, pour <a href="https://live-prism.web.app/security">sécuriser votre compte</a>.</p>
+          <div class="buttons-container">
+          <button class="btn-down" id="createaccnt" type="button" onclick="redirectToCreateAccount()">Créer un compte</button>
+          <button class="btn-down" id="nextstep" type="button" onclick="nextStep('email')">Suivant</button>
+        </div>
+      </form>
+      <form id="passwordForm" style="display: none;">
+          <div id="emailDisplayAt2"></div>
+          <input type="password" id="password" placeholder="Mot de passe" required>
+          <p id="emailText">Vous allez être redirigé sur BlocText</p>
+          <div class="buttons-container">
+          <button class="btn-down" id="createaccnt" type="button" onclick="resetPassword()">Mot de passe oublié ?</button>
+          <button class="btn-down" type="button" onclick="signIn()">Se connecter</button>
+        </div>
+      </form>
+    </div>
+    </div>
+</div>
+<script>
+//-----------------------------------------------------------------------Gestion de la connection a prismID-----------------------------------------------
+    // JavaScript pour contrôler l'affichage de la fenêtre modale
+    var modal = document.getElementById('modal');
+    
+    // Fonction pour afficher la fenêtre modale
+    function openModal() {
+      modal.style.display = 'block';
+    }
+    
+    // Fonction pour fermer la fenêtre modale
+    function closeModal() {
+      modal.style.display = 'none';
+    }
+    
+    // Fermer la fenêtre modale si l'utilisateur clique en dehors de celle-ci
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = 'none';
+      }
+    }
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-auth.js"></script>
+    <script>
+        // Configurez votre projet Firebase ici
+        var firebaseConfig = {
+            apiKey: "AIzaSyAqvHUxMhKKBgpZ1TSjwlh6FHP9OVpYkKk",
+            authDomain: "prism-project-id.firebaseapp.com",
+            projectId: "prism-project-id"
+        };
+
+        // Initialisez Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        function resetPassword() {
+    var email = document.getElementById('email').value;
+    var auth = firebase.auth();
+    var statusMessage = document.getElementById('statusMessage');
+
+    auth.sendPasswordResetEmail(email)
+        .then(function() {
+            // Email de réinitialisation envoyé avec succès
+            statusMessage.textContent = "Un lien de réinitialisation de mot de passe a été envoyé à votre adresse e-mail.";
+        })
+        .catch(function(error) {
+            // Gestion des erreurs
+            statusMessage.textContent = "Erreur lors de l'envoi du lien de réinitialisation : " + error.message;
+        });
+}
+
+        function nextStep(step) {
+            if (step === 'email') {
+              document.getElementById('nextstep').textContent = 'Patientez...'
+              setTimeout(function() {
+                var emailInput = document.getElementById('email');
+                if (emailInput.checkValidity()) {
+                    var email = emailInput.value;
+                    document.getElementById('emailForm').style.display = 'none';
+                    document.getElementById('passwordForm').style.display = 'block';
+                    document.getElementById('emailDisplayAt2').textContent = 'Bienvenue :\n' + email;
+                } else {
+                    alert('Veuillez entrer une adresse e-mail valide.');
+                }
+              }, 2430); //Pour éviter un nombre trop important de requette
+            }
+        }
+
+        function signIn() {
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
+
+            if (!email || !password) {
+                alert('Veuillez entrer une adresse e-mail et un mot de passe.');
+                return;
+            }
+
+            // Utilisez Firebase pour vérifier l'e-mail et le mot de passe
+            firebase.auth().signInWithEmailAndPassword(email, password)
+                .then(function(user) {
+                    // L'authentification a réussi, vous pouvez rediriger l'utilisateur vers la page appropriée
+                    redirectToSourcePage(email);
+                })
+                .catch(function(error) {
+                    // En cas d'échec de l'authentification, affichez un message d'erreur
+                    alert('Échec de l\'authentification : ' + error.message);
+                });
+        }
+
+        function redirectToCreateAccount() {
+            window.location.href = "Create-UserFirebase.html";
+        }
+
+        // Récupérer les paramètres de l'URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const sourceParam = urlParams.get('source');
+        var buttonToRemove = document.getElementById('Conn-btn');
+        var emailDisplay = document.getElementById('emailDisplay');
+        // Fonction pour rediriger en fonction de la source
+        function redirectToSourcePage(email) {
+            closeModal();
+        }
+    </script>
+  <script>
+    //------------------------------------------------------IMPRESSION-----------------------------------------------------------
+    const printButton = document.getElementById('apply-stand-new-line');
+    printButton.addEventListener('click', () => {
+            const printContent = document.getElementById('editor').innerHTML;
+            const printWindow = window.open('', '', 'width=600,height=600');
+            printWindow.document.open();
+            printWindow.document.write('<html><head><title>Impression</title></head><body>');
+            printWindow.document.write(printContent);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+            printWindow.close();
+        });
+    //---------------------------------------------------ADVANCETEXTOPTION-----------------------------------------------------------
+    // Sélection des boutons
+    const alignLeftButton = document.querySelector('.class1-button:nth-of-type(1)');
+    const alignCenterButton = document.querySelector('.class1-button:nth-of-type(2)');
+    const alignRightButton = document.querySelector('.class1-button:nth-of-type(3)');
+    const superscriptButton = document.querySelector('.class1-button:nth-of-type(4)');
+    const subscriptButton = document.querySelector('.class1-button:nth-of-type(5)');
+
+    // Fonction pour récupérer la sélection de texte
+    function getSelectedText() {
+      return window.getSelection().toString();
+    }
+
+    // Écouteurs d'événements pour chaque bouton
+    alignLeftButton.addEventListener('click', () => {
+      document.execCommand('justifyLeft', false, null);
+    });
+
+    alignCenterButton.addEventListener('click', () => {
+      document.execCommand('justifyCenter', false, null);
+    });
+
+    alignRightButton.addEventListener('click', () => {
+      document.execCommand('justifyRight', false, null);
+    });
+
+    superscriptButton.addEventListener('click', () => {
+      const selectedText = getSelectedText();
+      if (selectedText) {
+        document.execCommand('superscript', false, null);
+      }
+    });
+
+    subscriptButton.addEventListener('click', () => {
+      const selectedText = getSelectedText();
+      if (selectedText) {
+        document.execCommand('subscript', false, null);
+      }
+    });
+    //-------------------------------------------------COPY/CUT/PAST-----------------------------------------------------------------
+    // Sélection des boutons de la classe 2
+    const copyButton = document.querySelector('.class2-button:nth-of-type(1)');
+    const pasteButton = document.querySelector('.class2-button:nth-of-type(2)');
+    const cutButton = document.querySelector('.class2-button:nth-of-type(3)');
+
+    // Écouteurs d'événements pour chaque bouton
+    copyButton.addEventListener('click', () => {
+    const selectedText = getSelectedText();
+    if (selectedText) {
+      document.execCommand('copy');
+    }
+    });
+
+    pasteButton.addEventListener('click', () => {
+      document.execCommand('paste');
+    });
+
+    cutButton.addEventListener('click', () => {
+      const selectedText = getSelectedText();
+      if (selectedText) {
+        document.execCommand('cut');
+      }
+    });
+    //-----------------------------------------------BOLT/ITALIC/UNDERLINE----------------------------------------------------------
+    // Sélection des boutons de la classe2-button-solo
+    const boldButton = document.getElementById('apply-stand');
+    const italicButton = document.querySelector('.class2-button-solo:nth-of-type(2)');
+    const underlineButton = document.querySelector('.class2-button-solo:nth-of-type(3)');
+
+    // Fonction pour vérifier si le texte est mis en forme
+    function isApplied(command) {
+      return document.queryCommandState(command);
+    }
+
+    // Écouteurs d'événements pour chaque bouton
+    boldButton.addEventListener('click', () => {
+    const selectedText = getSelectedText();
+      if (selectedText) {
+        document.execCommand('bold');
+      }
+    });
+
+    italicButton.addEventListener('click', () => {
+      const selectedText = getSelectedText();
+      if (selectedText) {
+        document.execCommand('italic');
+      }
+    });
+
+    underlineButton.addEventListener('click', () => {
+      const selectedText = getSelectedText();
+      if (selectedText) {
+        document.execCommand('underline');
+      }
+    });
+    //-------------------------------------------------Taille de police-------------------------------------
+    // Sélection des menus déroulants
+    const fontFamilySelect = document.getElementById('font-family');
+    const fontSizeSelect = document.getElementById('font-size');
+
+    // Écouteurs d'événements pour chaque menu déroulant
+    fontFamilySelect.addEventListener('change', () => {
+      const selectedFont = fontFamilySelect.value;
+      document.execCommand('fontName', false, selectedFont);
+    });
+
+    fontSizeSelect.addEventListener('change', () => {
+      const selectedSize = fontSizeSelect.value;
+      document.execCommand('fontSize', false, selectedSize);
+    });
+    //-------------------------------------------------Save-------------------------------------------------
+    const saveButton = document.getElementById('save');
+const openButton = document.getElementById('open');
+const fileInput = document.getElementById('file-input');
+const editor = document.getElementById('editor');
+
+saveButton.addEventListener('click', () => {
+  const podxContent = editor.innerHTML;
+  const blob = new Blob([podxContent], { type: 'application/podx' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'Document.podx';
+  a.click();
+  URL.revokeObjectURL(url);
+  adjustEditorHeight()
+});
+
+openButton.addEventListener('click', () => {
+  fileInput.click();
+  adjustEditorHeight()
+});
+
+fileInput.addEventListener('change', () => {
+  const file = fileInput.files[0];
+  const reader = new FileReader();
+  adjustEditorHeight()
+  reader.onload = (event) => {
+    const podxContent = event.target.result;
+    editor.innerHTML = podxContent;
+  };
+  reader.readAsText(file);
+  adjustEditorHeight()
+});
+
+//--------------------------------------------------color--------------------------------------------------------
+const colorButtons = document.querySelectorAll('.class1-color-button');
+const anotherColorButton = document.getElementById('another');
+const customColorPicker = document.getElementById('custom-color-picker');
+
+colorButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    const color = button.dataset.color;
+    applyColorToSelection(color);
+  });
+});
+
+anotherColorButton.addEventListener('click', () => {
+  customColorPicker.click();
+});
+
+customColorPicker.addEventListener('input', () => {
+  const color = customColorPicker.value;
+  applyColorToSelection(color);
+});
+
+function applyColorToSelection(color) {
+  const selection = window.getSelection();
+  if (selection.rangeCount > 0) {
+    const range = selection.getRangeAt(0);
+    const span = document.createElement('span');
+    span.style.color = color;
+    range.surroundContents(span);
+  }
+}
+//---------------------------------------------------------------------ZOOM----------------------------------------
+document.addEventListener('DOMContentLoaded', function() {
+  var editor = document.getElementById('editor');
+  var zoomBar = document.getElementById('zoomBar');
+  var valeurZoom = document.getElementById('valeur-zoom');
+
+  zoomBar.addEventListener('input', function() {
+    var valeur = zoomBar.value;
+    valeurZoom.textContent = valeur + '%';
+    editor.style.transform = 'scale(' + valeur / 100 + ') translateX(-50%)'; // Appliquer le zoom et le centrage horizontal à la div de l'éditeur
+    editor.style.marginLeft = '50%'; // Centrer horizontalement l'éditeur
+  });
+});
+//--------------------------------------------GESTION PAGE----------------------------------------------------------
+let previousHeight = editor.scrollHeight;
+
+function adjustEditorHeight() {
+  const currentHeight = editor.scrollHeight;
+
+  if (currentHeight !== previousHeight) {
+    editor.style.height = 'fit-content';
+    previousHeight = currentHeight;
+  }
+}
+
+// Appelez la fonction pour ajuster la hauteur au chargement initial et à chaque modification du contenu
+window.addEventListener('DOMContentLoaded', adjustEditorHeight);
+editor.addEventListener('input', adjustEditorHeight);
+
+//---------------------------------------------Gestion du loader------------------------------------------------------
+setTimeout(function() {
+        var loader = document.getElementById('loader');
+        loader.style.display = 'none';
+        }, 1230);
+  </script>
+</body>
+</html>

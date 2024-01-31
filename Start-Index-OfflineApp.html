@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            background-image: url('Res/5006030.jpg'); /* Remplacez 'chemin/vers/votre/image.jpg' par le chemin de votre image */
+            background-size: cover; /* Ajuste la taille de l'image pour couvrir tout l'arrière-plan */
+            background-repeat: no-repeat; /* Empêche la répétition de l'image */
+            background-attachment: fixed; /* Fixe l'image en place (scrolle avec le contenu) */
+        }
+
+        .sidebar {
+            background-color: #858585; /* Couleur grise claire pour la barre de gauche */
+            color: #333; /* Couleur du texte dans la barre de gauche */
+            width: 50px; /* Ajustez la largeur selon vos besoins */
+            padding: 10px;
+            position: fixed; /* Fixer la barre latérale */
+            height: 100%; /* S'étend jusqu'en bas de la page */
+            display: flex;
+            flex-direction: column;
+            z-index: 9999;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin: 10px 0;
+        }
+
+        .sidebar ul li img {
+            width: 50px; /* Ajustez la taille des logos d'application selon vos besoins */
+            cursor: pointer;
+        }
+
+        .content-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin-left: 50px; /* Évite de masquer la barre latérale */
+        }
+
+        .top-bar {
+            background-color: #616161; /* Couleur légèrement plus foncée pour la barre du haut */
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-bar img {
+            width: 100px; /* Ajustez la taille du logo selon vos besoins */
+            margin-left: 25px;
+        }
+
+        #search-box {
+            border-radius: 5px;
+            border-color: transparent;
+            padding: 5px;
+            font-size: 16px;
+            position: absolute;
+            left: 50%; /* Placez la barre de recherche à 50% de la largeur de la page */
+            transform: translateX(-50%); /* Décalez-la de 50% de sa propre largeur vers la gauche pour la centrer */
+            width: 20%;
+            background-color: #9c9c9c;
+        }
+
+        .main-content {
+            flex: 1;
+        }
+        .tab-button-menu img {
+            width: 35px;
+            height: 35px;
+        }
+        #menu-tab {
+            width: 40px;
+            height: 40px;
+            background-color: transparent;
+            border-color: transparent;
+            cursor: pointer
+        }
+        .btnapp img{
+                width: 34px;
+                height: 34px;
+        }
+        .btnapp {
+            background-color: transparent;
+            border-color: transparent;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+        #main-content img {
+            width: 100%;
+            height: 100%;
+            
+        }
+        .welcome-message {
+            text-align: center;
+            color: #fff;
+            background: #ffffff79;
+            width: 100%;
+        }
+
+        .welcome-message h1 {
+            font-size: 24px;
+        }
+
+        .welcome-message p {
+            font-size: 16px;
+        }
+
+        .start-button {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .start-button button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .carousel-container {
+            width: 100%; /* Ajustez la largeur du carrousel selon vos besoins */
+            margin: 0 auto;
+            
+            position: relative;
+            overflow: hidden;
+            background-color: #ffffff79;
+            
+        }
+        .carousel-container h1 {
+            position: relative;
+            margin-left: 2.5%;
+            color: #fff;
+            font-size: 24px;
+        }
+
+        .carousel {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            align-items: center; /* Alignement horizontal au centre */
+        }
+
+        .template {
+            width: 10%; /* Ajustez la largeur selon vos besoins */
+            height: 10%;
+            border-radius: 10px;
+            background: #ececec8e; /* Fond blanc */
+            padding: 20px;
+            text-align: center;
+            margin-left: 50px;
+            align-items: center;
+        }
+
+        .template img {
+            width: 70%; /* Ajustez la taille de l'image selon vos besoins */
+            border-radius: 10px;
+        }
+
+        .logo {
+            background: #8888888c; /* Fond gris */
+            width: 100%; /* Ajustez la taille de la case grise */
+            height: 50px; /* Ajustez la taille de la case grise */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            margin-top: 9px; /* Marge pour l'espacement */
+        }
+
+        .logo img {
+            width: 30px; /* Ajustez la taille du logo à l'intérieur de la case grise */
+        }
+        .logo p {
+            margin-left: 7px;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        .prev-btn {
+            left: 10px;
+        }
+
+        .next-btn {
+            right: 10px;
+        }
+        .degrade-top {
+            height: 50%;
+            background: linear-gradient(to bottom, transparent, #ffffff79);
+        }
+        .bottom-color {
+            position: fixed;
+            width: 100%;
+            height: 120%;
+            background: #ffffff79;
+        }
+        #serv-button-cloud {
+            width: 8%; /* Ajustez la largeur selon vos besoins */
+            height: 10%;
+            border-radius: 10px;
+            background: #ececec8e; /* Fond blanc */
+            padding: 20px;
+            text-align: center;
+            margin-left: 50px;
+            align-items: center;
+            border-color: transparent;
+        }
+        #serv-button-connection {
+            width: 8%; /* Ajustez la largeur selon vos besoins */
+            height: 10%;
+            border-radius: 10px;
+            background: #ececec8e; /* Fond blanc */
+            padding: 20px;
+            text-align: center;
+            margin-left: 50px;
+            align-items: center;
+            border-color: transparent;
+        }
+        #serv-button-cloud-img {
+            width: 100%;
+            height: auto;
+            padding: 5px;
+            margin-top: 5%;
+        }
+        #serv-button-connection-img {
+            width: 100%;
+            height: auto;
+            padding: 5px;
+            margin-top: 5%;
+        }
+        #download-winbtn {
+            width: 5%; /* Ajustez la largeur selon vos besoins */
+            height: 5%;
+            border-radius: 10px;
+            background: #ececec8e; /* Fond blanc */
+            margin-left: 50px;
+            align-items: center;
+            border-color: transparent;
+            
+        }
+        #download-winbtn-img {
+            width: 90%;
+            height: auto;
+            padding: 5px;
+            margin-top: 8%;
+        }
+    </style>
+    <title>DeskTools - PrismOS</title>
+</head>
+<link rel="icon" href="Res/logo-DeskTools.png" type="image/x-icon">
+<body>
+    <div class="sidebar">
+        <button class="tab-button-menu" id="menu-tab"><img src="Res/menu.png"></button>
+        <ul>
+            
+            <li><img src="Res/home.png" alt="Menu"></li>
+            <button class="btnapp" id="app1"><img src="Res/fichier (2).png" alt="Application 1"></button>
+            <button class="btnapp" id="app2"><img src="Res/fichier (3).png" alt="Application 2"></button>
+            <button class="btnapp" id="app3"><img src="Res/fichier (4).png" alt="Application 3"></button>
+            <button class="btnapp" id="app4"><img src="Res/fichier (5).png" alt="Application 4"></button>
+        </ul>
+    </div>
+    <div class="content-wrapper">
+        <div class="top-bar">
+            <div class="logo-bar">
+                <img src="Res/logo-text-big.png" alt="Logo Logiciel">
+            </div>
+            <input type="text" id="search-box" placeholder="Rechercher (Alt + K)">
+        </div>
+        <div class="main-content">
+            <div class="degrade-top">
+            </div>
+            <div class="carousel-container">
+                <h1>Créer un nouveau fichier à partir d'un model :</h1>
+                <div class="carousel">
+                    <div class="template">
+                        <img id="to-writter" src="Res/page.png" alt="Image du Template">
+                        <p>Nouveau fichier texte</p>
+                        <div class="logo">
+                            <img id="to-writter" src="Res/fichier (2).png" alt="Logo">
+                            <p>DeskWritter</p>
+                        </div>
+                    </div>
+                    <div class="template">
+                        <img id="to-code" src="Res/code.png" alt="Image du Template">
+                        <p>Nouveau code</p>
+                        <div class="logo">
+                            <img id="to-code" src="Res/fichier (4).png" alt="Logo">
+                            <p>DeskCode</p>
+                        </div>
+                    </div>
+                    <div class="template">
+                        <img src="Res/pic.png" alt="Image du Template">
+                        <p>Nouvelle image 1960x1450</p>
+                        <div class="logo">
+                            <img src="Res/fichier (5).png" alt="Logo">
+                            <p>Pic'Edit</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-color">
+                
+            </div>
+        </div>
+    </div>
+</body>
+<script> 
+document.addEventListener('DOMContentLoaded', function() {
+    // Sélectionnez les éléments à rediriger
+    var toWritter = document.getElementById('to-writter');
+    var toCode = document.getElementById('to-code');
+    var tocodeleft = document.getElementById('app3');
+    var towritterleft = document.getElementById('app1');
+    var toCloud = document.getElementById('serv-button-cloud');
+    var toConne = document.getElementById('serv-button-connection');
+    var userEmail = getUrlParameter('email');
+
+    // Ajoutez des gestionnaires d'événements pour la redirection lors du clic
+    toWritter.addEventListener('click', function() {
+        if (userEmail) {
+            window.location.href = 'BlocText.html?email='+userEmail;
+        } else {
+            window.location.href = 'BlocText.html';
+        }
+        
+    });
+    // Ajoutez des gestionnaires d'événements pour la redirection lors du clic
+    towritterleft.addEventListener('click', function() {
+        if (userEmail) {
+            window.location.href = 'BlocText.html?email='+userEmail;
+        } else {
+            window.location.href = 'BlocText.html';
+        }
+        
+    });
+
+    toCode.addEventListener('click', function() {
+        if (userEmail) {
+            window.location.href = 'DeskCode.html?email='+userEmail;
+        } else {
+            window.location.href = 'DeskCode.html';
+        }
+        
+    });
+    tocodeleft.addEventListener('click', function() {
+        if (userEmail) {
+            window.location.href = 'DeskCode.html?email='+userEmail;
+        } else {
+            window.location.href = 'DeskCode.html';
+        }
+        
+    });
+});
+    const app1Button = document.getElementById('app1');
+    let currentIndex = 0;
+        const templates = document.querySelectorAll('.template');
+
+        function moveSlide(direction) {
+            currentIndex += direction;
+            if (currentIndex < 0) currentIndex = templates.length - 1;
+            if (currentIndex >= templates.length) currentIndex = 0;
+
+            const transformValue = `translateX(-${currentIndex * 100}%)`;
+            document.querySelector('.carousel').style.transform = transformValue;
+        }
+
+    document.addEventListener('keydown', function (event) {
+            if (event.altKey && event.key === 'k') {
+                // Récupérez l'élément de la barre de recherche
+                const searchBox = document.getElementById('search-box');
+        
+                // Placez le focus sur la barre de recherche
+                searchBox.focus();
+        
+                // Sélectionnez tout le texte dans la barre de recherche (si vous le souhaitez)
+                searchBox.select();
+        
+                // Vous pouvez également ajouter ici le code pour déclencher la recherche avec le contenu actuel de la barre de recherche.
+                // Par exemple, en appelant une fonction qui effectue la recherche.
+            }
+        });
+    // Fonction pour récupérer le paramètre d'URL par son nom
+    function getUrlParameter(name) {
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+            var results = regex.exec(window.location.href);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+</script>
+<script>
+    // Fonction pour déclencher le téléchargement du fichier setup.exe
+    function downloadSetupWin() {
+        // Créer un élément <a> temporaire
+        var link = document.createElement('a');
+        link.href = 'Res/setup.zip'; // Chemin vers votre fichier setup.exe
+        link.download = 'setup.zip'; // Nom du fichier à télécharger
+
+        // Simuler un clic sur le lien pour démarrer le téléchargement
+        document.body.appendChild(link);
+        link.click();
+
+        // Nettoyer l'élément créé
+        document.body.removeChild(link);
+    }
+</script>
+</html>
