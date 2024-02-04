@@ -27,6 +27,7 @@
         display: flex;
       justify-content: flex-start;
       align-items: center;
+      
     }
     #tool-contener-line2 {
         display: flex;
@@ -68,7 +69,6 @@
       border-color: transparent;
       cursor: pointer;
       display: inline-block;
-      margin-left: 5px;
       height: 40px;
     }
     .class1-button img {
@@ -77,7 +77,7 @@
     }
     #tool-container-text {
         background-color: white;
-        width: 250px;
+        width: 230px;
         height: 40px;
         border-radius: 50px;
         margin-top: 10px;
@@ -134,11 +134,12 @@
             font-family: Arial, sans-serif;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
             border-radius: 20px;
-            width: 40%; /* Largeur A4 en millimètres */
-            height: 100%; /* Hauteur A4 en millimètres */
+            width: 210mm;
+            height: 297mm;
             margin-top: 50px;
             margin-left: 50%;
             transform: translateX(-50%);
+            overflow: hidden;
             
         }
       .class2-button-solo {
@@ -261,25 +262,7 @@
             position: absolute;
             bottom: 0;
         }
-        .modal {
-  display: none; /* Initialement cachée */
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #ECEFF1; /* Fond semi-transparent */
-  z-index: 9999; /* Au-dessus du reste du contenu */
-}
-
-.modal-content {
-  background-color: #fefefe;
-  margin: 10% auto; /* Centrage vertical et horizontal */
-  padding: 20px;
-  border-radius: 5px;
-  max-width: 20%;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-}
+        
 .container h1 {
             text-align: center;
             font-size: 160%;
@@ -341,6 +324,91 @@
     text-align: left;
     font-size: 12px;
 }
+#tool-container-text-b {
+        background-color: white;
+        width: 90px;
+        height: 40px;
+        border-radius: 50px;
+        margin-top: 10px;
+        margin-left: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+    }
+    #menu {
+            position: fixed;
+            top: 0;
+            left: -18%;
+            width: 18%;
+            height: 100%;
+            background-color: #fff;
+            transition: left 0.3s;
+            z-index: 9999;
+        }
+    #emailDisplay {
+      display: flex;
+    justify-content: space-between; /* Alignement horizontal au centre */
+    align-items: center; /* Alignement vertical au centre si nécessaire */
+    margin-top: 10px;
+    margin-left: 7px;
+    margin-right: 7px;
+    }
+        /* Style pour la fenêtre modale */
+.modal {
+  display: none; /* Par défaut, la fenêtre modale est cachée */
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.5); /* Fond semi-transparent */
+}
+
+/* Contenu de la fenêtre modale */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 50%; /* Largeur de la fenêtre modale */
+  height: 50%;
+}
+
+/* Style pour le bouton de fermeture */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+/* Ajoutez du style pour les onglets et le contenu des onglets */
+.tabcontent {
+  display: none;
+}
+
+/* Style actif pour les onglets */
+.tabcontent.active {
+  display: block;
+}
+
+/* Style pour les boutons des onglets */
+.tablinks {
+  background-color: #f2f2f2;
+  border: none;
+  cursor: pointer;
+  padding: 10px 20px;
+}
+
+.tablinks:hover {
+  background-color: #ddd;
+}
   </style>
 </head>
 <body>
@@ -351,12 +419,19 @@
     </div>
 </div>
   <div id="top-bar">
-    <button class="button-with-image"><img src="Res/applications.png" alt="Image 1"></button>
+    <button class="button-with-image" id="menudev"><img src="Res/applications.png" alt="Image 1"></button>
     <button id="save" class="button-with-image"><img src="Res/save.png" alt="Image 2"></button>
     <button id="open" class="button-with-image"><img src="Res/open.png" alt="Image 4"></button>
     <input type="file" id="file-input" style="display: none;">
-    <button class="button-with-image"><img src="Res/settings-sliders.png" alt="Image 3"></button>
-    <button class="button-with-image" onclick="openModal()"><img src="Res/profile-user.png" alt="connexion au service"></button>
+    <button class="button-with-image" id="openModalBtn"><img src="Res/settings-sliders.png" alt="Image 3"></button>
+    <button class="button-with-image" onclick="openPopup()"><img src="Res/profile-user.png" alt="connexion au service"></button>
+    <div id="menu" class="hidden">
+      <div id="emailDisplay">
+          <button id="menu-return-button" onclick="window.location.href = 'Start-Index-OfflineApp.html';">Retour au menu principale</button>
+          <button id="Conn-btn" onclick="openPopup(); toggleMenu();">Connectez vous</button>
+      </div>
+      
+  </div>
 
 </div>
 <div id="middle-bar">
@@ -419,12 +494,18 @@
   <button id="apply-stand" class="class2-button-solo"><img src="Res/bold.png" alt="img"></button>
   <button class="class2-button-solo"><img src="Res/italic.png" alt="img"></button>
   <button class="class2-button-solo"><img src="Res/underline.png" alt="img"></button>
+  <div id="tool-container-text-b">
+    <button class="class1-button" id="unordered-list-button"><img src="Res/lister.png" alt="img"></button>
+    <button class="class1-button" id="ordered-list-button"><img src="Res/listern-um.png" alt="img"></button>
+    
+  </div>
 </div>
+
 <div id="tool-contener-line2">
   <button id="apply-stand-new-line" class="class2-button-solo"><img src="Res/print.png" alt="img"></button>
   <button class="class2-button-solo"><img src="Res/eraser.png" alt="img"></button>
   <div id="tool-container-text">
-    <button class="class1-button"><img src="Res/align-left.png" alt="img"></button>
+    <button class="class1-button" style="margin-left: 5px;"><img src="Res/align-left.png" alt="img"></button>
     <button class="class1-button"><img src="Res/align-center.png" alt="img"></button>
     <button class="class1-button"><img src="Res/align-right.png" alt="img"></button>
     <button class="class1-button"><img src="Res/exposant.png" alt="img"></button>
@@ -442,7 +523,9 @@
   <button id="another" class="class1-color-button"></button>
   <input type="color" id="custom-color-picker" style="display: none;">
 </div>
+
 </div>
+
 </div>
   <div id="content">
     <div id="zoom-contener">
@@ -452,150 +535,174 @@
     </div>
     <div id="editor" contenteditable="true"></div>
   </div>
-  <div id="modal" class="modal">
+  <div id="myModal" class="modal">
     <div class="modal-content">
-<div id="message">
-    <div class="container">
-    <img id="image_logo" src="Res/logo-text-small-100px.png">
-    <h1>Connexion - PRISMID</h1>
-    <h2>Accedez a vos service PRISM</h2>
-      <form id="emailForm">
-          <input type="email" id="email" placeholder="Adresse e-mail" required>
-          <p id="emailText">Déconnectez-vous après chaque utilisation, surtout sur des appareils partagés, pour <a href="https://live-prism.web.app/security">sécuriser votre compte</a>.</p>
-          <div class="buttons-container">
-          <button class="btn-down" id="createaccnt" type="button" onclick="redirectToCreateAccount()">Créer un compte</button>
-          <button class="btn-down" id="nextstep" type="button" onclick="nextStep('email')">Suivant</button>
-        </div>
-      </form>
-      <form id="passwordForm" style="display: none;">
-          <div id="emailDisplayAt2"></div>
-          <input type="password" id="password" placeholder="Mot de passe" required>
-          <p id="emailText">Vous allez être redirigé sur BlocText</p>
-          <div class="buttons-container">
-          <button class="btn-down" id="createaccnt" type="button" onclick="resetPassword()">Mot de passe oublié ?</button>
-          <button class="btn-down" type="button" onclick="signIn()">Se connecter</button>
-        </div>
-      </form>
+      <span class="close">&times;</span>
+      
+      <!-- Onglets -->
+      <div class="tabs">
+        <button class="tablinks" onclick="openTab(event, 'Page')">Page</button>
+        <button class="tablinks" onclick="openTab(event, 'Insertion')">Insertion</button>
+        <button class="tablinks" onclick="openTab(event, 'MiseEnPage')">Mise en page</button>
+        <button class="tablinks" onclick="openTab(event, 'Autre')">Autre</button>
+      </div>
+      
+      <!-- Contenu des onglets -->
+      <div id="Page" class="tabcontent">
+        <h3>Operation de pa page</h3>
+        <button id="generatePdfBtn">Générer PDF</button>
+        <!-- Ajoutez ici le contenu de l'onglet "Page" -->
+      </div>
+      
+      <div id="Insertion" class="tabcontent">
+        <h3>Insertion</h3>
+        <h4>Inserer un tableau</h4>
+        <label for="num-rows">Nombre de lignes :</label>
+        <input type="number" id="num-rows" min="1" value="3"><br>
+        <label for="num-cols">Nombre de colonnes :</label>
+        <input type="number" id="num-cols" min="1" value="3"><br>
+        <button id="insert-table-btn">Insérer un tableau</button>
+        <h4>Inserer une image :</h4>
+        <input type="file" id="image-input" accept="image/*">
+        <button id="insert-image-btn">Insérer une image</button>
+        <p>ATTENTION : Si votre image est plus grande que la zone de texte, elle sera automatiquement cachée</p>
+      </div>
+      
+      <div id="MiseEnPage" class="tabcontent">
+        <h3>Mise en page</h3>
+      <h4>Orientation de la page :</h4>
+      <label><input type="radio" name="orientation" value="portrait" checked> Portrait</label>
+      <label><input type="radio" name="orientation" value="landscape"> Paysage</label>
+      <p>Le type de feuille est actuellement 'A4'</p>
+      <h4>Format de papier :</h4>
+      <select id="paper-size">
+        <option value="A4">A4</option>
+        <option value="A5">A5</option>
+        <option value="Letter">Lettre US</option>
+        <option value="Legal">Legal US</option>
+      </select>
+      <h4>Marges :</h4>
+      <select id="margin-size">
+        <option value="narrow">Étroite (marge de 10mm)</option>
+        <option value="normal" selected>Normale (marge de 20mm)</option>
+        <option value="wide">Large (marge de 30mm)</option>
+        <!-- Ajoutez d'autres options de marges si nécessaire -->
+      </select>
+      <ul>
+        <li><strong>Étroite :</strong> Une marge de 10 mm.</li>
+        <li><strong>Normale :</strong> Une marge de 20 mm.</li>
+        <li><strong>Large :</strong> Une marge de 30 mm.</li>
+      </ul>
+      
+      </div>
+      
+      <div id="Autre" class="tabcontent">
+        <h3>Autre</h3>
+        <!-- Ajoutez ici le contenu de l'onglet "Autre" -->
+      </div>
     </div>
-    </div>
-</div>
+  </div>
 <script>
 //-----------------------------------------------------------------------Gestion de la connection a prismID-----------------------------------------------
-    // JavaScript pour contrôler l'affichage de la fenêtre modale
-    var modal = document.getElementById('modal');
-    
-    // Fonction pour afficher la fenêtre modale
-    function openModal() {
-      modal.style.display = 'block';
-    }
-    
-    // Fonction pour fermer la fenêtre modale
-    function closeModal() {
-      modal.style.display = 'none';
-    }
-    
-    // Fermer la fenêtre modale si l'utilisateur clique en dehors de celle-ci
-    window.onclick = function(event) {
-      if (event.target == modal) {
-        modal.style.display = 'none';
+      var popupWindow;
+  
+      // Fonction pour ouvrir la fenêtre contextuelle
+      function openPopup() {
+          var width = 500;
+          var height = 600;
+          var left = (window.innerWidth - width) / 2;
+          var top = (window.innerHeight - height) / 2;
+          var options = 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + width + ', height=' + height + ', top=' + top + ', left=' + left;
+  
+          popupWindow = window.open('ConnectionService-FirebasePupUp.html', 'Popup', options);
       }
-    }
-    </script>
-    <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-auth.js"></script>
-    <script>
-        // Configurez votre projet Firebase ici
-        var firebaseConfig = {
-            apiKey: "AIzaSyAqvHUxMhKKBgpZ1TSjwlh6FHP9OVpYkKk",
-            authDomain: "prism-project-id.firebaseapp.com",
-            projectId: "prism-project-id"
-        };
-
-        // Initialisez Firebase
-        firebase.initializeApp(firebaseConfig);
-
-        function resetPassword() {
-    var email = document.getElementById('email').value;
-    var auth = firebase.auth();
-    var statusMessage = document.getElementById('statusMessage');
-
-    auth.sendPasswordResetEmail(email)
-        .then(function() {
-            // Email de réinitialisation envoyé avec succès
-            statusMessage.textContent = "Un lien de réinitialisation de mot de passe a été envoyé à votre adresse e-mail.";
-        })
-        .catch(function(error) {
-            // Gestion des erreurs
-            statusMessage.textContent = "Erreur lors de l'envoi du lien de réinitialisation : " + error.message;
-        });
-}
-
-        function nextStep(step) {
-            if (step === 'email') {
-              document.getElementById('nextstep').textContent = 'Patientez...'
-              setTimeout(function() {
-                var emailInput = document.getElementById('email');
-                if (emailInput.checkValidity()) {
-                    var email = emailInput.value;
-                    document.getElementById('emailForm').style.display = 'none';
-                    document.getElementById('passwordForm').style.display = 'block';
-                    document.getElementById('emailDisplayAt2').textContent = 'Bienvenue :\n' + email;
-                } else {
-                    alert('Veuillez entrer une adresse e-mail valide.');
-                }
-              }, 2430); //Pour éviter un nombre trop important de requette
-            }
-        }
-
-        function signIn() {
-            var email = document.getElementById('email').value;
-            var password = document.getElementById('password').value;
-
-            if (!email || !password) {
-                alert('Veuillez entrer une adresse e-mail et un mot de passe.');
-                return;
-            }
-
-            // Utilisez Firebase pour vérifier l'e-mail et le mot de passe
-            firebase.auth().signInWithEmailAndPassword(email, password)
-                .then(function(user) {
-                    // L'authentification a réussi, vous pouvez rediriger l'utilisateur vers la page appropriée
-                    redirectToSourcePage(email);
-                })
-                .catch(function(error) {
-                    // En cas d'échec de l'authentification, affichez un message d'erreur
-                    alert('Échec de l\'authentification : ' + error.message);
-                });
-        }
-
-        function redirectToCreateAccount() {
-            window.location.href = "Create-UserFirebase.html";
-        }
-
-        // Récupérer les paramètres de l'URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const sourceParam = urlParams.get('source');
-        var buttonToRemove = document.getElementById('Conn-btn');
-        var emailDisplay = document.getElementById('emailDisplay');
-        // Fonction pour rediriger en fonction de la source
-        function redirectToSourcePage(email) {
-            closeModal();
-        }
-    </script>
+  
+      // Fonction appelée après la connexion réussie dans la fenêtre contextuelle
+      function onLoginSuccess(userInfo) {
+          // Extrayez l'e-mail de l'utilisateur
+          var userEmail = userInfo.email;
+          // Fermez la fenêtre contextuelle après traitement des informations
+          if (popupWindow) {
+              popupWindow.close();
+          }
+      }
+  </script>
   <script>
+    //------------------------------------------------------Gestion menu---------------------------------------------------------
+    const menu = document.getElementById('menu');
+const menudev = document.getElementById('menudev');
+
+menudev.addEventListener('click', (event) => {
+    event.stopPropagation(); // Arrête la propagation de l'événement pour éviter la fermeture immédiate du menu
+    toggleMenu(); // Afficher ou masquer le menu
+});
+
+// Écouter les clics en dehors du menu pour le masquer
+document.addEventListener('click', (event) => {
+    const isClickInsideMenu = menu.contains(event.target);
+    if (!isClickInsideMenu) {
+        menu.style.left = "-18%"; // Masquer le menu si le clic est en dehors du menu
+    }
+});
+
+function toggleMenu() {
+    // Si le menu est actuellement affiché, masquez-le. Sinon, affichez-le.
+    if (menu.style.left === "0px" || menu.style.left === "") {
+        menu.style.left = "-18%"; // Masquer le menu
+    } else {
+        menu.style.left = "0"; // Afficher le menu
+    }
+}
     //------------------------------------------------------IMPRESSION-----------------------------------------------------------
     const printButton = document.getElementById('apply-stand-new-line');
-    printButton.addEventListener('click', () => {
-            const printContent = document.getElementById('editor').innerHTML;
-            const printWindow = window.open('', '', 'width=600,height=600');
-            printWindow.document.open();
-            printWindow.document.write('<html><head><title>Impression</title></head><body>');
-            printWindow.document.write(printContent);
-            printWindow.document.write('</body></html>');
-            printWindow.document.close();
-            printWindow.print();
-            printWindow.close();
-        });
+
+// Ajoutez un écouteur d'événements au bouton d'impression
+printButton.addEventListener('click', () => {
+    const printContent = document.getElementById('editor').innerHTML;
+    const printWindow = window.open('', '', 'width=600,height=600');
+    printWindow.document.open();
+    printWindow.document.write(`
+        <html>
+        <head>
+            <title>Impression</title>
+            <style>
+                @page {
+                    size: ${getPaperSize()} ${getOrientation()}; /* Définir la taille du papier et l'orientation */
+                    margin: ${getMargin()}; /* Définir les marges */
+                }
+                body {
+                    font-size: 12px; /* Définir la taille de la police */
+                    margin: 0; /* Réinitialiser les marges du corps */
+                }
+            </style>
+        </head>
+        <body>
+            ${printContent}
+        </body>
+        </html>
+    `);
+    printWindow.document.close();
+    printWindow.print();
+    printWindow.close();
+});
+
+// Fonction pour obtenir la taille du papier sélectionnée
+function getPaperSize() {
+    const paperSizeSelect = document.getElementById('paper-size');
+    return paperSizeSelect.value;
+}
+
+// Fonction pour obtenir l'orientation sélectionnée
+function getOrientation() {
+    const orientationSelect = document.querySelector('input[name="orientation"]:checked');
+    return orientationSelect.value;
+}
+
+// Fonction pour obtenir les marges sélectionnées
+function getMargin() {
+    const marginSelect = document.getElementById('margin-size');
+    return marginSelect.value + 'mm'; // Suppose que les marges sont en millimètres
+}
     //---------------------------------------------------ADVANCETEXTOPTION-----------------------------------------------------------
     // Sélection des boutons
     const alignLeftButton = document.querySelector('.class1-button:nth-of-type(1)');
@@ -603,6 +710,8 @@
     const alignRightButton = document.querySelector('.class1-button:nth-of-type(3)');
     const superscriptButton = document.querySelector('.class1-button:nth-of-type(4)');
     const subscriptButton = document.querySelector('.class1-button:nth-of-type(5)');
+    const unorderedListButton = document.getElementById('unordered-list-button');
+    const orderedListButton = document.getElementById('ordered-list-button');
 
     // Fonction pour récupérer la sélection de texte
     function getSelectedText() {
@@ -634,6 +743,13 @@
       if (selectedText) {
         document.execCommand('subscript', false, null);
       }
+    });
+    unorderedListButton.addEventListener('click', () => {
+            document.execCommand('insertUnorderedList', false, null);
+        });
+
+    orderedListButton.addEventListener('click', () => {
+            document.execCommand('insertOrderedList', false, null);
     });
     //-------------------------------------------------COPY/CUT/PAST-----------------------------------------------------------------
     // Sélection des boutons de la classe 2
@@ -701,11 +817,15 @@
       const selectedFont = fontFamilySelect.value;
       document.execCommand('fontName', false, selectedFont);
     });
-
     fontSizeSelect.addEventListener('change', () => {
-      const selectedSize = fontSizeSelect.value;
-      document.execCommand('fontSize', false, selectedSize);
-    });
+    const selection = window.getSelection();
+    if (selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        const span = document.createElement('span');
+        span.style.fontSize = fontSizeSelect.value + 'px'; // Ajoutez 'px' à la valeur de la taille de police
+        range.surroundContents(span);
+    }
+});
     //-------------------------------------------------Save-------------------------------------------------
     const saveButton = document.getElementById('save');
 const openButton = document.getElementById('open');
@@ -804,7 +924,222 @@ editor.addEventListener('input', adjustEditorHeight);
 setTimeout(function() {
         var loader = document.getElementById('loader');
         loader.style.display = 'none';
-        }, 1230);
+        }, 0);
+//----------------------------------------------Gestion du modal pour les parametre------------------------------------
+// Fonction pour ouvrir un onglet spécifique
+function openTab(event, tabName) {
+  // Récupère tous les éléments avec la classe "tabcontent" et les masque
+  const tabcontent = document.getElementsByClassName('tabcontent');
+  for (let i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = 'none';
+  }
+
+  // Récupère tous les éléments avec la classe "tablinks" et supprime la classe "active"
+  const tablinks = document.getElementsByClassName('tablinks');
+  for (let i = 0; i < tablinks.length; i++) {
+    tablinks[i].classList.remove('active');
+  }
+
+  // Affiche l'onglet sélectionné et ajoute la classe "active" au bouton de l'onglet sélectionné
+  document.getElementById(tabName).style.display = 'block';
+  event.currentTarget.classList.add('active');
+}
+
+// Événement pour ouvrir la fenêtre modale
+document.getElementById('openModalBtn').addEventListener('click', () => {
+  document.getElementById('myModal').style.display = 'block';
+});
+
+// Événement pour fermer la fenêtre modale
+document.querySelector('.close').addEventListener('click', () => {
+  document.getElementById('myModal').style.display = 'none';
+});
+
+// Événement pour fermer la fenêtre modale en cliquant en dehors de celle-ci
+window.addEventListener('click', (event) => {
+  if (event.target === document.getElementById('myModal')) {
+    document.getElementById('myModal').style.display = 'none';
+  }
+});
+//------------------------------------------Option--------------------------------------------------------------------------------
+//Mise en page
+//-----------------------------------------oriantation-------------------------------------
+function changeOrientationAndPaperSize() {
+  const selectedOrientation = document.querySelector('input[name="orientation"]:checked').value;
+  const selectedPaperSize = document.getElementById('paper-size').value;
+  const editor = document.getElementById('editor');
+  
+  switch (selectedPaperSize) {
+    case 'A4':
+      if (selectedOrientation === 'portrait') {
+        editor.style.width = '210mm';
+        editor.style.height = '297mm';
+      } else if (selectedOrientation === 'landscape') {
+        editor.style.width = '297mm';
+        editor.style.height = '210mm';
+      }
+      break;
+    case 'A5':
+      if (selectedOrientation === 'portrait') {
+        editor.style.width = '148mm';
+        editor.style.height = '210mm';
+      } else if (selectedOrientation === 'landscape') {
+        editor.style.width = '210mm';
+        editor.style.height = '148mm';
+      }
+      break;
+    case 'Letter':
+      if (selectedOrientation === 'portrait') {
+        editor.style.width = '8.5in';
+        editor.style.height = '11in';
+      } else if (selectedOrientation === 'landscape') {
+        editor.style.width = '11in';
+        editor.style.height = '8.5in';
+      }
+      break;
+    case 'Legal':
+      if (selectedOrientation === 'portrait') {
+        editor.style.width = '8.5in';
+        editor.style.height = '14in';
+      } else if (selectedOrientation === 'landscape') {
+        editor.style.width = '14in';
+        editor.style.height = '8.5in';
+      }
+      break;
+    // Ajoutez d'autres cas pour d'autres formats de papier si nécessaire
+    default:
+      break;
+  }
+}
+
+// Événement pour détecter le changement d'orientation et de format de papier
+document.querySelectorAll('input[name="orientation"], #paper-size').forEach((input) => {
+  input.addEventListener('change', changeOrientationAndPaperSize);
+});
+//----------------------------------------------Taille--------------------------------------
+// Fonction pour détecter le changement de format de papier et ajuster la taille de la zone de texte éditable en conséquence
+function changePaperSize() {
+  const selectedPaperSize = document.getElementById('paper-size').value;
+  const editor = document.getElementById('editor');
+  
+  switch (selectedPaperSize) {
+    case 'A4':
+      editor.style.width = '210mm';
+      editor.style.height = '297mm';
+      break;
+    case 'A5':
+      editor.style.width = '148mm';
+      editor.style.height = '210mm';
+      break;
+    case 'Letter':
+      editor.style.width = '8.5in';
+      editor.style.height = '11in';
+      break;
+    case 'Legal':
+      editor.style.width = '8.5in';
+      editor.style.height = '14in';
+      break;
+    // Ajoutez d'autres cas pour d'autres formats de papier si nécessaire
+    default:
+      break;
+  }
+}
+
+// Événement pour détecter le changement de format de papier
+document.getElementById('paper-size').addEventListener('change', changePaperSize);
+//---------------------------------------------marge-----------------------------------------
+// Fonction pour détecter le changement de marges et ajuster la taille de la zone de texte éditable en conséquence
+function changeMarginSize() {
+  const selectedMarginSize = document.getElementById('margin-size').value;
+  const editor = document.getElementById('editor');
+  
+  switch (selectedMarginSize) {
+    case 'narrow':
+      editor.style.padding = '10mm';
+      break;
+    case 'normal':
+      editor.style.padding = '20mm';
+      break;
+    case 'wide':
+      editor.style.padding = '30mm';
+      break;
+    // Ajoutez d'autres cas pour d'autres options de marges si nécessaire
+    default:
+      break;
+  }
+}
+
+// Événement pour détecter le changement de marges
+document.getElementById('margin-size').addEventListener('change', changeMarginSize);
+//-----------------------------------------------Tableau----------------------------------------------
+// Sélectionnez le bouton d'insertion de tableau
+const insertTableButton = document.getElementById('insert-table-btn');
+
+// Ajoutez un écouteur d'événements pour l'insertion de tableau
+insertTableButton.addEventListener('click', () => {
+    // Récupérez le nombre de lignes et de colonnes à partir des champs d'entrée
+    const numRows = parseInt(document.getElementById('num-rows').value);
+    const numCols = parseInt(document.getElementById('num-cols').value);
+
+    // Générez le code HTML pour le tableau en fonction du nombre de lignes et de colonnes
+    let tableHtml = '<table border="1">';
+    for (let i = 0; i < numRows; i++) {
+        tableHtml += '<tr>';
+        for (let j = 0; j < numCols; j++) {
+            tableHtml += '<td>Donnée</td>';
+        }
+        tableHtml += '</tr>';
+    }
+    tableHtml += '</table>';
+
+    // Insérez le tableau dans l'éditeur
+    document.getElementById('editor').insertAdjacentHTML('beforeend', tableHtml);
+});
+//---------------------------------------------------------Image-----------------------------------------------
+// Sélectionnez la zone de texte éditable
+const imageInput = document.getElementById('image-input');
+
+// Ajoutez un écouteur d'événements pour détecter la sélection d'un fichier image
+imageInput.addEventListener('change', () => {
+    const file = imageInput.files[0]; // Obtenez le fichier image sélectionné
+    const reader = new FileReader(); // Créez un objet FileReader pour lire le contenu du fichier
+
+    reader.onload = function(event) {
+        const imageUrl = event.target.result; // Obtenez l'URL de l'image chargée
+
+        // Insérez l'image dans l'éditeur à l'emplacement du curseur
+        const imageHtml = `<img src="${imageUrl}" alt="Image">`;
+        editor.focus(); // Assurez-vous que l'éditeur est sélectionné
+        document.execCommand('insertHTML', false, imageHtml); // Insérez l'image dans l'éditeur
+    };
+
+    reader.readAsDataURL(file); // Lire le contenu du fichier sous forme d'URL de données
+});
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+  <script>
+    //-------------------------------------------------------GEN PDF------------------------------------------
+    document.getElementById('generatePdfBtn').addEventListener('click', () => {
+      const editorContent = document.getElementById('editor').innerHTML;
+
+      // Récupérer la taille du format sélectionnée
+      const paperSize = document.getElementById('paper-size').value;
+      
+      // Récupérer l'orientation sélectionnée
+      const orientation = document.querySelector('input[name="orientation"]:checked').value;
+
+      // Options pour html2pdf
+      const options = {
+  filename: 'document.pdf',
+  image: { type: 'png' }, // Utiliser le format PNG
+  html2canvas: { scale: 2 },
+  jsPDF: { unit: 'mm', format: paperSize, orientation: orientation }
+};
+
+
+      // Générer le PDF
+      html2pdf().from(editorContent).set(options).save();
+    });
   </script>
 </body>
 </html>
