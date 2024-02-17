@@ -10,6 +10,7 @@
       padding: 0;
       height: 100%;
       background-color: rgb(255, 255, 255);
+      overflow: hidden;
     }
     #top-bar {
       background-color: rgba(168, 168, 168, 0.801);
@@ -20,8 +21,8 @@
       padding-left: 10px;
       border-bottom-left-radius: 20px;
       border-bottom-right-radius: 20px;
-      touch-action: manipulation; /* Empêche le zoom sur les appareils tactiles */
-      overflow: hidden; /* Cache tout contenu qui déborde de la div */
+      touch-action: manipulation;
+      overflow: hidden;
     }
     #tool-contener-line1 {
         display: flex;
@@ -37,8 +38,8 @@
     #middle-bar {
       background-color: rgb(255, 255, 255);
       height: 13%;
-      touch-action: manipulation; /* Empêche le zoom sur les appareils tactiles */
-      overflow: hidden; /* Cache tout contenu qui déborde de la div */
+      touch-action: manipulation;
+      overflow: hidden;
     }
     #content {
       background: linear-gradient(to bottom, rgba(206, 206, 206, 0.521), rgba(104, 104, 104, 0.301));
@@ -46,8 +47,8 @@
       border-top-right-radius: 20px;
       border-top-left-radius: 20px;
       z-index: 9999;
-      touch-action: manipulation; /* Empêche le zoom sur les appareils tactiles */
-      overflow: auto; /* Cache tout contenu qui déborde de la div */
+      touch-action: manipulation;
+      overflow: auto;
     }
     .button-with-image {
       height: 45px;
@@ -409,14 +410,102 @@
 .tablinks:hover {
   background-color: #ddd;
 }
+@keyframes grow {
+  0% {
+    transform: scale(0.4);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.imgloaderorg {
+  animation: grow 2s ease-in-out forwards;
+}
+table {
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            resize: both; /* Permet le redimensionnement */
+            overflow: auto; /* Affiche les barres de défilement si nécessaire */
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            resize: both;
+            border: 2px solid transparent; /* Ajoute une bordure pour indiquer que l'image est redimensionnable */
+        }
+        #editor img {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid transparent; /* Ajoute une bordure pour indiquer que l'image est redimensionnable */
+            position: absolute; /* Permet le positionnement absolu */
+            user-select: none; /* Empêche la sélection du texte lors du déplacement de l'image */
+            cursor: grab; /* Curseur indiquant que l'image peut être déplacée */
+        }
+        /* Styles for custom context menu */
+        #custom-menu {
+      display: none;
+      position: absolute;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 8px;
+      box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+      min-width: 200px;
+      border-radius: 10px;
+      z-index: 99999;
+    }
+    #custom-menu ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+    #custom-menu li {
+      display: flex; /* Utiliser flexbox pour aligner les éléments horizontalement */
+      align-items: center; /* Aligner les éléments verticalement */
+      padding: 8px 20px;
+      cursor: pointer;
+    }
+    #custom-menu ul li:hover {
+      background-color: #f0f0f0;
+    }
+    /* Styles for icons */
+    .icon {
+      width: 20px; /* Adjust as needed */
+      height: 20px; /* Adjust as needed */
+      margin-right: 8px;
+    }
+    /* Styles for search bar */
+    #search-bar {
+      width: calc(100% - 20px); /* Adjust for padding */
+      padding: 8px;
+      margin-bottom: 8px;
+      border-radius: 5px;
+      border-style: solid;
+      border-color: gray;
+    }
   </style>
 </head>
 <body>
   <div id="loader">
-    <img src="Res/fichier-2.svg">
+    <img class="imgloaderorg" src="Res/fichier-2.svg">
     <div class="bottom-content">
         <img src="Res/logo-text-big.png">
-    </div>
+    </div> 
+</div>
+<div id="custom-menu">
+  <input type="text" id="search-bar" placeholder="Search..."> <!-- Search bar -->
+  <ul>
+    <li id="menucut"><img src="Res/scissors.png" alt="Icon 1" class="icon"> Couper</li>
+    <li id="menucopy"><img src="Res/copy.png" alt="Icon 1" class="icon"> Copier</li>
+    <li id="menupast"><img src="Res/paste.png" alt="Icon 2" class="icon"> Coller</li>
+    <li id="openModalinster"><img src="Res/image.png" alt="Icon 2" class="icon"> Inserer</li>
+    <li id="openModalpara"><img src="Res/setting.png" alt="Icon 2" class="icon"> Paramètre page</li>
+    <li><img src="Res/link.png" alt="Icon 2" class="icon"> Lien</li>
+    <li><img src="Res/question.png" alt="Icon 2" class="icon"> Aide en ligne</li>
+  </ul>
 </div>
   <div id="top-bar">
     <button class="button-with-image" id="menudev"><img src="Res/applications.png" alt="Image 1"></button>
@@ -442,55 +531,251 @@
         <button class="class2-button"><img src="Res/scissors.png" alt="img"></button>
     </div>
     <select id="font-family">
-      <option value="Arial">Arial</option>
-      <option value="Times New Roman">Times New Roman</option>
-      <option value="Courier New">Courier New</option>
-      <option value="Verdana">Verdana</option>
-      <option value="Georgia">Georgia</option>
-      <option value="Tahoma">Tahoma</option>
-      <option value="Helvetica">Helvetica</option>
-      <option value="Palatino">Palatino</option>
-      <option value="Calibri">Calibri</option>
-      <option value="Lucida Sans">Lucida Sans</option>
-      <option value="Impact">Impact</option>
-      <option value="Comic Sans MS">Comic Sans MS</option>
-      <option value="Trebuchet MS">Trebuchet MS</option>
-      <option value="Garamond">Garamond</option>
-      <option value="Book Antiqua">Book Antiqua</option>
-      <option value="Century Gothic">Century Gothic</option>
-      <option value="Futura">Futura</option>
-      <option value="Myriad Pro">Myriad Pro</option>
-      <option value="Baskerville">Baskerville</option>
-      <option value="Rockwell">Rockwell</option>
-      <option value="Franklin Gothic">Franklin Gothic</option>
-      <option value="Copperplate">Copperplate</option>
-      <option value="Segoe UI">Segoe UI</option>
-      <option value="Consolas">Consolas</option>
-      <option value="Cambria">Cambria</option>
-      <option value="Brush Script">Brush Script</option>
-      <option vaue="Monospace">Monospace</option>
-      <option value="Roboto">Roboto</option>
-      <option value="Open Sans">Open Sans</option>
-      <option value="Lato">Lato</option>
-      <!-- autres polices ici -->
+    <!--C'est long / it's very long-->
+    <option value="Agency FB">Agency FB</option>
+    <option value="Algerian">Algerian</option>
+    <option value="Andalus">Andalus</option>
+    <option value="Arial Narrow">Arial Narrow</option>
+    <option value="Arial Black">Arial Black</option>
+    <option value="Arial Rounded MT Bold">Arial Rounded MT Bold</option>
+    <option value="Bauhaus 93">Bauhaus 93</option>
+    <option value="Bell MT">Bell MT</option>
+    <option value="Berlin Sans FB">Berlin Sans FB</option>
+    <option value="Bernard MT Condensed">Bernard MT Condensed</option>
+    <option value="Blackadder ITC">Blackadder ITC</option>
+    <option value="Bodoni MT">Bodoni MT</option>
+    <option value="Bodoni MT Poster Compressed">Bodoni MT Poster Compressed</option>
+    <option value="Bookshelf Symbol 7">Bookshelf Symbol 7</option>
+    <option value="Bradley Hand ITC">Bradley Hand ITC</option>
+    <option value="Broadway">Broadway</option>
+    <option value="Brush Script MT">Brush Script MT</option>
+    <option value="Bodoni MT">Bodoni MT</option>
+    <option value="Bodoni MT Black">Bodoni MT Black</option>
+    <option value="Bodoni MT Condensed">Bodoni MT Condensed</option>
+    <option value="Bodoni MT Poster Compressed">Bodoni MT Poster Compressed</option>
+    <option value="Book Antiqua">Book Antiqua</option>
+    <option value="Bookman Old Style">Bookman Old Style</option>
+    <option value="Bookshelf Symbol 7">Bookshelf Symbol 7</option>
+    <option value="Bradley Hand ITC">Bradley Hand ITC</option>
+    <option value="Britannic Bold">Britannic Bold</option>
+    <option value="Broadway">Broadway</option>
+    <option value="Brush Script MT">Brush Script MT</option>
+    <option value="Bodoni MT">Bodoni MT</option>
+    <option value="Bodoni MT Black">Bodoni MT Black</option>
+    <option value="Bodoni MT Condensed">Bodoni MT Condensed</option>
+    <option value="Bodoni MT Poster Compressed">Bodoni MT Poster Compressed</option>
+    <option value="Book Antiqua">Book Antiqua</option>
+    <option value="Bookman Old Style">Bookman Old Style</option>
+    <option value="Bookshelf Symbol 7">Bookshelf Symbol 7</option>
+    <option value="Bradley Hand ITC">Bradley Hand ITC</option>
+    <option value="Britannic Bold">Britannic Bold</option>
+    <option value="Broadway">Broadway</option>
+    <option value="Brush Script MT">Brush Script MT</option>
+    <option value="Californian FB">Californian FB</option>
+    <option value="Calisto MT">Calisto MT</option>
+    <option value="Cambria">Cambria</option>
+    <option value="Candara">Candara</option>
+    <option value="Castellar">Castellar</option>
+    <option value="Centaur">Centaur</option>
+    <option value="Century">Century</option>
+    <option value="Century Gothic">Century Gothic</option>
+    <option value="Century Schoolbook">Century Schoolbook</option>
+    <option value="Chiller">Chiller</option>
+    <option value="Colonna MT">Colonna MT</option>
+    <option value="Comic Sans MS">Comic Sans MS</option>
+    <option value="Consolas">Consolas</option>
+    <option value="Constantia">Constantia</option>
+    <option value="Cooper Black">Cooper Black</option>
+    <option value="Copperplate Gothic Bold">Copperplate Gothic Bold</option>
+    <option value="Copperplate Gothic Light">Copperplate Gothic Light</option>
+    <option value="Corbel">Corbel</option>
+    <option value="Cordia New">Cordia New</option>
+    <option value="Courier New">Courier New</option>
+    <option value="Courier Std">Courier Std</option>
+    <option value="Curlz MT">Curlz MT</option>
+    <option value="Curlz MT">Curlz MT</option>
+    <option value="DejaVu Sans">DejaVu Sans</option>
+    <option value="DejaVu Sans Condensed">DejaVu Sans Condensed</option>
+    <option value="DejaVu Sans Light">DejaVu Sans Light</option>
+    <option value="DejaVu Sans Mono">DejaVu Sans Mono</option>
+    <option value="DejaVu Serif">DejaVu Serif</option>
+    <option value="DejaVu Serif Condensed">DejaVu Serif Condensed</option>
+    <option value="Dubai">Dubai</option>
+    <option value="Dubai Light">Dubai Light</option>
+    <option value="Dubai Medium">Dubai Medium</option>
+    <option value="Dubai SemiBold">Dubai SemiBold</option>
+    <option value="Dubai Bold">Dubai Bold</option>
+    <option value="Elephant">Elephant</option>
+    <option value="Engravers MT">Engravers MT</option>
+    <option value="Eras Bold ITC">Eras Bold ITC</option>
+    <option value="Eras Demi ITC">Eras Demi ITC</option>
+    <option value="Eras Light ITC">Eras Light ITC</option>
+    <option value="Eras Medium ITC">Eras Medium ITC</option>
+    <option value="Eras Ultra ITC">Eras Ultra ITC</option>
+    <option value="Felix Titling">Felix Titling</option>
+    <option value="Footlight MT Light">Footlight MT Light</option>
+    <option value="Forte">Forte</option>
+    <option value="Franklin Gothic Book">Franklin Gothic Book</option>
+    <option value="Franklin Gothic Demi">Franklin Gothic Demi</option>
+    <option value="Franklin Gothic Demi Cond">Franklin Gothic Demi Cond</option>
+    <option value="Franklin Gothic Heavy">Franklin Gothic Heavy</option>
+    <option value="Franklin Gothic Medium">Franklin Gothic Medium</option>
+    <option value="Franklin Gothic Medium Cond">Franklin Gothic Medium Cond</option>
+    <option value="Freestyle Script">Freestyle Script</option>
+    <option value="French Script MT">French Script MT</option>
+    <option value="Gabriola">Gabriola</option>
+    <option value="Garamond">Garamond</option>
+    <option value="Gautami">Gautami</option>
+    <option value="Gigi">Gigi</option>
+    <option value="Gill Sans MT">Gill Sans MT</option>
+    <option value="Gill Sans MT Condensed">Gill Sans MT Condensed</option>
+    <option value="Gill Sans MT Ext Condensed Bold">Gill Sans MT Ext Condensed Bold</option>
+    <option value="Gloucester MT Extra Condensed">Gloucester MT Extra Condensed</option>
+    <option value="Goudy Old Style">Goudy Old Style</option>
+    <option value="Goudy Stout">Goudy Stout</option>
+    <option value="Gulim">Gulim</option>
+    <option value="GulimChe">GulimChe</option>
+    <option value="Haettenschweiler">Haettenschweiler</option>
+    <option value="Harlow Solid Italic">Harlow Solid Italic</option>
+    <option value="Harrington">Harrington</option>
+    <option value="High Tower Text">High Tower Text</option>
+    <option value="Impact">Impact</option>
+    <option value="Imprint MT Shadow">Imprint MT Shadow</option>
+    <option value="Informal Roman">Informal Roman</option>
+    <option value="Javanese Text">Javanese Text</option>
+    <option value="Jokerman">Jokerman</option>
+    <option value="Juice ITC">Juice ITC</option>
+    <option value="Kristen ITC">Kristen ITC</option>
+    <option value="Kunstler Script">Kunstler Script</option>
+    <option value="Leelawadee">Leelawadee</option>
+    <option value="Leelawadee UI">Leelawadee UI</option>
+    <option value="Lucida Bright">Lucida Bright</option>
+    <option value="Lucida Calligraphy">Lucida Calligraphy</option>
+    <option value="Lucida Console">Lucida Console</option>
+    <option value="Lucida Fax">Lucida Fax</option>
+    <option value="Lucida Handwriting">Lucida Handwriting</option>
+    <option value="Lucida Sans">Lucida Sans</option>
+    <option value="Lucida Sans Typewriter">Lucida Sans Typewriter</option>
+    <option value="Lucida Sans Unicode">Lucida Sans Unicode</option>
+    <option value="Magneto">Magneto</option>
+    <option value="Maiandra GD">Maiandra GD</option>
+    <option value="Malgun Gothic">Malgun Gothic</option>
+    <option value="Malgun Gothic">Malgun Gothic</option>
+    <option value="Malgun Gothic">Malgun Gothic</option>
+    <option value="Malgun Gothic">Malgun Gothic</option>
+    <option value="Marlett">Marlett</option>
+    <option value="Matura MT Script Capitals">Matura MT Script Capitals</option>
+    <option value="Microsoft Himalaya">Microsoft Himalaya</option>
+    <option value="Microsoft JhengHei">Microsoft JhengHei</option>
+    <option value="Microsoft JhengHei UI">Microsoft JhengHei UI</option>
+    <option value="Microsoft New Tai Lue">Microsoft New Tai Lue</option>
+    <option value="Microsoft PhagsPa">Microsoft PhagsPa</option>
+    <option value="Microsoft Sans Serif">Microsoft Sans Serif</option>
+    <option value="Microsoft Tai Le">Microsoft Tai Le</option>
+    <option value="Microsoft Uighur">Microsoft Uighur</option>
+    <option value="Microsoft YaHei">Microsoft YaHei</option>
+    <option value="Microsoft YaHei UI">Microsoft YaHei UI</option>
+    <option value="Microsoft Yi Baiti">Microsoft Yi Baiti</option>
+    <option value="MingLiU">MingLiU</option>
+    <option value="MingLiU-ExtB">MingLiU-ExtB</option>
+    <option value="MingLiU_HKSCS">MingLiU_HKSCS</option>
+    <option value="MingLiU_HKSCS-ExtB">MingLiU_HKSCS-ExtB</option>
+    <option value="Mistral">Mistral</option>
+    <option value="Modern No. 20">Modern No. 20</option>
+    <option value="Monotype Corsiva">Monotype Corsiva</option>
+    <option value="MS Gothic">MS Gothic</option>
+    <option value="MS Outlook">MS Outlook</option>
+    <option value="MS PGothic">MS PGothic</option>
+    <option value="MS PMincho">MS PMincho</option>
+    <option value="MS Reference Sans Serif">MS Reference Sans Serif</option>
+    <option value="MS Reference Specialty">MS Reference Specialty</option>
+    <option value="MV Boli">MV Boli</option>
+    <option value="Narkisim">Narkisim</option>
+    <option value="Niagara Engraved">Niagara Engraved</option>
+    <option value="Niagara Solid">Niagara Solid</option>
+    <option value="Nirmala UI">Nirmala UI</option>
+    <option value="OCR A Extended">OCR A Extended</option>
+    <option value="Old English Text MT">Old English Text MT</option>
+    <option value="Onyx">Onyx</option>
+    <option value="Palace Script MT">Palace Script MT</option>
+    <option value="Papyrus">Papyrus</option>
+    <option value="Parchment">Parchment</option>
+    <option value="Perpetua">Perpetua</option>
+    <option value="Perpetua Titling MT">Perpetua Titling MT</option>
+    <option value="Playbill">Playbill</option>
+    <option value="Poor Richard">Poor Richard</option>
+    <option value="Pristina">Pristina</option>
+    <option value="Rage Italic">Rage Italic</option>
+    <option value="Ravie">Ravie</option>
+    <option value="Rockwell">Rockwell</option>
+    <option value="Rockwell Condensed">Rockwell Condensed</option>
+    <option value="Rockwell Extra Bold">Rockwell Extra Bold</option>
+    <option value="Rod">Rod</option>
+    <option value="Sakkal Majalla">Sakkal Majalla</option>
+    <option value="Script">Script</option>
+    <option value="Script MT Bold">Script MT Bold</option>
+    <option value="Segoe MDL2 Assets">Segoe MDL2 Assets</option>
+    <option value="Segoe Print">Segoe Print</option>
+    <option value="Segoe Script">Segoe Script</option>
+    <option value="Segoe UI">Segoe UI</option>
+    <option value="Segoe UI Emoji">Segoe UI Emoji</option>
+    <option value="Segoe UI Historic">Segoe UI Historic</option>
+    <option value="Segoe UI Symbol">Segoe UI Symbol</option>
+    <option value="Showcard Gothic">Showcard Gothic</option>
+    <option value="Shruti">Shruti</option>
+    <option value="SimHei">SimHei</option>
+    <option value="SimSun">SimSun</option>
+    <option value="SimSun-ExtB">SimSun-ExtB</option>
+    <option value="Sitka Small">Sitka Small</option>
+    <option value="Snap ITC">Snap ITC</option>
+    <option value="Stencil">Stencil</option>
+    <option value="Sylfaen">Sylfaen</option>
+    <option value="Symbol">Symbol</option>
+    <option value="Tahoma">Tahoma</option>
+    <option value="Tempus Sans ITC">Tempus Sans ITC</option>
+    <option value="Terminal">Terminal</option>
+    <option value="Times New Roman">Times New Roman</option>
+    <option value="Trebuchet MS">Trebuchet MS</option>
+    <option value="Tw Cen MT">Tw Cen MT</option>
+    <option value="Tw Cen MT Condensed">Tw Cen MT Condensed</option>
+    <option value="Tw Cen MT Condensed Extra Bold">Tw Cen MT Condensed Extra Bold</option>
+    <option value="Verdana">Verdana</option>
+    <option value="Viner Hand ITC">Viner Hand ITC</option>
+    <option value="Vivaldi">Vivaldi</option>
+    <option value="Vladimir Script">Vladimir Script</option>
+    <option value="Webdings">Webdings</option>
+    <option value="Wide Latin">Wide Latin</option>
+    <option value="Wingdings">Wingdings</option>
+    <option value="Wingdings 2">Wingdings 2</option>
+    <option value="Wingdings 3">Wingdings 3</option>
+    <option value="Yu Gothic">Yu Gothic</option>
+    <option value="Yu Gothic UI">Yu Gothic UI</option>
+    <option value="Yu Gothic UI Semibold">Yu Gothic UI Semibold</option>
+    <option value="Yu Gothic UI Light">Yu Gothic UI Light</option>
+    <option value="Yu Gothic UI Semilight">Yu Gothic UI Semilight</option>
+    <option value="Yu Gothic UI Bold">Yu Gothic UI Bold</option>
   </select>
   <select id="font-size">
-      <option value="8">8</option>
-      <option value="9">9</option>
-      <option value="10">10</option>
-      <option value="11">11</option>
-      <option value="12">12</option>
-      <option value="14">14</option>
-      <option value="16">16</option>
-      <option value="20">20</option>
-      <option value="22">22</option>
-      <option value="24">24</option>
-      <option value="26">26</option>
-      <option value="28">28</option>
-      <option value="36">36</option>
-      <option value="48">48</option>
-      <option value="72">72</option>
-  </select>
+    <option value="8">8</option>
+    <option value="9">9</option>
+    <option value="10">10</option>
+    <option value="11">11</option>
+    <option value="12">12</option>
+    <option value="14">14</option>
+    <option value="16">16</option>
+    <option value="20">20</option>
+    <option value="22">22</option>
+    <option value="24">24</option>
+    <option value="26">26</option>
+    <option value="28">28</option>
+    <option value="36">36</option>
+    <option value="48">48</option>
+    <option value="72">72</option>
+    <option value="96">96</option>
+    <option value="128">128</option>
+    <option value="256">256</option>
+    <option value="512">512</option>
+</select>
   <button id="apply-stand" class="class2-button-solo"><img src="Res/bold.png" alt="img"></button>
   <button class="class2-button-solo"><img src="Res/italic.png" alt="img"></button>
   <button class="class2-button-solo"><img src="Res/underline.png" alt="img"></button>
@@ -549,8 +834,6 @@
       
       <!-- Contenu des onglets -->
       <div id="Page" class="tabcontent">
-        <h3>Operation de pa page</h3>
-        <button id="generatePdfBtn">Générer PDF</button>
         <!-- Ajoutez ici le contenu de l'onglet "Page" -->
       </div>
       
@@ -566,6 +849,7 @@
         <input type="file" id="image-input" accept="image/*">
         <button id="insert-image-btn">Insérer une image</button>
         <p>ATTENTION : Si votre image est plus grande que la zone de texte, elle sera automatiquement cachée</p>
+        <!--<button onclick="insererDiagramme()">Inserer un diagramme</button>    //en cours de developement-->
       </div>
       
       <div id="MiseEnPage" class="tabcontent">
@@ -775,6 +1059,24 @@ function getMargin() {
         document.execCommand('cut');
       }
     });
+    // Pour le menu deroulant 
+  document.getElementById('menucut').addEventListener('click', function() {
+    const selectedText = getSelectedText();
+      if (selectedText) {
+        document.execCommand('cut');
+      }
+  });
+
+  document.getElementById('menucopy').addEventListener('click', function() {
+    const selectedText = getSelectedText();
+    if (selectedText) {
+      document.execCommand('copy');
+    }
+  });
+
+  document.getElementById('menupast').addEventListener('click', function() {
+    document.execCommand('paste');
+  });
     //-----------------------------------------------BOLT/ITALIC/UNDERLINE----------------------------------------------------------
     // Sélection des boutons de la classe2-button-solo
     const boldButton = document.getElementById('apply-stand');
@@ -950,6 +1252,15 @@ document.getElementById('openModalBtn').addEventListener('click', () => {
   document.getElementById('myModal').style.display = 'block';
 });
 
+// Événement pour ouvrir la fenêtre modale
+document.getElementById('openModalinster').addEventListener('click', () => {
+  document.getElementById('myModal').style.display = 'block';
+});
+
+document.getElementById('openModalpara').addEventListener('click', () => {
+  document.getElementById('myModal').style.display = 'block';
+});
+
 // Événement pour fermer la fenêtre modale
 document.querySelector('.close').addEventListener('click', () => {
   document.getElementById('myModal').style.display = 'none';
@@ -1086,7 +1397,7 @@ insertTableButton.addEventListener('click', () => {
     for (let i = 0; i < numRows; i++) {
         tableHtml += '<tr>';
         for (let j = 0; j < numCols; j++) {
-            tableHtml += '<td>Donnée</td>';
+            tableHtml += '<td contenteditable="true" style="width: 100px;">Donnée</td>'; // Vous pouvez ajuster la largeur selon vos besoins
         }
         tableHtml += '</tr>';
     }
@@ -1097,49 +1408,117 @@ insertTableButton.addEventListener('click', () => {
 });
 //---------------------------------------------------------Image-----------------------------------------------
 // Sélectionnez la zone de texte éditable
-const imageInput = document.getElementById('image-input');
+        const imageInput = document.getElementById('image-input');
 
-// Ajoutez un écouteur d'événements pour détecter la sélection d'un fichier image
-imageInput.addEventListener('change', () => {
-    const file = imageInput.files[0]; // Obtenez le fichier image sélectionné
-    const reader = new FileReader(); // Créez un objet FileReader pour lire le contenu du fichier
+        // Ajoutez un écouteur d'événements pour détecter la sélection d'un fichier image
+        imageInput.addEventListener('change', () => {
+            const file = imageInput.files[0]; // Obtenez le fichier image sélectionné
+            const reader = new FileReader(); // Créez un objet FileReader pour lire le contenu du fichier
 
-    reader.onload = function(event) {
-        const imageUrl = event.target.result; // Obtenez l'URL de l'image chargée
+            reader.onload = function(event) {
+                const imageUrl = event.target.result; // Obtenez l'URL de l'image chargée
 
-        // Insérez l'image dans l'éditeur à l'emplacement du curseur
-        const imageHtml = `<img src="${imageUrl}" alt="Image">`;
-        editor.focus(); // Assurez-vous que l'éditeur est sélectionné
-        document.execCommand('insertHTML', false, imageHtml); // Insérez l'image dans l'éditeur
-    };
+                // Insérez l'image dans l'éditeur à l'emplacement du curseur
+                const imageHtml = `<img src="${imageUrl}" alt="Image">`;
+                editor.focus(); // Assurez-vous que l'éditeur est sélectionné
+                document.execCommand('insertHTML', false, imageHtml); // Insérez l'image dans l'éditeur
 
-    reader.readAsDataURL(file); // Lire le contenu du fichier sous forme d'URL de données
-});
-  </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
-  <script>
-    //-------------------------------------------------------GEN PDF------------------------------------------
-    document.getElementById('generatePdfBtn').addEventListener('click', () => {
-      const editorContent = document.getElementById('editor').innerHTML;
+                // Ajoutez un gestionnaire d'événements pour permettre le redimensionnement et le déplacement de l'image
+                const insertedImages = editor.querySelectorAll('img');
+                insertedImages.forEach(img => {
+                    let isResizing = false;
+                    let isDragging = false;
+                    let startX, startY, startLeft, startTop, startWidth, startHeight;
 
-      // Récupérer la taille du format sélectionnée
-      const paperSize = document.getElementById('paper-size').value;
-      
-      // Récupérer l'orientation sélectionnée
-      const orientation = document.querySelector('input[name="orientation"]:checked').value;
+                    img.addEventListener('mousedown', (event) => {
+                        event.preventDefault(); // Empêche le comportement par défaut de glisser-déposer de l'image
+                        if (event.target.classList.contains('resizer')) {
+                            isResizing = true;
+                            startX = event.clientX;
+                            startY = event.clientY;
+                            startWidth = img.clientWidth;
+                            startHeight = img.clientHeight;
+                        } else {
+                            isDragging = true;
+                            startX = event.clientX;
+                            startY = event.clientY;
+                            startLeft = img.offsetLeft;
+                            startTop = img.offsetTop;
+                        }
+                    });
 
-      // Options pour html2pdf
-      const options = {
-  filename: 'document.pdf',
-  image: { type: 'png' }, // Utiliser le format PNG
-  html2canvas: { scale: 2 },
-  jsPDF: { unit: 'mm', format: paperSize, orientation: orientation }
-};
+                    img.addEventListener('mousemove', (event) => {
+                        if (isResizing) {
+                            const width = startWidth + (event.clientX - startX);
+                            const height = startHeight + (event.clientY - startY);
+                            img.style.width = `${width}px`;
+                            img.style.height = `${height}px`;
+                        } else if (isDragging) {
+                            const offsetX = event.clientX - startX;
+                            const offsetY = event.clientY - startY;
+                            img.style.left = `${startLeft + offsetX}px`;
+                            img.style.top = `${startTop + offsetY}px`;
+                        }
+                    });
 
+                    img.addEventListener('mouseup', () => {
+                        isResizing = false;
+                        isDragging = false;
+                    });
 
-      // Générer le PDF
-      html2pdf().from(editorContent).set(options).save();
-    });
+                    img.addEventListener('contextmenu', (event) => {
+                        event.preventDefault(); // Empêche l'affichage du menu contextuel lors du clic droit sur l'image
+                    });
+                });
+            };
+
+            reader.readAsDataURL(file); // Lire le contenu du fichier sous forme d'URL de données
+        });
+//---------------------------------------------------------------shape fonction-----------------------------------
+function createShape(x, y, label) {
+        var shape = document.createElement('div');
+        shape.classList.add('shape');
+        shape.style.left = x + 'px';
+        shape.style.top = y + 'px';
+        shape.textContent = label;
+        shape.draggable = true;
+
+        // Ajouter un gestionnaire d'événements pour le déplacement
+        shape.addEventListener('dragstart', function(event) {
+            event.dataTransfer.setData('text/plain', ''); // Nécessaire pour certains navigateurs
+        });
+
+        // Ajouter la forme à la zone de dessin
+        document.getElementById('diagram').appendChild(shape);
+    }
+    function insererDiagramme() {
+            // Récupérez le contenu du diagramme à insérer
+            var diagramme = '<div id="diagram" style="position: relative; width: 600px; height: 400px; border: 1px solid black;"></div>';
+            
+            // Insérez le diagramme dans l'éditeur de texte
+            document.getElementById('editor').innerHTML += diagramme;
+            createShape(50, 50, 'Processus 1');
+            createShape(200, 100, 'Processus 2');
+            createShape(350, 150, 'Processus 3');
+            // Fermez la fenêtre modale après l'insertion
+            closeModal();
+        }
+  //-----------------------------------------------------------------------Custom menu-----------------------------------------------------------
+  // Prevent default context menu
+  document.addEventListener('contextmenu', function(event) {
+    event.preventDefault();
+    // Show the custom context menu
+    var customMenu = document.getElementById('custom-menu');
+    customMenu.style.display = 'block';
+    customMenu.style.left = event.pageX + 'px';
+    customMenu.style.top = event.pageY + 'px';
+  });
+
+  // Hide the custom context menu when clicking outside
+  document.addEventListener('click', function(event) {
+    var customMenu = document.getElementById('custom-menu');
+    customMenu.style.display = 'none';
+  });
   </script>
 </body>
 </html>

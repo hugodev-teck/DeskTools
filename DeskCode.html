@@ -488,11 +488,22 @@
     text-align: left;
     font-size: 12px;
 }
+@keyframes grow {
+  0% {
+    transform: scale(0.4);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.imgloaderorg {
+  animation: grow 2s ease-in-out forwards;
+}
     </style>
 </head>
 <body>
     <div id="loader">
-        <img src="Res/fichier (4).png">
+        <img class="imgloaderorg" src="Res/fichier (4).png">
         <div class="bottom-content">
             <img src="Res/logo-text-big-partionaria.png">
         </div>
@@ -575,7 +586,7 @@
                                 <h1>Paramètre de connexion</h1>
                         </div>
                         <div id="emailDisplay">
-                            <button id="Conn-btn" onclick="openModal()">Connectez vous</button>
+                            <button id="Conn-btn" onclick="openPopup()">Connectez vous</button>
                         </div>
                     </div>
             </div>
@@ -633,146 +644,46 @@
         </div>
         <div id="editor_bottom-bar">
             <button class="Connection-button" onclick="debugHtmlEditor()"><img src="Res/play.png"> Simulator</button>
-            <button class="Connection-button" onclick="openModal()"><img src="Res/times-hexagon.png"> 0 Error</button>
-            <button class="Connection-button" onclick="openModal()"><img src="Res/exclamation.png"> 0 Warning</button>
+            <button class="Connection-button" onclick="openPopup()"><img src="Res/times-hexagon.png"> 0 Error</button>
+            <button class="Connection-button" onclick="openPopup()"><img src="Res/exclamation.png"> 0 Warning</button>
         </div>
-    </div>
-    <div id="modal" class="modal">
-        <div class="modal-content">
-    <div id="message">
-        <div class="container">
-        <img id="image_logo" src="Res/logo-text-small-100px.png">
-        <h1>Connexion - PRISMID</h1>
-        <h2>Accedez a vos service PRISM</h2>
-          <form id="emailForm">
-              <input type="email" id="email" placeholder="Adresse e-mail" required>
-              <p id="emailText">Déconnectez-vous après chaque utilisation, surtout sur des appareils partagés, pour <a href="https://live-prism.web.app/security">sécuriser votre compte</a>.</p>
-              <div class="buttons-container">
-              <button class="btn-down" id="createaccnt" type="button" onclick="redirectToCreateAccount()">Créer un compte</button>
-              <button class="btn-down" type="button" onclick="nextStep('email')">Suivant</button>
-            </div>
-          </form>
-          <form id="passwordForm" style="display: none;">
-              <div id="emailDisplayAt2"></div>
-              <input type="password" id="password" placeholder="Mot de passe" required>
-              <p id="emailText">Vous allez être redirigé sur DeskCode</p>
-              <div class="buttons-container">
-              <button class="btn-down" id="createaccnt" type="button" onclick="resetPassword()">Mot de passe oublié ?</button>
-              <button class="btn-down" type="button" onclick="signIn()">Se connecter</button>
-            </div>
-          </form>
-        </div>
-        </div>
-    </div>
     </div>
     <script>
-        // JavaScript pour contrôler l'affichage de la fenêtre modale
-        var modal = document.getElementById('modal');
-        
-        // Fonction pour afficher la fenêtre modale
-        function openModal() {
-          modal.style.display = 'block';
-        }
-        
-        // Fonction pour fermer la fenêtre modale
-        function closeModal() {
-          modal.style.display = 'none';
-        }
-        
-        // Fermer la fenêtre modale si l'utilisateur clique en dehors de celle-ci
-        window.onclick = function(event) {
-          if (event.target == modal) {
-            modal.style.display = 'none';
-          }
-        }
-        </script>
-        <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-app.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-auth.js"></script>
-        <script>
-            // Configurez votre projet Firebase ici
-            var firebaseConfig = {
-                apiKey: "AIzaSyAqvHUxMhKKBgpZ1TSjwlh6FHP9OVpYkKk",
-                authDomain: "prism-project-id.firebaseapp.com",
-                projectId: "prism-project-id"
-            };
-    
-            // Initialisez Firebase
-            firebase.initializeApp(firebaseConfig);
-    
-            function resetPassword() {
-        var email = document.getElementById('email').value;
-        var auth = firebase.auth();
-        var statusMessage = document.getElementById('statusMessage');
-    
-        auth.sendPasswordResetEmail(email)
-            .then(function() {
-                // Email de réinitialisation envoyé avec succès
-                statusMessage.textContent = "Un lien de réinitialisation de mot de passe a été envoyé à votre adresse e-mail.";
-            })
-            .catch(function(error) {
-                // Gestion des erreurs
-                statusMessage.textContent = "Erreur lors de l'envoi du lien de réinitialisation : " + error.message;
-            });
-    }
-    
-            function nextStep(step) {
-                if (step === 'email') {
-                    var emailInput = document.getElementById('email');
-                    if (emailInput.checkValidity()) {
-                        var email = emailInput.value;
-                        document.getElementById('emailForm').style.display = 'none';
-                        document.getElementById('passwordForm').style.display = 'block';
-                        document.getElementById('emailDisplayAt2').textContent = 'Bienvenue :\n' + email;
-                    } else {
-                        alert('Veuillez entrer une adresse e-mail valide.');
-                    }
-                }
-            }
-    
-            function signIn() {
-                var email = document.getElementById('email').value;
-                var password = document.getElementById('password').value;
-    
-                if (!email || !password) {
-                    alert('Veuillez entrer une adresse e-mail et un mot de passe.');
-                    return;
-                }
-    
-                // Utilisez Firebase pour vérifier l'e-mail et le mot de passe
-                firebase.auth().signInWithEmailAndPassword(email, password)
-                    .then(function(user) {
-                        // L'authentification a réussi, vous pouvez rediriger l'utilisateur vers la page appropriée
-                        redirectToSourcePage(email);
-                    })
-                    .catch(function(error) {
-                        // En cas d'échec de l'authentification, affichez un message d'erreur
-                        alert('Échec de l\'authentification : ' + error.message);
-                    });
-            }
-    
-            function redirectToCreateAccount() {
-                window.location.href = "Create-UserFirebase.html";
-            }
-    
-            // Récupérer les paramètres de l'URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const sourceParam = urlParams.get('source');
-            var buttonToRemove = document.getElementById('Conn-btn');
-            var emailDisplay = document.getElementById('emailDisplay');
-            // Fonction pour rediriger en fonction de la source
-            function redirectToSourcePage(email) {
-                // Création d'un nouvel élément paragraphe
-                var newParagraph = document.createElement('p');
-                emailDisplay.removeChild(buttonToRemove);
+        //-----------------------------------------------------------------------Gestion de la connection a prismID-----------------------------------------------
+              var popupWindow;
+          
+              // Fonction pour ouvrir la fenêtre contextuelle
+              function openPopup() {
+                  var width = 500;
+                  var height = 600;
+                  var left = (window.innerWidth - width) / 2;
+                  var top = (window.innerHeight - height) / 2;
+                  var options = 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + width + ', height=' + height + ', top=' + top + ', left=' + left;
+          
+                  popupWindow = window.open('ConnectionService-FirebasePupUp.html', 'Popup', options);
+              }
+          
+              // Fonction appelée après la connexion réussie dans la fenêtre contextuelle
+              function onLoginSuccess(userInfo) {
+                  // Extrayez l'e-mail de l'utilisateur
+                  var userEmail = userInfo.email;
+                var buttonToRemove = document.getElementById('Conn-btn');
+                var emailDisplay = document.getElementById('emailDisplay');
+                    // Création d'un nouvel élément paragraphe
+                    var newParagraph = document.createElement('p');
+                    emailDisplay.removeChild(buttonToRemove);
 
-                // Ajout de texte au paragraphe
-                newParagraph.textContent = "Bienvenue, " + email; // Supposant que 'email' est une variable contenant l'adresse e-mail
+                    // Ajout de texte au paragraphe
+                    newParagraph.textContent = "Bienvenue, " + userEmail;
 
-                // Ajout du paragraphe à l'élément 'emailDisplay'
-                emailDisplay.appendChild(newParagraph);
-                closeModal();
-            }
-        </script>
+                    // Ajout du paragraphe à l'élément 'emailDisplay'
+                    emailDisplay.appendChild(newParagraph);
+                  // Fermez la fenêtre contextuelle après traitement des informations
+                  if (popupWindow) {
+                      popupWindow.close();
+                  }
+              }
+          </script>
     <script src="Lib/MonacoEditor/min/vs/loader.js"></script>
     <script>
         function updateResultsHeight() {
@@ -851,24 +762,7 @@ function displayResults(results) {
     resultsContainer.appendChild(codeItem);
   });
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //fin
+    //fin
     function saveFile() {
     // Récupérer le contenu de l'éditeur Monaco
     var editorContent = monaco.editor.getModels()[0].getValue();
