@@ -152,7 +152,7 @@
 .modal {
     display: none; /* Masquer le modal par défaut */
     position: fixed; /* Position fixe */
-    z-index: 10000000; /* Mettre le modal au-dessus du reste du contenu */
+    z-index: 1; /* Mettre le modal au-dessus du reste du contenu */
     left: 0;
     top: 0;
     width: 100%;
@@ -339,21 +339,14 @@ var toWritter = document.getElementById('to-writter');
     });
 
     // Fonction pour rediriger si la largeur de l'écran est inférieure à 900px
-    function redirectToDeskCodePage() {
-    var isSupported = document.documentElement.clientWidth >= 900;
-    
-    if (isSupported) {
-        window.location.href = "DeskCode.html"
+function redirectToDeskCodePage() {
+    if (window.innerWidth >= 900) {
+        window.location.href = 'DeskCode.html';
     } else {
-        displayUnsupportedModal();
+        var modal = document.getElementById('unsupportedModal');
+        modal.style.display = "block";
     }
 }
-
-function displayUnsupportedModal() {
-    var modal = document.getElementById('unsupportedModal');
-    modal.style.display = "block";
-}
-
 // Fermer le modal lorsqu'on clique sur la croix
 var closeBtn = document.getElementsByClassName("close")[0];
 closeBtn.onclick = function() {

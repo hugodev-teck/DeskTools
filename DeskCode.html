@@ -4,502 +4,8 @@
     <meta charset="UTF-8">
     <title>DeskCode - Nouveau fichier code</title>
     <link rel="icon" href="Res/fichier (4).png" type="image/x-icon">
-    <link rel="stylesheet" href="Lib/MonacoEditor/min/vs/editor/editor.main.css" />
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #1E1E1E;
-            overflow: hidden;
-        }
-        /* Styles pour la leftbar (5% de la page) */
-        .editor_workspace_leftbar {
-            width: 4%;
-            background-color: rgb(54, 54, 54);
-            float: left;
-            height: 100vh;
-        }
-        /* Styles pour editor_workspace_leftbar_menu (20% de la page) */
-        .editor_workspace_leftbar_menu {
-            width: 20%;
-            background-color: #181818;
-            float: left;
-            height: 100vh;
-        }
-        /* Styles pour editor_code_main (le reste de la page) */
-        .editor_code_main {
-            width: 76%;
-            background-color: rgb(30, 30, 30);
-            float: left;
-            height: 100vh;
-        }
-        /* Styles pour la bottombar */
-        #editor_bottom-bar {
-            width: 100%;
-            background-color: rgb(0, 124, 182); /* Couleur bleue spécifiée */
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            height: 2.5%; /* Hauteur souhaitée pour la bottombar */
-        }
-        .Connection-button {
-            margin-right: 5px;
-            border-radius: 5px;
-            border-color: transparent;
-            background-color: transparent;
-            padding: 5px;
-        }
-        .Connection-button img{
-            width: 10px;
-            height: auto;
-        }
-        /* Styles pour la top bar */
-        #top_bar {
-            width: 100%;
-            background-color: #1a1a1a; /* Couleur grise foncée spécifiée */
-            height: 50px; /* Hauteur souhaitée pour la top bar */
-        }
-        /* Style du menu déroulant */
-        .dropdown {
-            position: relative;
-            display: inline-block;
-            margin-top: 7px;
-        }
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 200px;
-            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-            z-index: 1;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-        .dropdown-item {
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            color: #333;
-            transition: background-color 0.3s;
-        }
-        .dropdown-item:hover {
-            background-color: #ddd;
-        }
-        .dropdown-button {
-            background-color: rgba(27, 27, 27, 0.205);
-            margin-left: 5px;
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        .dropdown-button:hover {
-            background-color: rgba(85, 85, 85, 0.048);
-        }
-        .menu-container {
-            display: flex;
-            justify-content: center; /* Aligner les éléments avec un espacement entre eux */
-            align-items: center; /* Centrer verticalement les éléments */
-        }
-#terminalboxtext {
-    margin-left: 4.5%;
-    margin-top: 5%;
-    width: 88%;
-    background-color: black;
-    border-style: solid;
-    border-width: 2px;
-    position: left top;
-    font-family: monospace;
-    color: #ffffff;
-    z-index: 999;
-    height: 40ch;
-    resize: none; /* Empêche le redimensionnement */     
-}
-#terminalboxtextinput {
-    margin-left: 4.5%;
-    width: 88%;
-    height: 30%;
-    background-color: transparent;
-    border-style: solid;
-    font-style: normal;
-    color: #ffffff;
-    font-family: monospace;
-}
-#Propriete {
-    margin-top: 20px;
-    margin-left: 4.5%;
-    height: 19%;
-    background-color: transparent;
-    border-style: solid;
-    border-bottom: transparent;
-    font-style: normal;
-    color: #ffffff;
-    z-index: 5;
-    width: 100%;
-}
-#proporeteclass {
-    margin-left: 4.5%;
-    margin-right: 5%;
-    height: 100%;
-    display: none;
-}
-#proporeteclass select {
-    width: 100%;
-    border-radius: 5px;
-    background-color: #808080;
-    border-color: transparent;
-}
-#proporeteclass input {
-    width: 98%;
-    border-radius: 5px;
-    background-color: #808080;
-    border-color: transparent;
-}
-#proporeteclass button {
-    width: 30%;
-    border-radius: 5px;
-    background-color: #808080;
-    border-color: transparent;
-    margin-left: 85%;
-    transform: translateX(-50%);
-    margin-top: 15px;
-}
-#proporeteclass p {
-    margin-left: 5px;
-    color: #949494;
-    margin-top: 10px;
-    margin-bottom: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 18px;
-}
-#proporeteclass h1 {
-    margin-left: 5px;
-    color: #ddd;
-    margin-top: 10px;
-    margin-bottom: 0;
-    font-size: 21px;
-    font-family: Arial, Helvetica, sans-serif;
-}
-.explorer {
-    padding: 10px;
-}
-.explorer h1 {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 25px;
-    text-align: center;
-    color: #858585;
-}
-.explorer h2 {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 15px;
-    text-align: center;
-    color: #858585;
-}
-#button-open-folder {
-    border-radius: 5px;
-    border-color: transparent;
-    background-color: rgba(21, 40, 214, 0.4);
-    margin-left: 50%;
-    transform: translateX(-50%);
-}
-.file {
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
-}
-.tabs-on-sidebar{
-    border-radius: 10px;
-    width: 70%;
-    height: auto;
-    text-align: center;
-    background-color: transparent;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    margin-top: 15px;
-    margin-left: 15%;
-    border-color: transparent;
-}
-.padd {
-    margin-left: 10px;
-}
-.tabs-on-sidebar img {
-    max-width: 100%; /* Ajustez la largeur maximale de l'image selon vos besoins */
-    height: auto;
-    margin-top: 3px;
-    vertical-align: middle;
-    opacity: 0.7;
-}
-#editor {
-    margin-top: 10px;
-    display: none;
-}
-#emailDisplay {
-    display: none;
-}
-#emailDisplay p {
-    margin-left: 15px;
-    color: #949494;
-    margin-top: 10px;
-    margin-bottom: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 18px;
-}
-#emailDisplay button {
-    margin-left: 15px;
-    width: 40%;
-    border-radius: 5px;
-    margin-top: 10px;
-    background-color: #808080;
-    border-color: transparent;
-}
-#loader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #ffffff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-}
-
-#loader img {
-    width: 15%;
-}
-.bottom-content {
-    text-align: center;
-    margin: 20px 0;
-    position: absolute;
-    bottom: 0;
-}
-#editor_temp_start {
-    margin-left: 50%;
-    transform: translateX(-50%);
-}
-#editor_temp_start h1 {
-    margin-left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    padding: 0;
-    color: rgb(90, 90, 90);
-    font-family: sans-serif;
-    opacity: 0.4;
-    font-size: 45px;
-}
-#editor_temp_start h2 {
-    margin-left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    margin-top: -20px;
-    color: rgb(90, 90, 90);
-    font-family: sans-serif;
-    opacity: 0.4;
-}
-#editor_temp_start h3 {
-    margin-left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    color: rgb(90, 90, 90);
-    font-family: sans-serif;
-    opacity: 0.4;
-}
-#editor_image {
-    margin-left: 50%;
-    transform: translateX(-50%);
-    margin-top: 50%;
-    opacity: 0.4;
-}
-.TabName_sous_jacent {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 50px;
-    background-color: #2b2b2b;
-}
-
-.TabName_sous_jacent h1 {
-    margin: 15px; /* Pour enlever les marges par défaut */
-    font-family: Arial;
-    font-size: small;
-    color: #858585;
-}
-
-#button_close_tab {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    color: #555;
-    padding: 15px;
-}
-#cosriptlogo {
-    height: auto;
-    width: 40%;
-    margin-top: 10px;
-    margin-left: 10px;
-}
-/* Style des résultats */
-#results {
-    margin-top: 10px;
-    max-height: 800px; /* Ajustez la hauteur maximale selon vos besoins */
-  overflow-y: auto; /* Activation du défilement vertical si nécessaire */
-}
-#results .code-item {
-  border: 1px solid #ccc;
-  background-color: #575757;
-  border-radius: 10px;
-  margin-left: 10px;
-  margin-right: 10px;
-  padding: 10px;
-  margin-bottom: 10px;
-}
-
-#results h3 {
-  margin-top: 0;
-}
-
-#results p {
-  margin-bottom: 10px;
-}
-
-#results pre {
-  background-color: #f5f5f5;
-  padding: 5px;
-  overflow-x: auto;
-}
-
-#results button {
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 14px;
-  margin: 4px 2px;
-  cursor: pointer;
-  border-radius: 4px;
-}
-#CoscriptTab h2 {
-    color: #858585;
-    font-family: sans-serif;
-    font-size: 150%;
-    margin-left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-}
-#searchInput {
-    font-family: sans-serif;
-    margin-left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    width: 50%;
-    height: auto;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    border-color: transparent;
-}
-.modal {
-  display: none; /* Initialement cachée */
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #ECEFF1; /* Fond semi-transparent */
-  z-index: 9999; /* Au-dessus du reste du contenu */
-}
-
-.modal-content {
-  background-color: #fefefe;
-  margin: 10% auto; /* Centrage vertical et horizontal */
-  padding: 20px;
-  border-radius: 5px;
-  max-width: 20%;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-}
-.container h1 {
-            text-align: center;
-            font-size: 160%;
-        }
-        .container h2 {
-          margin-top: -10px;
-            text-align: center;
-            font-size: 100%;
-        }
-        .container input {
-            width: 95%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: none;
-            background: #eee;
-            margin-top: 5%;
-        }
-
-        .container button {
-            width: 30%;
-            padding: 10px;
-            border: none;
-            background: #ff3333;
-            color: white;
-            cursor: pointer;
-        }
-
-        .container a {
-            color: rgb(0, 0, 0);
-            text-decoration: underline;
-            cursor: pointer;
-            border: none;
-        }
-        #createaccnt {
-          width: 50%;
-            padding: 10px;
-            border: none;
-            color: #ff3333;
-            background-color: transparent;
-            cursor: pointer;
-            text-align: left;
-        }
-        .buttons-container {
-    display: flex;
-    justify-content: space-between; /* Alignement horizontal au centre */
-    align-items: center; /* Alignement vertical au centre si nécessaire */
-    margin-top: 10%;
-    margin-bottom: 5%;
-}
-#image_logo {
-    margin-left: 50%;
-    transform: translateX(-50%);
-}
-#emailDisplayAt2 {
-    text-align: center;
-}
-#emailText {
-    color: grey;
-    text-align: left;
-    font-size: 12px;
-}
-@keyframes grow {
-  0% {
-    transform: scale(0.4);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-.imgloaderorg {
-  animation: grow 2s ease-in-out forwards;
-}
-    </style>
+    <link rel="stylesheet" href="Lib/MonacoEditor/dev/vs/editor/editor.main.css" />
+    <link rel="stylesheet" href="Lib/OfficialDeskCodeLib/Dev/style/editormain.css">
 </head>
 <body>
     <div id="loader">
@@ -511,11 +17,14 @@
     <div class="editor_main">
         <div class="editor_workspace">
             <div class="editor_workspace_leftbar">
-                <button class="tabs-on-sidebar" onclick="openTab('terminal')"><img src="Res/square-terminal.png"></button>
+                <button class="tabs-on-sidebar" onclick="hideorshowterminal()"><img src="Res/square-terminal.png"></button>
                 <button class="tabs-on-sidebar" class="padd" onclick="openTab('file')"><img src="Res/document.png"></button>
                 <button class="tabs-on-sidebar" class="padd" onclick="openTab('propriete')"><img src="Res/settings-sliders.png"></button>
             </div>
             <div class="editor_workspace_leftbar_menu">
+                <div id="searchbar">
+
+                </div>
                 <div id="CoscriptTab" class="tabcontent">
                     <div class="TabName_sous_jacent">
                         <h1>Co-script</h1>
@@ -526,14 +35,6 @@
                     <input type="text" id="searchInput" onkeydown="searchCode()" placeholder="Entrez votre recherche...">
                     <div id="results"></div>
                 </div>
-                <div id="terminalTab" class="tabcontent">
-                    <div class="TabName_sous_jacent">
-                        <h1>Terminal de commande</h1>
-                        <button id="button_close_tab" onclick="CloseAllTabs()">X</button>
-                    </div>
-                    <textarea type="text" id="terminalboxtext" readonly></textarea>
-                    <input type="text" id="terminalboxtextinput" onkeydown="handleCommand(event)" placeholder="Saisisez votre commande ici">
-                    </div>
                     <!-- file tab -->
                     <div id="fileTab" class="tabcontent">
                         <div class="TabName_sous_jacent">
@@ -569,18 +70,51 @@
                                     <option value="javascript">JavaScript</option>
                                     <option value="css">CSS</option>
                                     <option value="typescript">TypeScript</option>
-                                    <option value="json">Json</option>
+                                    <option value="json">JSON</option>
                                     <option value="python">Python</option>
-                                    <option value="c">C [No Coloration mode and no interpreter]</option>
-                                    <option value="c++">C++ [No Coloration mode and no interpreter]</option>
-                                    <option value="assembly">Assembleur [No Coloration mode and no interpreter]</option>
-                                    <option value="react">React [No Coloration mode and no interpreter]</option>
-                                    <option value="othe">Other [No Coloration mode and no interpreter]</option>
+                                    <option value="c">C</option>
+                                    <option value="cpp">C++</option>
+                                    <option value="asm">Assembleur</option>
+                                    <option value="sass">Sass</option>
+                                    <option value="scss">SCSS</option>
+                                    <option value="less">LESS</option>
+                                    <option value="stylus">Stylus</option>
+                                    <option value="coffee">CoffeeScript</option>
+                                    <option value="lua">Lua</option>
+                                    <option value="perl">Perl</option>
+                                    <option value="bash">Bash</option>
+                                    <option value="r">R</option>
+                                    <option value="swift">Swift</option>
+                                    <option value="rust">Rust</option>
+                                    <option value="go">Go</option>
+                                    <option value="php">PHP</option>
+                                    <option value="java">Java</option>
+                                    <option value="ruby">Ruby</option>
+                                    <option value="vb">VB.NET</option>
+                                    <option value="scala">Scala</option>
+                                    <option value="kotlin">Kotlin</option>
+                                    <option value="typescript">TypeScript</option>
+                                    <option value="perl">Perl</option>
+                                    <option value="powershell">PowerShell</option>
+                                    <option value="haskell">Haskell</option>
+                                    <option value="elixir">Elixir</option>
+                                    <option value="erlang">Erlang</option>
+                                    <option value="d">D</option>
+                                    <option value="clojure">Clojure</option>
+                                    <option value="f#">F#</option>
+                                    <option value="ocaml">OCaml</option>
+                                    <option value="racket">Racket</option>
+                                    <option value="julia">Julia</option>
+                                    <option value="nim">Nim</option>
+                                    <option value="pascal">Pascal</option>
+                                    <option value="scheme">Scheme</option>
+                                    <option value="verilog">Verilog</option>
+                                    <option value="vhdl">VHDL</option>
+                                    <option value="yaml">YAML</option>
                                 </select>
                                 <p>Selection du dubuger</p>
                                 <select id="debug-language-selection">
-                                    <option value="html">DeskTolls Official Compilator</option>
-                                    <option value="html">No compilator selected / No compilator installed</option>
+                                    <option value="html">DeskTolls  Compilateur pour HTML</option>
                                 </select>
                                 <button onclick="applyLanguage()">Appliquer</button>
                                 <h1>Paramètre de connexion</h1>
@@ -594,58 +128,61 @@
                 <div id="top_bar">
                     <div class="menu-container">
                         <div class="dropdown">
-                            <button class="dropdown-button">File</button>
+                            <button class="dropdown-button">Fichier</button>
                             <div class="dropdown-content">
-                                <a class="dropdown-item" href="javascript:saveFile()">Save</a>
-                                <a class="dropdown-item" href="#">Save to PrismCloud</a>
-                                <a class="dropdown-item" href="javascript:openFile()">Open from computer</a>
-                                <a class="dropdown-item" href="#">Open from PrismCloud</a>
-                                <a class="dropdown-item" href="javascript:InitialiseWorkspace()">New File</a>
-                                <a class="dropdown-item" href="javascript:openTab('Coscript')">Open Co-scipt</a>
-                                <a class="dropdown-item" href="javascript:RedirectToMainPage()">Exit</a>
+                                <a class="dropdown-item" href="javascript:saveFile()">Sauvegarder<span class="shortcut">CTRL + S</span></a>
+                                <a class="dropdown-item" href="javascript:openFile()">Ouvrir depuis l'ordinateur</a>
+                                <a class="dropdown-item" href="javascript:addTab()">Nouveau fichier<span class="shortcut">CTRL + Q</span></a>
+                                <a class="dropdown-item" href="javascript:openTab('Coscript')">Ouvrir Co-scipt</a>
+                                <a class="dropdown-item" href="javascript:clearTabs()">Effacer tout les onglets<span class="shortcut">CTRL + P</span></a>
+                                <a class="dropdown-item" href="Start-Index-OfflineApp.html">Quitter<span class="shortcut">CTRL + ALT + C</span></a>
                             </div>
                         </div>
                         <div class="dropdown">
-                            <button class="dropdown-button">Edit</button>
+                            <button class="dropdown-button">Editer</button>
                             <div class="dropdown-content">
-                                <a class="dropdown-item" href="javascript:undo()">Undo</a>
-                                <a class="dropdown-item" href="javascript:redo()">Redo</a>
-                                <a class="dropdown-item" href="javascript:copy()">Copy</a>
-                                <a class="dropdown-item" href="javascript:cut()">Cut</a>
-                                <a class="dropdown-item" href="javascript:past()">Past</a>
+                                <a class="dropdown-item" href="javascript:undo()">Annuler<span class="shortcut">CTRL + Z</span></a>
+                                <a class="dropdown-item" href="javascript:redo()">Rétablir<span class="shortcut">CTRL + Y</span></a>
+                                <a class="dropdown-item" href="javascript:copy()">Copier<span class="shortcut">CTRL + C</span></a>
+                                <a class="dropdown-item" href="javascript:cut()">Couper<span class="shortcut">CTRL + X</span></a>
+                                <a class="dropdown-item" href="javascript:paste()">Coller<span class="shortcut">CTRL + V</span></a>
                             </div>
                         </div>
                         <div class="dropdown">
                             <button class="dropdown-button">Run</button>
                             <div class="dropdown-content">
-                                <a class="dropdown-item" href="javascript:debugHtmlEditor()">Start debuging</a>
-                                <a class="dropdown-item" href="javascript:printToTerminal('Current language : HTML')">Select language</a>
+                                <a class="dropdown-item" href="javascript:debugHtmlEditor()">Commencer debuging<span class="shortcut">F9</span></a>
+                                <a class="dropdown-item" href="javascript:printToTerminal('Current language : HTML')">Selectionner un language<span class="shortcut">ALTGR + N</span></a>
                             </div>
                         </div>
                         <div class="dropdown">
                             <button class="dropdown-button">Terminal</button>
                             <div class="dropdown-content">
-                                <a class="dropdown-item" href="javascript:openTab('terminal')">Open terminal</a>
-                                <a class="dropdown-item" href="javascript:openTab('terminal')">Run task</a>
-                                <a class="dropdown-item" href="javascript:openTab('terminal')">Buid task</a>
+                                <a class="dropdown-item" href="javascript:hideorshowterminal()">Open terminal<span class="shortcut">CTRL + ù</span></a>
+                                <a class="dropdown-item" href="javascript:hideorshowterminal()">Run task<span class="shortcut">F5</span></a>
+                                <a class="dropdown-item" href="javascript:hideorshowterminal()">Buid task<span class="shortcut">Indisponible</span></a>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div id="editor_temp_start">
-                    <img id="editor_image" src="Res/logo-monochrome.png">
-                    <h1>DESKCODE</h1>
-                    <h2>DeskTools 2.0.3 BETA</h2>
-                    <h3>CTRL + Q to create a new code</h3>
+                <div id="tabs">
                 </div>
                 <div id="editor">
                 </div>
+                <div id="terminaldiv">
+                <div class="TabName_sous_jacent">
+                    <h1>Terminal de commande</h1>
+                    <button id="button_close_tab" onclick="hideorshowterminal()">X</button>
+                </div>
+                <div id="terminal" class="terminal"></div>
+                <input type="text" id="terminalboxtextinput" placeholder="Saisisez votre commande ici ...">
+            </div>
             </div>
         </div>
         <div id="editor_bottom-bar">
             <button class="Connection-button" onclick="debugHtmlEditor()"><img src="Res/play.png"> Simulator</button>
-            <button class="Connection-button" onclick="openPopup()"><img src="Res/times-hexagon.png"> 0 Error</button>
-            <button class="Connection-button" onclick="openPopup()"><img src="Res/exclamation.png"> 0 Warning</button>
+            <button class="Connection-button" onclick="openPopup()"><img src="Res/times-hexagon.png"> Error</button>
+            <button class="Connection-button" onclick="openPopup()"><img src="Res/exclamation.png"> Warning</button>
         </div>
     </div>
     <script>
@@ -660,15 +197,15 @@
                   var top = (window.innerHeight - height) / 2;
                   var options = 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + width + ', height=' + height + ', top=' + top + ', left=' + left;
           
-                  popupWindow = window.open('ConnectionService-FirebasePupUp.html', 'Popup', options);
+                  popupWindow = window.open('auth/0/Connection.html', 'Popup', options);
               }
           
               // Fonction appelée après la connexion réussie dans la fenêtre contextuelle
               function onLoginSuccess(userInfo) {
-                  // Extrayez l'e-mail de l'utilisateur
-                  var userEmail = userInfo.email;
-                var buttonToRemove = document.getElementById('Conn-btn');
-                var emailDisplay = document.getElementById('emailDisplay');
+                    // Extrayez l'e-mail de l'utilisateur
+                    var userEmail = userInfo.email;
+                    var buttonToRemove = document.getElementById('Conn-btn');
+                    var emailDisplay = document.getElementById('emailDisplay');
                     // Création d'un nouvel élément paragraphe
                     var newParagraph = document.createElement('p');
                     emailDisplay.removeChild(buttonToRemove);
@@ -683,430 +220,9 @@
                       popupWindow.close();
                   }
               }
-          </script>
-    <script src="Lib/MonacoEditor/min/vs/loader.js"></script>
-    <script>
-        function updateResultsHeight() {
-    const screenHeight = window.innerHeight;
-    const desiredHeight = screenHeight * 0.725;
-    const resultsElement = document.getElementById('results');
-    resultsElement.style.maxHeight = desiredHeight + 'px';
-}
-
-// Appel initial de la fonction pour définir la hauteur au chargement de la page
-updateResultsHeight();
-
-        window.addEventListener('resize', updateResultsHeight);
-        //fin
-
-        function searchCode() {
-  const searchInput = document.getElementById('searchInput').value.toLowerCase();
-
-  // Chargement du fichier JSON en utilisant une balise <script>
-  const script = document.createElement('script');
-  script.src = 'list.js'; // Remplacez par le chemin vers votre fichier JSON
-
-  // Manipulation des données lorsque le fichier JSON est chargé
-  script.onload = () => {
-    const results = jsonData.filter(code => {
-      const title = code.title.toLowerCase();
-      const description = code.description.toLowerCase();
-
-      return title.includes(searchInput) || description.includes(searchInput);
-    });
-
-    displayResults(results);
-  };
-
-  document.head.appendChild(script);
-}
-
-function displayResults(results) {
-  const resultsContainer = document.getElementById('results');
-  resultsContainer.innerHTML = '';
-
-  if (results.length === 0) {
-    resultsContainer.innerHTML = 'Aucun résultat trouvé.';
-    return;
-  }
-
-  const maxResultsToShow = 140; // Nombre maximum de résultats à afficher
-  const resultsToShow = results.slice(0, maxResultsToShow); // Limiter les résultats
-
-  resultsToShow.forEach(code => {
-    const codeItem = document.createElement('div');
-    codeItem.classList.add('code-item');
-    
-    const title = document.createElement('h3');
-    title.textContent = code.title;
-    
-    const description = document.createElement('p');
-    description.textContent = code.description;
-    
-    const codeBlock = document.createElement('pre');
-    codeBlock.innerHTML = `<code>${code.code}</code>`;
-    
-    const insertButton = document.createElement('button');
-    insertButton.textContent = 'Insérer';
-    
-    insertButton.addEventListener('click', () => {
-      // Insérer le code dans l'éditeur Monaco
-      insertCodeIntoEditor(code.code);
-    });
-    
-    codeItem.appendChild(title);
-    codeItem.appendChild(description);
-    codeItem.appendChild(codeBlock);
-    codeItem.appendChild(insertButton);
-    
-    resultsContainer.appendChild(codeItem);
-  });
-}
-    //fin
-    function saveFile() {
-    // Récupérer le contenu de l'éditeur Monaco
-    var editorContent = monaco.editor.getModels()[0].getValue();
-
-    // Récupérer le nom du fichier à partir de l'entrée de l'utilisateur
-    var fileNameInput = document.getElementById('file-name');
-    var fileName = fileNameInput.value || 'default'; // Utiliser 'default' si le champ est vide
-
-    // Récupérer l'extension du langage sélectionné
-    var languageSelect = document.getElementById('language-selection');
-    var selectedLanguage = languageSelect.value;
-    var extension = '';
-
-    // Définir l'extension du fichier en fonction du langage sélectionné
-    if (selectedLanguage === 'html') {
-        extension = '.html';
-    } else if (selectedLanguage === 'javascript') {
-        extension = '.js';
-    } else if (selectedLanguage === 'python') {
-        extension = '.py';
-    } else if (selectedLanguage === 'c') {
-        extension = '.c';
-    } else if (selectedLanguage === 'assembly') {
-        extension = '.asm';
-    } else if (selectedLanguage === 'css') {
-        extension = '.css';
-    }// Ajoutez des conditions pour d'autres langages si nécessaire
-
-    // Créer un objet Blob avec le contenu
-    var blob = new Blob([editorContent], { type: 'text/plain' });
-
-    // Créer un lien pour le téléchargement
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-
-    // Définir le nom du fichier en utilisant le nom saisi et l'extension correspondante
-    var finalFileName = fileName + extension;
-    a.download = finalFileName;
-
-    // Simuler un clic sur le lien pour déclencher le téléchargement
-    a.click();
-}
-function openFile() {
-        // Créer un champ de fichier invisible
-        var fileInput = document.createElement('input');
-        fileInput.type = 'file';
-        fileInput.style.display = 'none';
-
-        // Lorsqu'un fichier est sélectionné, chargez son contenu dans l'éditeur Monaco
-        fileInput.addEventListener('change', function (e) {
-            var file = e.target.files[0];
-            var reader = new FileReader();
-
-        reader.onload = function (event) {
-            var fileContent = event.target.result;
-
-            // Vérifier si un modèle existe
-            if (monaco.editor.getModels().length > 0) {
-                // Remplacez le contenu du premier modèle par le contenu du fichier
-                monaco.editor.getModels()[0].setValue(fileContent);
-                // Récupérer le nom du fichier à partir du chemin du fichier sélectionné
-                var fileName = file.name;
-
-                // Mettre à jour la valeur de l'élément input avec le nom du fichier
-                document.getElementById('file-name').value = fileName;
-                document.title = 'DeskCode - ' + fileName;
-            }
-        };
-
-        reader.readAsText(file);
-    });
-
-    // Cliquez sur le champ de fichier pour ouvrir la boîte de dialogue de sélection de fichier
-    fileInput.click();
-    document.getElementById('editor').style.display = 'block';
-    document.getElementById('editor_image').style.display = 'none';
-    document.getElementById('proporeteclass').style.display = 'block';
-    document.getElementById('emailDisplay').style.display = 'block';
-    document.getElementById('editor_temp_start').style.display = 'none';
-    openTab('propriete');
-}
-//lol
-const output = document.getElementById("terminalboxtext");
-        const input = document.getElementById("terminalboxtextinput");
-
-        // Fonction pour afficher du texte dans le terminal
-        function printToTerminal(text) {
-            output.value += text + "\n";
-            input.value = ""; // Efface le champ d'entrée
-        }
-
-        // Écouteur pour détecter la touche "Entrée"
-        input.addEventListener("keyup", function(event) {
-            if (event.key === "Enter") {
-                const command = input.value.trim();
-                if (command !== "") {
-                printToTerminal("> " + input.value);
-                if (command === "help") {
-                    printToTerminal("Commandes disponibles :");
-                    printToTerminal("- help : Affiche le contenu de l'aide");
-                    printToTerminal("- run file : Initialise le fichier en cours... (arg -html -json)");
-                } else if (command === "run file -html") {
-                    printToTerminal("[100%] : Initialisation en cours");
-                    printToTerminal("[100%] : Traitement du fichier");
-                    printToTerminal("[100%] : Démarrage de la page Nav");
-                    printToTerminal("[100%] : Set debugger to HTML");
-                    debugHtmlEditor();
-                } else if (command === "run file -json") {
-                    printToTerminal("[100%] : Initialisation en cours");
-                    printToTerminal("[100%] : Traitement du fichier");
-                    printToTerminal("[100%] : Démarrage...");
-                    printToTerminal("[100%] : Set debugger to Json");
-                    debugHtmlEditor();
-                } else {
-                    printToTerminal("Commande inconnue : " + command);
-                }
-            } else {
-                printToTerminal("> " + "Commande vide");
-            }
-            }
-        });
-        //debug code
-        function debugHtmlEditor() {
-            var languageSelect = document.getElementById('language-selection');
-    var selectedLanguage = languageSelect.value;
-
-    // Définir l'extension du fichier en fonction du langage sélectionné
-    if (selectedLanguage === 'html') {
-            printToTerminal("[100%] : Debug en cours...");
-            printToTerminal("Notice : Selected langague is HTML");
-        // Récupérez l'éditeur Monaco
-        var editor = monaco.editor.getModels()[0];
-    
-        if (editor) {
-            // Obtenez le contenu de l'éditeur Monaco
-            var editorContent = editor.getValue();
-        
-            // Créez un élément div pour afficher le contenu
-            var debugContainer = document.createElement('div');
-            debugContainer.innerHTML = editorContent;
-        
-            // Ouvrez une nouvelle fenêtre et affichez le contenu
-            var debugWindow = window.open('', '', 'width=' + screen.width + ',height=' + screen.height);
-            debugWindow.document.open();
-            debugWindow.document.write('<html><head><title>Debug</title></head><body>');
-            debugWindow.document.write(debugContainer.innerHTML);
-            debugWindow.document.write('</body></html>');
-            debugWindow.document.close();
-            printToTerminal("Warning : Debug is now ended");
-        }
-    }
-    if (selectedLanguage === 'javascript') {
-        printToTerminal("[100%] : Debug en cours...");
-        printToTerminal("Notice : Selected langague is Js (JavaScipt)");
-         // Récupérer l'instance de l'éditeur
-    const editorInstance = monaco.editor.getModels()[0]; // Supposons que "editor" est l'instance de Monaco Editor
-
-        // Récupérer le contenu du Monaco Editor à l'aide de getValue()
-        const codeFromMonaco = editorInstance.getValue();
-        try {
-            // Exécuter le code récupéré
-            const result = eval(codeFromMonaco);
-
-            // Afficher le résultat dans une input ou console.log()
-            printToTerminal("Notice : Code executé sans erreur");
-            printToTerminal("Returned : " + result);
-        } catch (error) {
-            printToTerminal("Erreur : " + error);
-        }
-    }
-    else {
-        printToTerminal("Erreur : Langage non pris en charge pour le débogage.");
-    }
-    
-}
-setTimeout(function() {
-                var loader = document.getElementById('loader');
-                loader.style.display = 'none';
-                }, 5266);//Laisser charger jusqu'a DOMcontent is loaded
-// Fonction pour appliquer le langage sélectionné à l'éditeur Monaco
-function applyLanguage() {
-        var selectedLanguage = document.getElementById('language-selection').value;
-
-        // Appliquer le langage sélectionné à l'éditeur Monaco
-        var editor = monaco.editor.getModels()[0];
-        if (editor) {
-            monaco.editor.setModelLanguage(editor, selectedLanguage);
-        }
-
-        // Fermer la fenêtre modale après avoir appliqué le langage
-        var modal = document.getElementById('modal');
-        modal.style.display = 'none';
-    }
-function RunDebug() {
-    var selectedLanguage = languageSelect.value;
-
-    if (selectedLanguage === 'HTML') {
-        // Obtenir le contenu du modèle de l'éditeur Monaco
-        var editorContent = monaco.editor.getModels()[0].getValue();
-
-        // Créer un élément div pour afficher le contenu
-        var printContainer = document.createElement('div');
-        printContainer.innerHTML = editorContent;
-
-        // Ajouter le contenu à la page
-        document.body.appendChild(printContainer);
-        
-        // Appeler la fonction d'impression
-        window.print();
-
-        // Supprimer l'élément div après l'impression
-        document.body.removeChild(printContainer);
-    }
-}
-        // Fonction pour mettre à jour la hauteur de l'éditeur
-        function updateEditorHeight() {
-            const topBarHeight = document.getElementById('top_bar').offsetHeight;
-            const bottomBarHeight = document.getElementById('editor_bottom-bar').offsetHeight;
-            const windowHeight = window.innerHeight;
-
-            // Calculer la hauteur disponible pour l'éditeur
-            const availableHeight = windowHeight - topBarHeight - bottomBarHeight - 10;
-
-            // Mettre à jour la hauteur de l'éditeur avec la hauteur calculée
-            document.getElementById('editor').style.height = availableHeight + 'px';
-        }
-
-        // Appel de la fonction pour mettre à jour la hauteur lors du chargement de la page
-        window.onload = function () {
-            // Initialiser l'éditeur
-            require.config({ paths: { 'vs': 'Lib/MonacoEditor/min/vs' } });
-            require(['vs/editor/editor.main'], function () {
-                const editor = monaco.editor.create(document.getElementById('editor'), {
-                    value: '',
-                    language: 'html',
-                    automaticLayout: true,
-                    theme: 'vs-dark'
-                });
-            });
-            setTimeout(updateEditorHeight, 500);
-            // Mettre à jour la hauteur lors du redimensionnement de la fenêtre
-            window.addEventListener('resize', updateEditorHeight);
-        };
-        var i, tabcontent;
-        tabcontent = document.getElementsByClassName('tabcontent');
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = 'none';
-        }
-        function CloseAllTabs() {
-            var i, tabcontent;
-        tabcontent = document.getElementsByClassName('tabcontent');
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = 'none';
-        }
-        }
-        
-        function openTab(tabName) {
-        // Masquer tous les onglets
-        var i, tabcontent;
-        tabcontent = document.getElementsByClassName('tabcontent');
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = 'none';
-        }
-  
-        // Désactiver tous les boutons d'onglets
-        var tabButtons = document.getElementsByClassName('tablinks');
-        for (i = 0; i < tabButtons.length; i++) {
-        tabButtons[i].classList.remove('active');
-        }
-  
-        // Afficher l'onglet sélectionné et activer le bouton correspondant
-        document.getElementById(tabName + 'Tab').style.display = 'block';
-        event.currentTarget.classList.add('active');
-        }
-        //c'est ici mon gars
-        function openFileExplorer() {
-            document.getElementById('fileInput').click();
-        }
-        document.addEventListener('keydown', function (event) {
-            if (event.ctrlKey && event.key === 'q') {
-                document.getElementById('editor').style.display = 'block';
-                document.getElementById('editor_image').style.display = 'none';
-                document.getElementById('proporeteclass').style.display = 'block';
-                document.getElementById('emailDisplay').style.display = 'block';
-                document.getElementById('editor_temp_start').style.display = 'none';
-                openTab('propriete');
-                
-            }
-        });
-        function InitialiseWorkspace() {
-        document.getElementById('editor').style.display = 'block';
-                document.getElementById('editor_image').style.display = 'none';
-                document.getElementById('proporeteclass').style.display = 'block';
-                document.getElementById('emailDisplay').style.display = 'block';
-                document.getElementById('editor_temp_start').style.display = 'none';
-                monaco.editor.getModels()[0].setValue('');
-                openTab('propriete');
-        }
-        const inputFileName = document.getElementById('file-name');
-const defaultFileName = 'Nouveau fichier code'; // Valeur par défaut
-
-inputFileName.addEventListener('input', function() {
-    const fileNameValue = inputFileName.value.trim(); // Récupérer la valeur en enlevant les espaces
-    
-    // Vérifier si la valeur est vide ou seulement des espaces
-    if (fileNameValue === '') {
-        document.title = 'DeskCode - ' + defaultFileName; // Restaurer la valeur par défaut
-    } else {
-        document.title = 'DeskCode - ' + fileNameValue; // Mettre à jour avec la nouvelle valeur
-    }
-});
-
-// Au chargement initial de la page
-window.addEventListener('DOMContentLoaded', function() {
-    // Vérifier si la valeur par défaut est déjà affichée
-    if (inputFileName.value.trim() === '') {
-        document.title = 'DeskCode - ' + defaultFileName;
-    }
-});
-function insertCodeIntoEditor(code) {
-  const editor = monaco.editor.getModels()[0];
-  const lineCount = editor.getLineCount();
-  const columnCount = editor.getLineContent(lineCount).length + 1;
-
-  editor.executeEdits("insertCode", [{
-    range: new monaco.Range(lineCount, columnCount, lineCount, columnCount),
-    text: "\n" + code,
-    forceMoveMarkers: true
-  }]);
-}
-function insertCodeIntoEditor(code) {
-  const editor = monaco.editor.getModels()[0];
-  const lineCount = editor.getLineCount();
-  const columnCount = editor.getLineContent(lineCount).length + 1;
-
-  const textToInsert = code;
-  editor.pushEditOperations([], [
-    {
-      range: new monaco.Range(lineCount, columnCount, lineCount, columnCount),
-      text: textToInsert,
-    },
-  ]);
-}
-
-    </script>
+</script>
+<script src="Lib/MonacoEditor/dev/vs/loader.js"></script>
+<script src="Lib/OfficialDeskCodeLib/Dev/loader.js"></script>
+<script src="Lib/OfficialDeskCodeLib/Dev/terminal/main.js"></script>
 </body>
 </html>
