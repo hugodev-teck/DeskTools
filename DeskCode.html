@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>DeskCode - Nouveau fichier code</title>
+    <title>Nouveau fichier code - DeskCode</title>
     <link rel="icon" href="Res/fichier (4).png" type="image/x-icon">
     <link rel="stylesheet" href="Lib/MonacoEditor/dev/vs/editor/editor.main.css" />
     <link rel="stylesheet" href="Lib/OfficialDeskCodeLib/Dev/style/editormain.css">
@@ -17,6 +17,7 @@
     <div class="editor_main">
         <div class="editor_workspace">
             <div class="editor_workspace_leftbar">
+                <button style="object-fit: contain;" class="tabs-on-sidebar" class="padd" onclick="openTab('Coscript')"><img src="Res/logo-co-script-solo.png"></button>
                 <button class="tabs-on-sidebar" onclick="hideorshowterminal()"><img src="Res/square-terminal.png"></button>
                 <button class="tabs-on-sidebar" class="padd" onclick="openTab('file')"><img src="Res/document.png"></button>
                 <button class="tabs-on-sidebar" class="padd" onclick="openTab('propriete')"><img src="Res/settings-sliders.png"></button>
@@ -31,7 +32,6 @@
                         <button id="button_close_tab" onclick="CloseAllTabs()">X</button>
                     </div>
                     <img id="cosriptlogo" src="Res/logo-co-script.png" alt="co-script logo">
-                    <h2>Recherche de code</h2>
                     <input type="text" id="searchInput" onkeydown="searchCode()" placeholder="Entrez votre recherche...">
                     <div id="results"></div>
                 </div>
@@ -114,7 +114,7 @@
                                 </select>
                                 <p>Selection du dubuger</p>
                                 <select id="debug-language-selection">
-                                    <option value="html">DeskTolls  Compilateur pour HTML</option>
+                                    <option value="html">DeskTolls Compilateur pour HTML</option>
                                 </select>
                                 <button onclick="applyLanguage()">Appliquer</button>
                                 <h1>Paramètre de connexion</h1>
@@ -135,7 +135,7 @@
                                 <a class="dropdown-item" href="javascript:addTab()">Nouveau fichier<span class="shortcut">CTRL + Q</span></a>
                                 <a class="dropdown-item" href="javascript:openTab('Coscript')">Ouvrir Co-scipt</a>
                                 <a class="dropdown-item" href="javascript:clearTabs()">Effacer tout les onglets<span class="shortcut">CTRL + P</span></a>
-                                <a class="dropdown-item" href="Start-Index-OfflineApp.html">Quitter<span class="shortcut">CTRL + ALT + C</span></a>
+                                <a class="dropdown-item" href="index.html">Quitter<span class="shortcut">CTRL + ALT + C</span></a>
                             </div>
                         </div>
                         <div class="dropdown">
@@ -186,6 +186,17 @@
         </div>
     </div>
     <script>
+        // Fonction pour rediriger si la largeur de l'écran est inférieure à 900px
+    function redirectToDeskCodePage() {
+    var isSupported = document.documentElement.clientWidth >= 900;
+    
+    if (isSupported) {
+        return true;
+    } else {
+        window.location.href = 'index.html';
+    }
+}
+redirectToDeskCodePage();
         //-----------------------------------------------------------------------Gestion de la connection a prismID-----------------------------------------------
               var popupWindow;
           

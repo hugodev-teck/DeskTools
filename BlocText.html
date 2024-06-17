@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
   <link rel="icon" href="Res/fichier-2.svg" type="image/x-icon">  
-<title>DeskWritter - PrismTools</title>
+<title>Nouveau bloc note - DeskWritter</title>
   <style>
     body, html {
       margin: 0;
@@ -13,8 +13,8 @@
       overflow: hidden;
     }
     #top-bar {
-      background-color: rgba(168, 168, 168, 0.801);
-      height: 5%;
+      background: linear-gradient(to top, #F0F0F0, #d8d8d8);
+      height: 48px;
       display: flex;
       justify-content: flex-start;
       align-items: center;
@@ -37,15 +37,42 @@
     }
     #middle-bar {
       background-color: rgb(255, 255, 255);
-      height: 13%;
-      touch-action: manipulation;
-      overflow: hidden;
+      padding: 10px;
+      overflow-x: scroll;
+      overflow-y: hidden;
+      display: flex;
+    align-items: center; /* Alignement vertical au centre si nécessaire */
     }
+    #middle-bar::-webkit-scrollbar {
+  height: 5px; /* Largeur de la barre de défilement */
+}
+
+/* Style de la poignée de la barre de défilement */
+#middle-bar::-webkit-scrollbar-thumb {
+  background-color: rgba(179, 179, 179, 0.5); /* Couleur de la poignée */
+  border-radius: 5px; /* Bord arrondi de la poignée */
+}
+
+/* Style de la piste de la barre de défilement (la piste est la partie de la barre de défilement où se déplace la poignée) */
+#middle-bar::-webkit-scrollbar-track {
+  background-color: transparent; /* Fond de la piste transparent */
+}
+
+/* Masquer les flèches de défilement */
+#middle-bar::-webkit-scrollbar-button {
+  display: none; /* Masquer les flèches de défilement */
+}
+
+/* Masquer les coins de défilement */
+#middle-bar::-webkit-scrollbar-corner {
+  background-color: transparent; /* Fond des coins transparent */
+}
     #content {
-      background: linear-gradient(to bottom, rgba(206, 206, 206, 0.521), rgba(104, 104, 104, 0.301));
+      background: linear-gradient(to bottom, #F0F0F0, #d8d8d8);
       height: 82%;
       border-top-right-radius: 20px;
       border-top-left-radius: 20px;
+      width: 100%;
       z-index: 9999;
       touch-action: manipulation;
       overflow: auto;
@@ -78,7 +105,7 @@
     }
     #tool-container-text {
         background-color: white;
-        width: 230px;
+        width: 270px;
         height: 40px;
         border-radius: 50px;
         margin-top: 10px;
@@ -134,11 +161,12 @@
             padding: 15px;
             font-family: Arial, sans-serif;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
-            border-radius: 20px;
+            border-radius: 5px;
             width: 210mm;
             height: 297mm;
             margin-top: 50px;
             margin-left: 50%;
+            margin-bottom: 25px;
             transform: translateX(-50%);
             overflow: hidden;
             
@@ -321,7 +349,7 @@
     text-align: center;
 }
 #emailText {
-    color: grey;
+    color: rgb(204, 204, 204);
     text-align: left;
     font-size: 12px;
 }
@@ -329,28 +357,33 @@
         background-color: white;
         width: 90px;
         height: 40px;
+        padding-left: 5px;
         border-radius: 50px;
         margin-top: 10px;
         margin-left: 10px;
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
     }
     #menu {
+      display: flex;
+      align-items: center; /* Alignement vertical au centre si nécessaire */
+      flex-direction: row;
             position: fixed;
             top: 0;
-            left: -18%;
-            width: 18%;
+            width: 100%;
             height: 100%;
             background-color: #fff;
-            transition: left 0.3s;
-            z-index: 9999;
+            transition: left 0.8s;
+            z-index: 9999999;
         }
     #emailDisplay {
+      background-color: rgb(216, 216, 216);
       display: flex;
-    justify-content: space-between; /* Alignement horizontal au centre */
+      flex-direction: column;
     align-items: center; /* Alignement vertical au centre si nécessaire */
-    margin-top: 10px;
-    margin-left: 7px;
-    margin-right: 7px;
+    margin-top: 0px;
+    margin-left: 0px;
+    width: 19%;
+    height: 100%;
     }
         /* Style pour la fenêtre modale */
 .modal {
@@ -386,6 +419,19 @@
 .close:hover,
 .close:focus {
   color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+.closebtn {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.closebtn:hover,
+.closebtn:focus {
+  color: rgb(155, 32, 32);
   text-decoration: none;
   cursor: pointer;
 }
@@ -486,6 +532,446 @@ table {
       border-style: solid;
       border-color: gray;
     }
+    /* Styles pour l'élément imprprev (modal d'aperçu avant impression) */
+#imprprev {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+}
+
+#imprprev .modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  border-radius: 10px;
+  width: 80%;
+  height: 52%;
+  max-width: 600px;
+}
+
+#imprprev .close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+#imprprev .close:hover,
+#imprprev .close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Styles pour le bouton d'aperçu avant impression */
+#print-preview-btn {
+  background-color: #4CAF50; /* Couleur de fond */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+#print-preview-btn:hover {
+  background-color: #45a049; /* Changement de couleur au survol */
+}
+
+/* Styles pour le bouton d'impression */
+#print-btn {
+  background-color: #008CBA; /* Couleur de fond */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-top: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+#print-btn:hover {
+  background-color: #0073a8; /* Changement de couleur au survol */
+}
+#zone2-tool-bar-top-line1-bis {
+  margin-top: 5px;
+  margin-left: 20px;
+  display: flex;
+    align-items: center; /* Alignement vertical au centre si nécessaire */
+}
+#zone1-tool-bar-top-line1-line2 {
+  margin-top: -7px;
+}
+.soussection {
+  
+  background-color: white;
+        align-items: center;
+        height: 75px;
+        width: 120px;
+        padding-left: 5px;
+        border-color: rgb(231, 231, 231);
+        border-style: solid;
+        border-radius: 10px;
+        margin-left: 10px;
+        cursor: pointer;
+  transition: background-color 0.3s ease; /* Ajoute une transition de couleur sur 0.3s */
+}
+.soussection:hover {
+  background-color: #f0f0f0; /* Change la couleur de fond au survol */
+}
+#tool-container-text-c {
+  display: flex;
+    align-items: center; /* Alignement vertical au centre si nécessaire */
+        background-color: white;
+        padding-right: 20px;
+        height: 100px;
+        padding-left: 5px;
+        border-radius: 10px;
+        margin-bottom: 5px;
+        margin-left: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+    }
+    #tool-container-micro {
+        background-color: white;
+        height: 100px;
+        padding-left: 6px;
+        border-color: transparent;
+        border-radius: 10px;
+        margin-bottom: 5px;
+        margin-left: 13px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+        transition: background-color 0.3s ease; /* Ajoute une transition de couleur sur 0.3s */
+    }
+    #tool-container-micro:hover {
+  background-color: #f0f0f0; /* Change la couleur de fond au survol */
+}
+    #tool-container-micro img {
+      width: 30px;
+      height: 30px;
+      margin-top: 15px;
+    }
+    #tool-container-micro h1 {
+      font-size: small;
+      font-family: sans-serif;
+      padding: 5px;
+      color: #757575;
+}
+    #soustitre h1{
+      font-size: 19px;
+      font-family: Arial;
+      color: rgb(48, 48, 48);
+    }
+    #titre1 h1{
+      font-size: 20px;
+      font-family: Arial;
+      color: rgb(18, 18, 131);
+      font-style: italic;
+    }
+    #titre2 h1{
+      font-size: 20px;
+      font-family: sans-serif;
+      color: rgb(252, 193, 0);
+      font-style: italic;
+    }
+    #titre3 h1{
+      font-size: 18px;
+      font-family: sans-serif;
+      color: rgb(61, 61, 61);
+      font-style: italic;
+    }
+    #citation h1{
+      font-size: 17px;
+      font-family: Arial;
+      color: gray;
+      font-style: italic;
+
+    }
+    #soustitre h2{
+      font-size: 10px;
+      font-family: Arial;
+      color: rgb(180, 180, 180);
+      font-style: italic;
+
+}
+#titre1 h2{
+  font-size: 10px;
+      font-family: Arial;
+      color: rgb(180, 180, 180);
+      font-style: italic;
+
+}
+#titre2 h2{
+  font-size: 10px;
+      font-family: Arial;
+      color: rgb(180, 180, 180);
+      font-style: italic;
+
+}
+#titre3 h2{
+  font-size: 10px;
+      font-family: Arial;
+      color: rgb(180, 180, 180);
+      font-style: italic;
+
+}
+#citation h2{
+  font-size: 10px;
+      font-family: Arial;
+      color: rgb(180, 180, 180);
+      font-style: italic;
+
+}
+#sansinterligna h1 {
+      font-size: 16px;
+      font-family: Arial;
+      color: rgb(27, 27, 27);
+      font-style: italic;
+
+}
+#sansinterligna h2 {
+  font-size: 10px;
+      font-family: Arial;
+      color: rgb(180, 180, 180);
+      font-style: italic;
+}
+.menubtnm {
+  display: flex;
+  align-items: center; /* Alignement vertical au centre si nécessaire */
+  text-align: center;
+  width: 100%;
+  height: 40px;
+  transition: background-color 0.3s ease;
+  background-color: transparent;
+  border-color: transparent;
+  margin-left: 25px;
+}
+.menubtnm img {
+  width: 25px;
+  height: auto;
+}
+.menubtnm h1 {
+  font-size: small;
+  margin-left: 15px;
+}
+.menubtnm:hover {
+  text-decoration: underline;
+}
+#textinpunmenu {
+  padding-inline-start: 10px;
+  width: 80%;
+  border-radius: 50px;
+  border-color: transparent;
+  height: 30px;
+  margin-top: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+}
+#infomodel {
+  height: 100%;
+  width: 81%;
+  background-color: #f7f7f7;
+}
+#start {
+        background-color: #4a6c7e96;
+        color: #fff;
+        padding: 10px;
+        width: 100%;
+        box-sizing: border-box;
+        height: 420px;
+        overflow-x: scroll;
+    }
+    .content {
+        flex: 1;
+        margin-left: 100px; /* Pour laisser de la place à la sidebar */
+    }
+    #list {
+        height: 600px;
+        width: 100%;
+        background-color: #dbdbdb;
+    }
+    .template {
+            width: 180px; /* Ajustez la largeur selon vos besoins */
+            border-radius: 10px;
+            background: #ececec8e; /* Fond blanc */
+            color: black;
+            padding: 20px;
+            text-align: center;
+            margin-left: 50px;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .template img {
+            width: 70%; /* Ajustez la taille de l'image selon vos besoins */
+            border-radius: 10px;
+        }
+
+        .logo {
+            background: #8888888c; /* Fond gris */
+            width: 100%; /* Ajustez la taille de la case grise */
+            height: 50px; /* Ajustez la taille de la case grise */
+            display: flex;
+            justify-content: center;
+            overflow: hidden;
+            align-items: center;
+            border-radius: 10px;
+            margin-top: 9px; /* Marge pour l'espacement */
+        }
+        .logooth {
+            background: rgba(255, 255, 255, 0.438); /* Fond gris */
+            width: 50px; /* Ajustez la taille de la case grise */
+            height: 50px; /* Ajustez la taille de la case grise */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            margin-top: 9px; /* Marge pour l'espacement */
+            margin-left: 25px;
+        }
+        #logomenu {
+            width: 35px; /* Ajustez la taille de la case grise */
+            height: 35px; /* Ajustez la taille de la case grise */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            margin-top: 9px; /* Marge pour l'espacement */
+            margin-top: 30px;
+            margin-left: 33px;
+            margin-bottom: 40px;
+        }
+        .logooth img {
+            width: 70%;
+            height: 70%;
+        }
+        .logo img {
+            width: 30px; /* Ajustez la taille du logo à l'intérieur de la case grise */
+        }
+        .logo p {
+            margin-left: 7px;
+        }
+        .carousel {
+          display: flex;
+          align-items: center; /* Alignement horizontal au centre */
+        }
+        #infomodel h1 {
+          margin-left: 25px;
+          font-size: x-large;
+          font-family: sans-serif;
+          
+        }
+        #tool-container-micro-act {
+        position: fixed;
+        z-index: 1000;
+        left: 200px;
+        top: 200px;
+        background-color: rgba(0, 0, 0, 0.5);
+        background-color: white;
+        height: 100px;
+        width: 100px;
+        padding-left: 6px;
+        border-color: transparent;
+        border-radius: 10px;
+        margin-bottom: 5px;
+        margin-left: 13px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+        transition: background-color 0.3s ease;
+        display: none;
+        overflow: hidden;
+    }
+    #tool-container-micro-act h1 {
+      font-size: 12px;
+      font-family: sans-serif;
+    }
+    #tool-container-micro-act button {
+      border-color: transparent;
+      background-color: transparent;
+    }
+    #tool-container-micro-act img {
+      width: 50px;
+      height: auto;
+      margin-top: 5px;
+      margin-left: 10px;
+    }
+    #microphoneIcon {
+  border-radius: 50%;
+}
+#tool-container-sc {
+        background-color: white;
+        height: 100px;
+        padding-left: 6px;
+        border-color: transparent;
+        border-radius: 10px;
+        margin-bottom: 5px;
+        margin-left: 13px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+        transition: background-color 0.3s ease; /* Ajoute une transition de couleur sur 0.3s */
+    }
+    #tool-container-sc:hover {
+  background-color: #f0f0f0; /* Change la couleur de fond au survol */
+}
+    #tool-container-sc img {
+      width: 30px;
+      height: 30px;
+      margin-top: 15px;
+    }
+    #tool-container-sc h1 {
+      font-size: small;
+      font-family: sans-serif;
+      color: #757575;
+      margin-top: 5px;
+}
+#tool-container-sc h1:last-child {
+      margin-top: -8px;
+}
+#special-characters-container {
+  position: fixed;
+  z-index: 9999;
+  right: 30px;
+  width: 210px;
+  height: 210px;
+  top: 175px;
+  display: none;
+  border-radius: 10px;
+  flex-wrap: wrap; /* Permettre le retour à la ligne des boutons si nécessaire */
+  background-color: #aaaaaa;
+  overflow-y: scroll;
+}
+#special-characters-container h1 {
+  font-size: small;
+  color: rgb(46, 46, 46);
+}
+
+.special-character {
+  margin: 3px; /* Espacement entre les boutons */
+  padding: 5px 10px; /* Espacement interne des boutons */
+  font-size: 16px; /* Taille de la police */
+  border: 1px solid #ccc; /* Bordure autour des boutons */
+  border-radius: 5px; /* Coins arrondis */
+  background-color: #808080; /* Couleur de fond */
+  cursor: pointer; /* Curseur de la souris */
+  width: 40px;
+  height: 40px;
+  transition: background-color 0.3s; /* Transition pour un changement de couleur en douceur */
+}
+
+.special-character:hover {
+  background-color: #e0e0e0; /* Couleur de fond au survol */
+}
   </style>
 </head>
 <body>
@@ -494,6 +980,42 @@ table {
     <div class="bottom-content">
         <img src="Res/logo-text-big.png">
     </div> 
+</div>
+<div id="tool-container-micro-act">
+  <h1 id="titled">Enregistrement</h1>
+  <button onclick="stopSpeechRecognition()"><img id="microphoneIcon" src="Res/stop-button.png" alt="stoprec"></button>
+</div>
+<div id="imprprev">
+  <div class="modal-content">
+    <span class="close" onclick="closePrintPreviewModal()">&times;</span>
+    <h2>Paramètre</h2>
+    <h3>Mise en page</h3>
+      <h4>Orientation de la page :</h4>
+      <label><input type="radio" name="orientation" value="portrait" checked> Portrait</label>
+      <label><input type="radio" name="orientation" value="landscape"> Paysage</label>
+      <p>Le type de feuille est actuellement 'A4'</p>
+      <h4>Format de papier :</h4>
+      <select id="paper-size-bis">
+        <option value="A4">A4</option>
+        <option value="A5">A5</option>
+        <option value="Letter">Lettre US</option>
+        <option value="Legal">Legal US</option>
+      </select>
+      <h4>Marges :</h4>
+      <select id="margin-size-bis">
+        <option value="no">Aucune marge</option>
+        <option value="narrow">Étroite (marge de 10mm)</option>
+        <option value="normal" selected>Normale (marge de 20mm)</option>
+        <option value="wide">Large (marge de 30mm)</option>
+        <!-- Ajoutez d'autres options de marges si nécessaire -->
+      </select>
+      <ul>
+        <li><strong>Étroite :</strong> Une marge de 10 mm.</li>
+        <li><strong>Normale :</strong> Une marge de 20 mm.</li>
+        <li><strong>Large :</strong> Une marge de 30 mm.</li>
+      </ul>
+    <button id="print-btn" onclick="printContent()">Imprimer</button>
+  </div>
 </div>
 <div id="custom-menu">
   <input type="text" id="search-bar" placeholder="Search..."> <!-- Search bar -->
@@ -514,21 +1036,93 @@ table {
     <input type="file" id="file-input" style="display: none;">
     <button class="button-with-image" id="openModalBtn"><img src="Res/settings-sliders.png" alt="Image 3"></button>
     <button class="button-with-image" onclick="openPopup()"><img src="Res/profile-user.png" alt="connexion au service"></button>
-    <div id="menu" class="hidden">
+    <div id="menu" class="hidden" style="left: -100%;">
       <div id="emailDisplay">
-          <button id="menu-return-button" onclick="window.location.href = 'Start-Index-OfflineApp.html';">Retour au menu principale</button>
-          <button id="Conn-btn" onclick="openPopup(); toggleMenu();">Connectez vous</button>
+          <input placeholder="Recherche ici..." id="textinpunmenu" type="text"></input>
+          <button class="menubtnm" id="menu-return-button" onclick="window.location.href = 'index.html';">
+            <img src="Res/home.png" alt="arrow">
+            <h1>Accueil</h1>
+          </button>
+          <button class="menubtnm" id="save">
+            <img src="Res/save.png" alt="arrow">
+            <h1>Ouvrir</h1>
+          </button>
+          <button class="menubtnm" id="open">
+            <img src="Res/open.png" alt="arrow">
+            <h1>Sauvegarder</h1>
+          </button>
+          <button class="menubtnm" id="Conn-btn" onclick="openPopup(); toggleMenu();">
+            <img src="Res/profile-user.png" alt="arrow">
+            <h1>Connection à PRISMID</h1>
+          </button>
+          <button class="menubtnm" id="closebtn" onclick="toggleMenu();">
+            <img src="Res/arrow.png" alt="arrow">
+            <h1>Retour</h1>
+          </button>
+      </div>
+      <div id="infomodel">
+        <h1>Créer un nouveau document :</h1>
+        <div id="start">
+          <div class="carousel">
+          <div class="template">
+              <img id="to-writter" src="Res/page.png" alt="Image du Template">
+              <p>Fichier texte vide</p>
+              <div class="logo">
+                  <img id="to-writter" src="Res/fichier (2).png" alt="Logo">
+                  <p>DeskWritter</p>
+              </div>
+          </div>
+          <div class="template" onclick="openmedel('lettre'); toggleMenu();">
+            <img id="to-writter" src="Res/pagelettre.png" alt="Image du Template">
+            <p>Lettre simple</p>
+            <div class="logo">
+                <img id="to-writter" src="Res/fichier (2).png" alt="Logo">
+                <p>DeskWritter</p>
+            </div>
+        </div>
+        <div class="template" onclick="openmedel('liste'); toggleMenu();">
+          <img id="to-writter" src="Res/pageliste.png" alt="Image du Template">
+          <p>Liste simple</p>
+          <div class="logo">
+              <img id="to-writter" src="Res/fichier (2).png" alt="Logo">
+              <p>DeskWritter</p>
+          </div>
+      </div>
+      <div class="template" onclick="openmedel('PV'); toggleMenu();">
+        <img id="to-writter" src="Res/pagepv.png" alt="Image du Template">
+        <p>Procès-verbal de réunion</p>
+        <div class="logo">
+            <img id="to-writter" src="Res/fichier (2).png" alt="Logo">
+            <p>DeskWritter</p>
+        </div>
+    </div>
+    <div class="template" onclick="openmedel('rapport'); toggleMenu();">
+      <img id="to-writter" src="Res/pagerapport.png" alt="Image du Template">
+      <p>Rapport simple</p>
+      <div class="logo">
+          <img id="to-writter" src="Res/fichier (2).png" alt="Logo">
+          <p>DeskWritter</p>
+      </div>
+  </div>
+      </div>
+      </div>
       </div>
       
   </div>
 
 </div>
 <div id="middle-bar">
+<div id="zone1-tool-bar-top-line1-line2">
 <div id="tool-contener-line1">
     <div id="tool-container-text-adv">
         <button class="class2-button"><img src="Res/copy.png" alt="img"></button>
         <button class="class2-button"><img src="Res/paste.png" alt="img"></button>
         <button class="class2-button"><img src="Res/scissors.png" alt="img"></button>
+    </div>
+    <div id="tool-container-text-b">
+      <button class="class1-button" ><img src="Res/undo.png" alt="img"></button>
+      <button class="class1-button"><img src="Res/forward.png" alt="img"></button>
+      
     </div>
     <select id="font-family">
     
@@ -787,12 +1381,13 @@ table {
 </div>
 
 <div id="tool-contener-line2">
-  <button id="apply-stand-new-line" class="class2-button-solo"><img src="Res/print.png" alt="img"></button>
+  <button onclick="handlePrintPreviewButtonClick()" id="apply-stand-new-line" class="class2-button-solo"><img src="Res/print.png" alt="img"></button>
   <button class="class2-button-solo"><img src="Res/eraser.png" alt="img"></button>
   <div id="tool-container-text">
     <button class="class1-button" style="margin-left: 5px;"><img src="Res/align-left.png" alt="img"></button>
     <button class="class1-button"><img src="Res/align-center.png" alt="img"></button>
     <button class="class1-button"><img src="Res/align-right.png" alt="img"></button>
+    <button class="class1-button"><img src="Res/justified-text.png" alt="img"></button>
     <button class="class1-button"><img src="Res/exposant.png" alt="img"></button>
     <button class="class1-button"><img src="Res/indice.png" alt="img"></button>
 </div>
@@ -810,19 +1405,490 @@ table {
 </div>
 
 </div>
+</div>
+<div id="zone2-tool-bar-top-line1-bis">
+  <div id="tool-container-text-c">
+    <button class="soussection" id="titre1" onclick="insertStyledText('titre1')">
+      <h1>Titre 1</h1>
+      <h2>Arial, 35</h2>
+    </button>
+    <button class="soussection" id="titre2" onclick="insertStyledText('titre2')">
+      <h1>Titre 2</h1>
+      <h2>Sans Serif, 35</h2>
+    </button>
+    <button class="soussection" id="titre3" onclick="insertStyledText('titre3')">
+      <h1>Titre 3</h1>
+      <h2>Sans Serif, 30</h2>
+    </button>
+    <button class="soussection" id="soustitre" onclick="insertStyledText('soustitre')">
+      <h1>Sous-titre</h1>
+      <h2>Arial, 23</h2>
+    </button>
+    <button class="soussection" id="citation" onclick="insertStyledText('citation')">
+      <h1>Citation</h1>
+      <h2>Univers, 14</h2>
+    </button>
+    <button class="soussection" id="sansinterligna" onclick="insertStyledText('si')">
+      <h1>Sans Interligne</h1>
+      <h2>Univers, 12</h2>
+    </button>
+    
+  </div>
+  <button id="tool-container-micro" onclick="startSpeechRecognition()">
+    <img src="Res/microphone.png" alt="Microphone">
+    <h1>Dicter</h1>
+  </button>
+  <button id="tool-container-sc" onclick="toggleSpecialCharacters()">
+    <img src="Res/omega.png" alt="Microphone">
+    <h1>Caractères</h1>
+    <h1>spéciaux</h1>
+  </button>
+  <div id="special-characters-container" style="display: none;">
+    <h1>--------Caractères spéciaux---------</h1>
+    <button class="special-character">€</button>
+  <button class="special-character">¥</button>
+  <button class="special-character">£</button>
+  <button class="special-character">¢</button>
+  <button class="special-character">©</button>
+  <button class="special-character">®</button>
+  <button class="special-character">™</button>
+  <button class="special-character">§</button>
+  <button class="special-character">¶</button>
+  <button class="special-character">†</button>
+  <button class="special-character">‡</button>
+  <button class="special-character">№</button>
+  <button class="special-character">℗</button>
+  <button class="special-character">℠</button>
+  <button class="special-character">№</button>
+  <button class="special-character">℠</button>
+  <button class="special-character">℞</button>
+  <button class="special-character">°</button>
+  <button class="special-character">Ω</button>
+  <button class="special-character">℃</button>
+  <button class="special-character">℉</button>
+  <button class="special-character">‰</button>
+  <button class="special-character">←</button>
+  <button class="special-character">→</button>
+  <button class="special-character">↑</button>
+  <button class="special-character">↓</button>
+  <button class="special-character">↔</button>
+  <button class="special-character">↕</button>
+  <button class="special-character">↖</button>
+  <button class="special-character">↗</button>
+  <button class="special-character">↘</button>
+  <button class="special-character">↙</button>
+  <button class="special-character">◊</button>
+  <button class="special-character">♠</button>
+  <button class="special-character">♣</button>
+  <button class="special-character">♥</button>
+  <button class="special-character">♦</button>
+  <button class="special-character">♪</button>
+  <button class="special-character">♫</button>
+  <button class="special-character">♩</button>
+  <button class="special-character">♬</button>
+  <button class="special-character">✓</button>
+  <button class="special-character">✗</button>
+  <button class="special-character">✰</button>
+  <button class="special-character">✱</button>
+  <button class="special-character">✲</button>
+  <button class="special-character">✳</button>
+  <button class="special-character">✴</button>
+  <button class="special-character">✵</button>
+  <button class="special-character">✶</button>
+  <button class="special-character">✷</button>
+  <button class="special-character">✸</button>
+  <button class="special-character">✹</button>
+  <button class="special-character">✺</button>
+  <button class="special-character">✻</button>
+  <button class="special-character">✼</button>
+  <button class="special-character">✽</button>
+  <button class="special-character">✾</button>
+  <button class="special-character">✿</button>
+  <button class="special-character">❀</button>
+  <button class="special-character">❁</button>
+  <button class="special-character">❂</button>
+  <button class="special-character">❃</button>
+  <button class="special-character">❄</button>
+  <button class="special-character">❅</button>
+  <button class="special-character">❆</button>
+  <button class="special-character">❇</button>
+  <button class="special-character">❈</button>
+  <button class="special-character">❉</button>
+  <button class="special-character">❊</button>
+  <button class="special-character">❋</button>
+  <button class="special-character">❍</button>
+  <button class="special-character">❏</button>
+  <button class="special-character">❐</button>
+  <button class="special-character">❑</button>
+  <button class="special-character">❒</button>
+  <button class="special-character">❖</button>
+  <button class="special-character">❘</button>
+  <button class="special-character">❙</button>
+  <button class="special-character">❚</button>
+  <button class="special-character">❛</button>
+  <button class="special-character">❜</button>
+  <button class="special-character">❝</button>
+  <button class="special-character">❞</button>
+  <button class="special-character">❡</button>
+  <button class="special-character">❢</button>
+  <button class="special-character">❣</button>
+  <button class="special-character">❤</button>
+  <button class="special-character">❥</button>
+  <button class="special-character">❦</button>
+  <button class="special-character">❧</button>
+  <button class="special-character">☀</button>
+  <button class="special-character">☁</button>
+  <button class="special-character">☂</button>
+  <button class="special-character">☃</button>
+  <button class="special-character">☄</button>
+  <button class="special-character">★</button>
+  <button class="special-character">☆</button>
+  <button class="special-character">☇</button>
+  <button class="special-character">☈</button>
+  <button class="special-character">☉</button>
+  <button class="special-character">☊</button>
+  <button class="special-character">☋</button>
+  <button class="special-character">☌</button>
+  <button class="special-character">☍</button>
+  <button class="special-character">☎</button>
+  <button class="special-character">☏</button>
+  <button class="special-character">☐</button>
+  <button class="special-character">☑</button>
+  <button class="special-character">☒</button>
+  <button class="special-character">☓</button>
+  <button class="special-character">☖</button>
+  <button class="special-character">☗</button>
+  <button class="special-character">☘</button>
+  <button class="special-character">☙</button>
+  <button class="special-character">☚</button>
+  <button class="special-character">☛</button>
+  <button class="special-character">☜</button>
+  <button class="special-character">☞</button>
+  <button class="special-character">☟</button>
+  <button class="special-character">☠</button>
+  <button class="special-character">☡</button>
+  <button class="special-character">☢</button>
+  <button class="special-character">☣</button>
+  <button class="special-character">☤</button>
+  <button class="special-character">☥</button>
+  <button class="special-character">☦</button>
+  <button class="special-character">☧</button>
+  <button class="special-character">☨</button>
+  <button class="special-character">☩</button>
+  <button class="special-character">☪</button>
+  <button class="special-character">☫</button>
+  <button class="special-character">☬</button>
+  <button class="special-character">☭</button>
+  <button class="special-character">☮</button>
+  <button class="special-character">☯</button>
+  <button class="special-character">☰</button>
+  <button class="special-character">☱</button>
+  <button class="special-character">☲</button>
+  <button class="special-character">☳</button>
+  <button class="special-character">☴</button>
+  <button class="special-character">☵</button>
+  <button class="special-character">☶</button>
+  <button class="special-character">☷</button>
+  <button class="special-character">☸</button>
+  <button class="special-character">☹</button>
+  <button class="special-character">☺</button>
+  <button class="special-character">☻</button>
+  <button class="special-character">☼</button>
+  <button class="special-character">☽</button>
+  <button class="special-character">☾</button>
+  <button class="special-character">☿</button>
+  <button class="special-character">♀</button>
+  <button class="special-character">♂</button>
+  <button class="special-character">♃</button>
+  <button class="special-character">♄</button>
+  <button class="special-character">♅</button>
+  <button class="special-character">♆</button>
+  <button class="special-character">♇</button>
+  <button class="special-character">♔</button>
+  <button class="special-character">♕</button>
+  <button class="special-character">♖</button>
+  <button class="special-character">♗</button>
+  <button class="special-character">♘</button>
+  <button class="special-character">♙</button>
+  <button class="special-character">♚</button>
+  <button class="special-character">♛</button>
+  <button class="special-character">♜</button>
+  <button class="special-character">♝</button>
+  <button class="special-character">♞</button>
+  <button class="special-character">♟</button>
+  <button class="special-character">♠</button>
+  <button class="special-character">♡</button>
+  <button class="special-character">♢</button>
+  <button class="special-character">♣</button>
+  <button class="special-character">♤</button>
+  <button class="special-character">♥</button>
+  <button class="special-character">♦</button>
+  <button class="special-character">♧</button>
+  <button class="special-character">♨</button>
+  <button class="special-character">♩</button>
+  <button class="special-character">♫</button>
+  <button class="special-character">♬</button>
+  <button class="special-character">♭</button>
+  <button class="special-character">♮</button>
+  <button class="special-character">♯</button>
+  <button class="special-character">♰</button>
+  <button class="special-character">♱</button>
+  <button class="special-character">♲</button>
+  <button class="special-character">♳</button>
+  <button class="special-character">♴</button>
+  <button class="special-character">♵</button>
+  <button class="special-character">♶</button>
+  <button class="special-character">♷</button>
+  <button class="special-character">♸</button>
+  <button class="special-character">♹</button>
+  <button class="special-character">♺</button>
+  <button class="special-character">♻</button>
+  <button class="special-character">♼</button>
+  <button class="special-character">♽</button>
+  <button class="special-character">♾</button>
+  <h1>---------------emoji----------------</h1>
+  <button class="special-character">😀</button>
+  <button class="special-character">😃</button>
+  <button class="special-character">😄</button>
+  <button class="special-character">😁</button>
+  <button class="special-character">😆</button>
+  <button class="special-character">😅</button>
+  <button class="special-character">😂</button>
+  <button class="special-character">🤣</button>
+  <button class="special-character">😊</button>
+  <button class="special-character">😇</button>
+  <button class="special-character">🙂</button>
+  <button class="special-character">🙃</button>
+  <button class="special-character">😉</button>
+  <button class="special-character">😌</button>
+  <button class="special-character">😍</button>
+  <button class="special-character">😘</button>
+  <button class="special-character">😗</button>
+  <button class="special-character">😙</button>
+  <button class="special-character">😚</button>
+  <button class="special-character">😋</button>
+  <button class="special-character">😛</button>
+  <button class="special-character">😜</button>
+  <button class="special-character">😝</button>
+  <button class="special-character">🤑</button>
+  <button class="special-character">🤗</button>
+  <button class="special-character">🤓</button>
+  <button class="special-character">😎</button>
+  <button class="special-character">🤡</button>
+  <button class="special-character">🤠</button>
+  <button class="special-character">😏</button>
+  <button class="special-character">😒</button>
+  <button class="special-character">😞</button>
+  <button class="special-character">😔</button>
+  <button class="special-character">😟</button>
+  <button class="special-character">😕</button>
+  <button class="special-character">🙁</button>
+  <button class="special-character">☹️</button>
+  <button class="special-character">😣</button>
+  <button class="special-character">😖</button>
+  <button class="special-character">😫</button>
+  <button class="special-character">😩</button>
+  <button class="special-character">😢</button>
+  <button class="special-character">😭</button>
+  <button class="special-character">😤</button>
+  <button class="special-character">😠</button>
+  <button class="special-character">😡</button>
+  <button class="special-character">😶</button>
+  <button class="special-character">😐</button>
+  <button class="special-character">😑</button>
+  <button class="special-character">😯</button>
+  <button class="special-character">😦</button>
+  <button class="special-character">😧</button>
+  <button class="special-character">😮</button>
+  <button class="special-character">😲</button>
+  <button class="special-character">😴</button>
+  <button class="special-character">🤤</button>
+  <button class="special-character">😪</button>
+  <button class="special-character">😵</button>
+  <button class="special-character">🤐</button>
+  <button class="special-character">🤢</button>
+  <button class="special-character">🤧</button>
+  <button class="special-character">😷</button>
+  <button class="special-character">🤒</button>
+  <button class="special-character">🤕</button>
+  <button class="special-character">😈</button>
+  <button class="special-character">👿</button>
+  <button class="special-character">👹</button>
+  <button class="special-character">👺</button>
+  <button class="special-character">💀</button>
+  <button class="special-character">👻</button>
+  <button class="special-character">👽</button>
+  <button class="special-character">👾</button>
+  <button class="special-character">🤖</button>
+  <button class="special-character">💩</button>
+  <button class="special-character">😺</button>
+  <button class="special-character">😸</button>
+  <button class="special-character">😹</button>
+  <button class="special-character">😻</button>
+  <button class="special-character">😼</button>
+  <button class="special-character">😽</button>
+  <button class="special-character">🙀</button>
+  <button class="special-character">😿</button>
+  <button class="special-character">😾</button>
+  <h1>--------Alphabet Cyrillique---------</h1>
+  <button class="special-character">А</button>
+<button class="special-character">Б</button>
+<button class="special-character">В</button>
+<button class="special-character">Г</button>
+<button class="special-character">Д</button>
+<button class="special-character">Е</button>
+<button class="special-character">Ё</button>
+<button class="special-character">Ж</button>
+<button class="special-character">З</button>
+<button class="special-character">И</button>
+<button class="special-character">Й</button>
+<button class="special-character">К</button>
+<button class="special-character">Л</button>
+<button class="special-character">М</button>
+<button class="special-character">Н</button>
+<button class="special-character">О</button>
+<button class="special-character">П</button>
+<button class="special-character">Р</button>
+<button class="special-character">С</button>
+<button class="special-character">Т</button>
+<button class="special-character">У</button>
+<button class="special-character">Ф</button>
+<button class="special-character">Х</button>
+<button class="special-character">Ц</button>
+<button class="special-character">Ч</button>
+<button class="special-character">Ш</button>
+<button class="special-character">Щ</button>
+<button class="special-character">Ъ</button>
+<button class="special-character">Ы</button>
+<button class="special-character">Ь</button>
+<button class="special-character">Э</button>
+<button class="special-character">Ю</button>
+<button class="special-character">Я</button>
+<h1>-----------Alphabet arabe-----------</h1>
+<button class="special-character">ا</button>
+<button class="special-character">ب</button>
+<button class="special-character">ت</button>
+<button class="special-character">ث</button>
+<button class="special-character">ج</button>
+<button class="special-character">ح</button>
+<button class="special-character">خ</button>
+<button class="special-character">د</button>
+<button class="special-character">ذ</button>
+<button class="special-character">ر</button>
+<button class="special-character">ز</button>
+<button class="special-character">س</button>
+<button class="special-character">ش</button>
+<button class="special-character">ص</button>
+<button class="special-character">ض</button>
+<button class="special-character">ط</button>
+<button class="special-character">ظ</button>
+<button class="special-character">ع</button>
+<button class="special-character">غ</button>
+<button class="special-character">ف</button>
+<button class="special-character">ق</button>
+<button class="special-character">ك</button>
+<button class="special-character">ل</button>
+<button class="special-character">م</button>
+<button class="special-character">ن</button>
+<button class="special-character">ه</button>
+<button class="special-character">و</button>
+<button class="special-character">ي</button>
+<button class="special-character">ى</button>
+<button class="special-character">ئ</button>
+<button class="special-character">ء</button>
+<button class="special-character">ؤ</button>
+<button class="special-character">إ</button>
+<button class="special-character">أ</button>
+<button class="special-character">آ</button>
+<h1>------------Alphabet grec-----------</h1>
+<button class="special-character">Α</button>
+<button class="special-character">Β</button>
+<button class="special-character">Γ</button>
+<button class="special-character">Δ</button>
+<button class="special-character">Ε</button>
+<button class="special-character">Ζ</button>
+<button class="special-character">Η</button>
+<button class="special-character">Θ</button>
+<button class="special-character">Ι</button>
+<button class="special-character">Κ</button>
+<button class="special-character">Λ</button>
+<button class="special-character">Μ</button>
+<button class="special-character">Ν</button>
+<button class="special-character">Ξ</button>
+<button class="special-character">Ο</button>
+<button class="special-character">Π</button>
+<button class="special-character">Ρ</button>
+<button class="special-character">Σ</button>
+<button class="special-character">Τ</button>
+<button class="special-character">Υ</button>
+<button class="special-character">Φ</button>
+<button class="special-character">Χ</button>
+<button class="special-character">Ψ</button>
+<button class="special-character">Ω</button>
+<button class="special-character">α</button>
+<button class="special-character">β</button>
+<button class="special-character">γ</button>
+<button class="special-character">δ</button>
+<button class="special-character">ε</button>
+<button class="special-character">ζ</button>
+<button class="special-character">η</button>
+<button class="special-character">θ</button>
+<button class="special-character">ι</button>
+<button class="special-character">κ</button>
+<button class="special-character">λ</button>
+<button class="special-character">μ</button>
+<button class="special-character">ν</button>
+<button class="special-character">ξ</button>
+<button class="special-character">ο</button>
+<button class="special-character">π</button>
+<button class="special-character">ρ</button>
+<button class="special-character">σ</button>
+<button class="special-character">τ</button>
+<button class="special-character">υ</button>
+<button class="special-character">φ</button>
+<button class="special-character">χ</button>
+<button class="special-character">ψ</button>
+<button class="special-character">ω</button>
+<h1>----------Alphabet hébreu-----------</h1>
+<button class="special-character">א</button>
+<button class="special-character">ב</button>
+<button class="special-character">ג</button>
+<button class="special-character">ד</button>
+<button class="special-character">ה</button>
+<button class="special-character">ו</button>
+<button class="special-character">ז</button>
+<button class="special-character">ח</button>
+<button class="special-character">ט</button>
+<button class="special-character">י</button>
+<button class="special-character">כ</button>
+<button class="special-character">ל</button>
+<button class="special-character">מ</button>
+<button class="special-character">נ</button>
+<button class="special-character">ס</button>
+<button class="special-character">ע</button>
+<button class="special-character">פ</button>
+<button class="special-character">צ</button>
+<button class="special-character">ק</button>
+<button class="special-character">ר</button>
+<button class="special-character">ש</button>
+<button class="special-character">ת</button>
 
 </div>
+</div>
+
+</div>
+<div id="zoom-contener">
+  <img id="zoom-image" src="Res/magnifier.png" alt="Zomm1">
+  <input type="range" min="50" max="200" value="100" class="barre-zoom" id="zoomBar">
+  <span id="valeur-zoom">100%</span>
+</div>
   <div id="content">
-    <div id="zoom-contener">
-      <img id="zoom-image" src="Res/magnifier.png" alt="Zomm1">
-      <input type="range" min="50" max="200" value="100" class="barre-zoom" id="zoomBar">
-      <span id="valeur-zoom">100%</span>
-    </div>
+    
     <div id="editor" contenteditable="true"></div>
   </div>
   <div id="myModal" class="modal">
     <div class="modal-content">
-      <span class="close">&times;</span>
+      <span class="closebtn">&times;</span>
       
       <!-- Onglets -->
       <div class="tabs">
@@ -867,6 +1933,7 @@ table {
       </select>
       <h4>Marges :</h4>
       <select id="margin-size">
+        <option value="no">Aucune marge</option>
         <option value="narrow">Étroite (marge de 10mm)</option>
         <option value="normal" selected>Normale (marge de 20mm)</option>
         <option value="wide">Large (marge de 30mm)</option>
@@ -887,6 +1954,230 @@ table {
     </div>
   </div>
 <script>
+//-------------------------------------------------------------------------charspe-----------------------------------------------------------
+function toggleSpecialCharacters() {
+    var specialCharactersContainer = document.getElementById('special-characters-container');
+    if (specialCharactersContainer.style.display === 'none') {
+      specialCharactersContainer.style.display = 'flex';
+    } else {
+      specialCharactersContainer.style.display = 'none';
+    }
+  }
+// Sélection de la div contenant les caractères spéciaux
+const specialCharactersContainer = document.getElementById('special-characters-container');
+
+// Sélection de tous les boutons de caractères spéciaux
+const specialCharacterButtons = document.querySelectorAll('.special-character');
+
+// Ajout d'un gestionnaire d'événements pour chaque bouton de caractères spéciaux
+specialCharacterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        // Récupérer le caractère spécial associé à ce bouton
+        const specialCharacter = button.textContent;
+
+        // Insérer le caractère spécial dans l'éditeur de texte
+        const editor = document.getElementById('editor');
+        editor.focus();
+        document.execCommand('insertText', false, specialCharacter);
+    });
+});
+
+//------------------------------------------------------------------------Voice rec----------------------------------------------------------
+// Variables globales pour l'élément de l'icône du microphone et l'objet AnalyserNode
+let microphoneIcon;
+let analyser;
+
+// Fonction pour démarrer la visualisation audio
+function startAudioVisualization() {
+  // Récupérer l'élément de l'icône du microphone
+  microphoneIcon = document.getElementById('microphoneIcon');
+  
+  // Créer un objet AnalyserNode pour analyser les données audio
+  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  analyser = audioContext.createAnalyser();
+
+  // Configurer l'analyser
+  analyser.fftSize = 256;
+  const bufferLength = analyser.frequencyBinCount;
+  const dataArray = new Uint8Array(bufferLength);
+
+  // Obtenir le flux audio du microphone
+  navigator.mediaDevices.getUserMedia({ audio: true })
+    .then(stream => {
+      const source = audioContext.createMediaStreamSource(stream);
+      source.connect(analyser);
+
+      // Mettre à jour l'effet visuel en fonction du niveau audio
+      function draw() {
+        requestAnimationFrame(draw);
+        analyser.getByteFrequencyData(dataArray);
+        // Calculer la valeur moyenne des données de fréquence pour obtenir un niveau audio global
+        const audioLevel = dataArray.reduce((acc, val) => acc + val, 0) / bufferLength / 255;
+        updateMicrophoneVisuals(audioLevel);
+      }
+      draw();
+    })
+    .catch(error => {
+      console.error('Erreur lors de la récupération du flux audio du microphone :', error);
+    });
+}
+
+// Fonction pour arrêter la visualisation audio
+function stopAudioVisualization() {
+  if (analyser) {
+    analyser.disconnect(); // Déconnecter l'analyser du flux audio
+    resetMicrophoneVisuals(); // Réinitialiser l'effet visuel
+  }
+}
+
+// Fonction pour mettre à jour l'effet visuel en fonction du niveau audio
+function updateMicrophoneVisuals(audioLevel) {
+  // Convertir le niveau audio en une valeur d'ombre pour l'effet de box-shadow
+  const boxShadowValue = `${audioLevel * 20}px ${audioLevel * 20}px ${audioLevel * 40}px rgba(255, 0, 0, ${audioLevel})`;
+  // Appliquer l'effet de box-shadow à l'icône du microphone
+  microphoneIcon.style.boxShadow = boxShadowValue;
+}
+
+// Fonction pour réinitialiser l'effet visuel
+function resetMicrophoneVisuals() {
+  // Réinitialiser l'effet de box-shadow à sa valeur par défaut
+  if (microphoneIcon) {
+    microphoneIcon.style.boxShadow = 'none';
+  }
+}
+//---------------PUR----------------
+// Fonction pour initialiser la reconnaissance vocale
+function initializeSpeechRecognition() {
+  const microphoneIcon = document.getElementById('microphoneIcon');
+  const titreElement = document.getElementById('titled');
+
+  // Vérifiez si SpeechRecognition est pris en charge par le navigateur
+  if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+    // Créez un objet SpeechRecognition
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+
+    // Configurez les paramètres de reconnaissance
+    recognition.continuous = true; // Permet une dictée continue
+    recognition.lang = 'fr-FR'; // Langue de reconnaissance (français)
+
+    // Événement appelé lorsque la reconnaissance de la parole est terminée
+    recognition.onresult = function(event) {
+      const transcript = event.results[event.results.length - 1][0].transcript;
+      // Insérez le texte reconnu dans votre éditeur
+      const editor = document.getElementById('editor');
+      editor.innerHTML += transcript + ' '; // Ajoute le texte à l'éditeur
+    };
+
+    // Événement appelé en cas d'erreur
+    recognition.onerror = function(event) {
+      console.error('Une erreur est survenue lors de la reconnaissance vocale :', event.error);
+      microphoneIcon.src = 'Res/close.png';
+      titreElement.textContent = event.error + " error";
+    };
+
+    // Retournez l'objet de reconnaissance vocale pour permettre l'arrêt ultérieur
+    return recognition;
+  } else {
+    // Le navigateur ne prend pas en charge l'API Web Speech
+    console.error('Le navigateur ne prend pas en charge l\'API Web Speech');
+    titreElement.textContent = "Non supporté";
+    return null;
+  }
+}
+
+// Variable pour stocker l'objet de reconnaissance vocale
+let recognition;
+const stopper = document.getElementById('tool-container-micro-act');
+// Fonction pour démarrer la reconnaissance vocale
+function startSpeechRecognition() {
+  // Vérifiez si la reconnaissance n'est pas déjà en cours
+  if (!recognition) {
+    recognition = initializeSpeechRecognition();
+    stopper.style.display = 'block';
+    startAudioVisualization();
+  }
+  // Vérifiez si la reconnaissance est prête
+  if (recognition) {
+    recognition.start();
+    stopper.style.display = 'block';
+  }
+}
+
+// Fonction pour arrêter la reconnaissance vocale
+function stopSpeechRecognition() {
+  stopAudioVisualization();
+  // Vérifiez si la reconnaissance est en cours
+  if (recognition && recognition.abort) {
+    stopper.style.display = 'none';
+    recognition.abort();
+    recognition = null; // Réinitialisez l'objet de reconnaissance vocale
+  }
+}
+//------------------------------------------------------------------------Styliste de texte-------------------------------------------------------------
+function insertStyledText(name) {
+  const editor = document.getElementById('editor');
+  const styledText = document.createElement('span');
+  if(name === 'titre1') {
+    styledText.textContent = '[Votre titre ici]';
+  // Appliquer le style directement depuis JavaScript
+  styledText.style.color = 'rgb(18, 18, 131)';
+  styledText.style.fontFamily = 'Arial';
+  styledText.style.fontSize = '35px';
+  styledText.style.fontStyle = 'italic';
+  // Insérer le texte stylisé dans l'éditeur
+  editor.appendChild(styledText);
+  }
+  if(name === 'titre2') {
+    styledText.textContent = '[Votre titre ici]';
+  // Appliquer le style directement depuis JavaScript
+  styledText.style.color = 'rgb(252, 193, 0)';
+  styledText.style.fontFamily = 'sans-serif';
+  styledText.style.fontSize = '35px';
+  styledText.style.fontStyle = 'italic';
+  // Insérer le texte stylisé dans l'éditeur
+  editor.appendChild(styledText);
+  }
+  if(name === 'titre3') {
+    styledText.textContent = '[Votre titre ici]';
+  // Appliquer le style directement depuis JavaScript
+  styledText.style.color = 'rgb(61, 61, 61)';
+  styledText.style.fontFamily = 'sans-serif';
+  styledText.style.fontSize = '30px';
+  styledText.style.fontStyle = 'italic';
+  // Insérer le texte stylisé dans l'éditeur
+  editor.appendChild(styledText);
+  }
+  if(name === 'soustitre') {
+    styledText.textContent = '[Votre texte ici]';
+  // Appliquer le style directement depuis JavaScript
+  styledText.style.color = 'rgb(48, 48, 48)';
+  styledText.style.fontFamily = 'Arial';
+  styledText.style.fontSize = '23px';
+  // Insérer le texte stylisé dans l'éditeur
+  editor.appendChild(styledText);
+  }
+  if(name === 'citation') {
+    styledText.textContent = '"Votre citation ici"';
+  // Appliquer le style directement depuis JavaScript
+  styledText.style.color = 'gray';
+  styledText.style.fontFamily = 'Univers';
+  styledText.style.fontSize = '14px';
+  styledText.style.fontStyle = 'italic';
+  // Insérer le texte stylisé dans l'éditeur
+  editor.appendChild(styledText);
+  }
+  if(name === 'si') {
+    styledText.textContent = '[Votre texte ici]';
+  // Appliquer le style directement depuis JavaScript
+  styledText.style.color = 'black';
+  styledText.style.fontFamily = 'Univers';
+  styledText.style.fontSize = '12px';
+  // Insérer le texte stylisé dans l'éditeur
+  editor.appendChild(styledText);
+  }
+
+
+}
 //-----------------------------------------------------------------------Gestion de la connection a prismID-----------------------------------------------
       var popupWindow;
   
@@ -912,6 +2203,22 @@ table {
       }
   </script>
   <script>
+    window.addEventListener('DOMContentLoaded', function() {
+  // Sélectionnez les éléments par leur ID
+  var topBar = document.getElementById('top-bar');
+  var middleBar = document.getElementById('middle-bar');
+  var content = document.getElementById('content');
+  
+  // Calcul de la hauteur du contenu en pourcentage
+  var topBarHeight = topBar.offsetHeight; // Hauteur de #topbar
+  var middleBarHeight = middleBar.offsetHeight; // Hauteur de #middle-bar
+  var windowHeight = window.innerHeight; // Hauteur de la fenêtre du navigateur
+  
+  var contentHeightPercentage = 100 - (topBarHeight / windowHeight * 100) - (middleBarHeight / windowHeight * 100); // Calcul de la hauteur de #content en pourcentage
+  
+  // Définir la hauteur de #content en pourcentage
+  content.style.height = contentHeightPercentage + '%';
+});
     //------------------------------------------------------Gestion menu---------------------------------------------------------
     const menu = document.getElementById('menu');
 const menudev = document.getElementById('menudev');
@@ -925,14 +2232,14 @@ menudev.addEventListener('click', (event) => {
 document.addEventListener('click', (event) => {
     const isClickInsideMenu = menu.contains(event.target);
     if (!isClickInsideMenu) {
-        menu.style.left = "-18%"; // Masquer le menu si le clic est en dehors du menu
+        menu.style.left = "-100%"; // Masquer le menu si le clic est en dehors du menu
     }
 });
 
 function toggleMenu() {
     // Si le menu est actuellement affiché, masquez-le. Sinon, affichez-le.
     if (menu.style.left === "0px" || menu.style.left === "") {
-        menu.style.left = "-18%"; // Masquer le menu
+        menu.style.left = "-100%"; // Masquer le menu
     } else {
         menu.style.left = "0"; // Afficher le menu
     }
@@ -941,7 +2248,7 @@ function toggleMenu() {
     const printButton = document.getElementById('apply-stand-new-line');
 
 // Ajoutez un écouteur d'événements au bouton d'impression
-printButton.addEventListener('click', () => {
+function printContent() {
     const printContent = document.getElementById('editor').innerHTML;
     const printWindow = window.open('', '', 'width=600,height=600');
     printWindow.document.open();
@@ -950,6 +2257,14 @@ printButton.addEventListener('click', () => {
         <head>
             <title>Impression</title>
             <style>
+              table {
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            overflow: hidden; /* Affiche les barres de défilement si nécessaire */
+        }
                 @page {
                     size: ${getPaperSize()} ${getOrientation()}; /* Définir la taille du papier et l'orientation */
                     margin: ${getMargin()}; /* Définir les marges */
@@ -968,7 +2283,7 @@ printButton.addEventListener('click', () => {
     printWindow.document.close();
     printWindow.print();
     printWindow.close();
-});
+}
 
 // Fonction pour obtenir la taille du papier sélectionnée
 function getPaperSize() {
@@ -987,54 +2302,84 @@ function getMargin() {
     const marginSelect = document.getElementById('margin-size');
     return marginSelect.value + 'mm'; // Suppose que les marges sont en millimètres
 }
+//--------------------------NEW-----------------------------
+function openPrintPreviewModal() {
+       // Afficher la fenêtre modale
+    document.getElementById('imprprev').style.display = 'block';
+}
+
+// Fonction pour fermer le modal d'aperçu avant impression
+function closePrintPreviewModal() {
+  document.getElementById("imprprev").style.display = "none";
+}
+
+// Fonction pour afficher le contenu dans l'aperçu avant impression
+function displayContentForPrintPreview() {
+  // Insérez ici le code pour récupérer et afficher le contenu à imprimer dans l'aperçu
+}
+
+// Fonction appelée lorsque le bouton "Aperçu avant impression" est cliqué
+function handlePrintPreviewButtonClick() {
+  displayContentForPrintPreview(); // Afficher le contenu dans l'aperçu avant impression
+  openPrintPreviewModal(); // Ouvrir le modal d'aperçu avant impression
+}
     //---------------------------------------------------ADVANCETEXTOPTION-----------------------------------------------------------
     // Sélection des boutons
-    const alignLeftButton = document.querySelector('.class1-button:nth-of-type(1)');
-    const alignCenterButton = document.querySelector('.class1-button:nth-of-type(2)');
-    const alignRightButton = document.querySelector('.class1-button:nth-of-type(3)');
-    const superscriptButton = document.querySelector('.class1-button:nth-of-type(4)');
-    const subscriptButton = document.querySelector('.class1-button:nth-of-type(5)');
-    const unorderedListButton = document.getElementById('unordered-list-button');
-    const orderedListButton = document.getElementById('ordered-list-button');
+const alignLeftButton = document.querySelector('.class1-button:nth-of-type(1)');
+const alignCenterButton = document.querySelector('.class1-button:nth-of-type(2)');
+const alignRightButton = document.querySelector('.class1-button:nth-of-type(3)');
+const justifyButton = document.querySelector('.class1-button:nth-of-type(4)'); // Nouveau bouton pour le texte justifié
+const superscriptButton = document.querySelector('.class1-button:nth-of-type(5)');
+const subscriptButton = document.querySelector('.class1-button:nth-of-type(6)');
+const unorderedListButton = document.getElementById('unordered-list-button');
+const orderedListButton = document.getElementById('ordered-list-button');
 
-    // Fonction pour récupérer la sélection de texte
-    function getSelectedText() {
-      return window.getSelection().toString();
-    }
+// Fonction pour récupérer la sélection de texte
+function getSelectedText() {
+  return window.getSelection().toString();
+}
 
-    // Écouteurs d'événements pour chaque bouton
-    alignLeftButton.addEventListener('click', () => {
-      document.execCommand('justifyLeft', false, null);
-    });
+// Écouteurs d'événements pour chaque bouton
+alignLeftButton.addEventListener('click', () => {
+  document.execCommand('justifyLeft', false, null);
+});
 
-    alignCenterButton.addEventListener('click', () => {
-      document.execCommand('justifyCenter', false, null);
-    });
+alignCenterButton.addEventListener('click', () => {
+  document.execCommand('justifyCenter', false, null);
+});
 
-    alignRightButton.addEventListener('click', () => {
-      document.execCommand('justifyRight', false, null);
-    });
+alignRightButton.addEventListener('click', () => {
+  document.execCommand('justifyRight', false, null);
+});
 
-    superscriptButton.addEventListener('click', () => {
-      const selectedText = getSelectedText();
-      if (selectedText) {
-        document.execCommand('superscript', false, null);
-      }
-    });
+justifyButton.addEventListener('click', () => {
+  const selectedText = getSelectedText();
+  if (selectedText) {
+    document.execCommand('justifyFull', false, null);
+  }
+});
 
-    subscriptButton.addEventListener('click', () => {
-      const selectedText = getSelectedText();
-      if (selectedText) {
-        document.execCommand('subscript', false, null);
-      }
-    });
-    unorderedListButton.addEventListener('click', () => {
-            document.execCommand('insertUnorderedList', false, null);
-        });
+superscriptButton.addEventListener('click', () => {
+  const selectedText = getSelectedText();
+  if (selectedText) {
+    document.execCommand('superscript', false, null);
+  }
+});
 
-    orderedListButton.addEventListener('click', () => {
-            document.execCommand('insertOrderedList', false, null);
-    });
+subscriptButton.addEventListener('click', () => {
+  const selectedText = getSelectedText();
+  if (selectedText) {
+    document.execCommand('subscript', false, null);
+  }
+});
+
+unorderedListButton.addEventListener('click', () => {
+  document.execCommand('insertUnorderedList', false, null);
+});
+
+orderedListButton.addEventListener('click', () => {
+  document.execCommand('insertOrderedList', false, null);
+});
     //-------------------------------------------------COPY/CUT/PAST-----------------------------------------------------------------
     // Sélection des boutons de la classe 2
     const copyButton = document.querySelector('.class2-button:nth-of-type(1)');
@@ -1162,6 +2507,49 @@ fileInput.addEventListener('change', () => {
   reader.readAsText(file);
   adjustEditorHeight()
 });
+function openmedel(exemple){
+  if(exemple === 'lettre')
+    fetch('model/model-lettre.podx')
+      .then(response => response.text())
+      .then(podxContent => {
+        editor.innerHTML = podxContent;
+        adjustEditorHeight();
+      })
+      .catch(error => {
+        console.error('Une erreur est survenue lors du chargement du fichier modèle :', error);
+      }); 
+  if(exemple === 'liste')
+    fetch('model/model-listesimple.podx')
+      .then(response => response.text())
+      .then(podxContent => {
+        editor.innerHTML = podxContent;
+        adjustEditorHeight();
+      })
+      .catch(error => {
+        console.error('Une erreur est survenue lors du chargement du fichier modèle :', error);
+      }); 
+  if(exemple === 'rapport')
+    fetch('model/model-rapport.podx')
+      .then(response => response.text())
+      .then(podxContent => {
+        editor.innerHTML = podxContent;
+        adjustEditorHeight();
+      })
+      .catch(error => {
+        console.error('Une erreur est survenue lors du chargement du fichier modèle :', error);
+      }); 
+      if(exemple === 'PV')
+    fetch('model/model-procesverbal.podx')
+      .then(response => response.text())
+      .then(podxContent => {
+        editor.innerHTML = podxContent;
+        adjustEditorHeight();
+      })
+      .catch(error => {
+        console.error('Une erreur est survenue lors du chargement du fichier modèle :', error);
+      }); 
+}
+
 
 //--------------------------------------------------color--------------------------------------------------------
 const colorButtons = document.querySelectorAll('.class1-color-button');
@@ -1194,17 +2582,55 @@ function applyColorToSelection(color) {
   }
 }
 //---------------------------------------------------------------------ZOOM----------------------------------------
+// Ajoute un écouteur d'événements pour la molette de la souris
+document.addEventListener('wheel', function(event) {
+  // Vérifie si la touche Ctrl est enfoncée
+  if (event.ctrlKey === true) {
+    const zoomBar = document.getElementById('zoomBar');
+    const valeurZoom = document.getElementById('valeur-zoom');
+    // Empêche le comportement par défaut du zoom du navigateur
+    event.preventDefault();
+
+    // Récupère l'élément que vous souhaitez zoomer (dans ce cas, la zone de texte)
+    var editor = document.getElementById('editor');
+
+    // Récupère le facteur de zoom actuel
+    var currentZoom = parseFloat(editor.style.zoom) || 1;
+
+    // Ajuste le facteur de zoom en fonction de la direction de la molette
+    var delta = event.deltaY > 0 ? -0.1 : 0.1; // Sens de défilement de la molette
+    var newZoom = currentZoom + delta;
+
+    // Limite le facteur de zoom entre 0.5 et 3 (à ajuster selon vos besoins)
+    newZoom = Math.min(Math.max(0.5, newZoom), 2);
+
+    valeurZoom.textContent = Math.floor(newZoom * 100) + '%';
+    zoomBar.value = newZoom*100 ;
+
+    // Applique le nouveau facteur de zoom
+    editor.style.zoom = newZoom;
+  }
+}, { passive: false });
+
 document.addEventListener('DOMContentLoaded', function() {
   var editor = document.getElementById('editor');
   var zoomBar = document.getElementById('zoomBar');
   var valeurZoom = document.getElementById('valeur-zoom');
 
-  zoomBar.addEventListener('input', function() {
-    var valeur = zoomBar.value;
-    valeurZoom.textContent = valeur + '%';
-    editor.style.transform = 'scale(' + valeur / 100 + ') translateX(-50%)'; // Appliquer le zoom et le centrage horizontal à la div de l'éditeur
-    editor.style.marginLeft = '50%'; // Centrer horizontalement l'éditeur
-  });
+  // Ajoute un écouteur d'événements pour la modification de la barre de zoom
+zoomBar.addEventListener('input', function() {
+  // Récupère la valeur de la barre de zoom
+  var valeur = zoomBar.value;
+
+  // Met à jour l'affichage de la valeur de zoom
+  valeurZoom.textContent = valeur + '%';
+
+  // Applique le zoom à l'élément que vous souhaitez zoomer (dans ce cas, la zone de texte)
+  editor.style.zoom = valeur / 100;
+
+  // Centre horizontalement l'éditeur
+  editor.style.marginLeft = '50%';
+});
 });
 //--------------------------------------------GESTION PAGE----------------------------------------------------------
 let previousHeight = editor.scrollHeight;
@@ -1226,7 +2652,7 @@ editor.addEventListener('input', adjustEditorHeight);
 setTimeout(function() {
         var loader = document.getElementById('loader');
         loader.style.display = 'none';
-        }, 7150);
+        }, 5720);
 //----------------------------------------------Gestion du modal pour les parametre------------------------------------
 // Fonction pour ouvrir un onglet spécifique
 function openTab(event, tabName) {
@@ -1262,7 +2688,7 @@ document.getElementById('openModalpara').addEventListener('click', () => {
 });
 
 // Événement pour fermer la fenêtre modale
-document.querySelector('.close').addEventListener('click', () => {
+document.querySelector('.closebtn').addEventListener('click', () => {
   document.getElementById('myModal').style.display = 'none';
 });
 
@@ -1363,19 +2789,27 @@ document.getElementById('paper-size').addEventListener('change', changePaperSize
 function changeMarginSize() {
   const selectedMarginSize = document.getElementById('margin-size').value;
   const editor = document.getElementById('editor');
-  
+  console.log(selectedMarginSize);
   switch (selectedMarginSize) {
     case 'narrow':
       editor.style.padding = '10mm';
+      console.log("10mm");
       break;
     case 'normal':
       editor.style.padding = '20mm';
+      console.log("20mm");
       break;
     case 'wide':
       editor.style.padding = '30mm';
+      console.log("30mm");
+      break;
+    case 'no':
+      editor.style.padding = '0mm';
+      console.log("0mm");
       break;
     // Ajoutez d'autres cas pour d'autres options de marges si nécessaire
     default:
+    console.log("no mm");
       break;
   }
 }
@@ -1397,7 +2831,7 @@ insertTableButton.addEventListener('click', () => {
     for (let i = 0; i < numRows; i++) {
         tableHtml += '<tr>';
         for (let j = 0; j < numCols; j++) {
-            tableHtml += '<td contenteditable="true" style="width: 100px;">Donnée</td>'; // Vous pouvez ajuster la largeur selon vos besoins
+            tableHtml += '<td contenteditable="true" style="width: 100px;"></td>'; // Vous pouvez ajuster la largeur selon vos besoins
         }
         tableHtml += '</tr>';
     }
