@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="Res/fichier (3).png" type="image/x-icon">  
+<title>EnCell - PrismTools</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background-color: rgb(255, 255, 255);
+      overflow: hidden;
+    }
+    #top-bar {
+      background-color: rgba(168, 168, 168, 0.801);
+      height: 5%;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding-left: 10px;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+      touch-action: manipulation;
+      overflow: hidden;
+    }
+    #tool-contener-line1 {
+        display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      
+    }
+    #tool-contener-line2 {
+        display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+    #middle-bar {
+      background-color: rgb(255, 255, 255);
+      height: 13%;
+      touch-action: manipulation;
+      overflow: hidden;
+    }
+    #content {
+      background: linear-gradient(to bottom, rgba(206, 206, 206, 0.521), rgba(104, 104, 104, 0.301));
+      height: 82%;
+      border-top-right-radius: 20px;
+      border-top-left-radius: 20px;
+      z-index: 9999;
+      touch-action: manipulation;
+      overflow: scroll;
+    }
+    .button-with-image {
+      height: 45px;
+      width: 45px;
+      background-color: transparent;
+      border-color: transparent;
+      cursor: pointer;
+      display: inline-block;
+      margin-right: 10px;
+    }
+    .button-with-image img {
+      height: 30px;
+      width: 30px;
+    }
+    .class1-button {
+      height: 40px;
+      width: 40px;
+      background-color: transparent;
+      border-color: transparent;
+      cursor: pointer;
+      display: inline-block;
+      height: 40px;
+    }
+    .class1-button img {
+      height: 20px;
+      width: 20px;
+    }
+    #tool-container-text {
+        background-color: white;
+        width: 230px;
+        height: 40px;
+        border-radius: 50px;
+        margin-top: 10px;
+        margin-left: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+    }
+    .class2-button {
+      height: 40px;
+      width: 40px;
+      background-color: transparent;
+      border-color: transparent;
+      cursor: pointer;
+      display: inline-block;
+      margin-left: 5px;
+    }
+    .class2-button img {
+      height: 20px;
+      width: 20px;
+    }
+    #tool-container-text-adv {
+        background-color: white;
+        width: 153px;
+        border-radius: 50px;
+        margin-top: 10px;
+        margin-left: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+    }
+    #font-family {
+        background-color: white;
+        width: 200px;
+        border-radius: 50px;
+        margin-top: 10px;
+        margin-left: 10px;
+        height: 40px;
+        border-color: transparent;
+        text-align: center;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+    }
+    #font-size {
+        background-color: white;
+        width: 80px;
+        border-radius: 50px;
+        margin-top: 10px;
+        margin-left: 10px;
+        height: 40px;
+        border-color: transparent;
+        text-align: center;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+    }
+      .class2-button-solo {
+      height: 40px;
+      width: 40px;
+      margin-top: 15px;
+      background-color: transparent;
+      border-color: transparent;
+      cursor: pointer;
+      display: inline-block;
+    }
+    .class2-button-solo img {
+      height: 20px;
+      width: 20px;
+    }
+    #apply-stand {
+      margin-left: 12px;
+    }
+    #apply-stand-new-line {
+      margin-left: 6px;
+    }
+    #tool-container-color {
+      background-color: white;
+      width: 310px;
+      border-radius: 50px;
+      margin-top: 10px;
+      margin-left: 10px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+      padding: 7.5px;
+    }
+    .class1-color-button {
+      height: 25px;
+      width: 25px;
+      margin-left: 5px;
+      border-radius: 50px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+      border-color: transparent;
+    }
+    #black {
+      background-color: black;
+    }
+    #red {
+      background-color: rgb(202, 48, 48);
+    }
+    #orange {
+      background-color: rgb(243, 162, 10);
+    }
+    #yellow {
+      background-color: rgb(235, 235, 0);
+    }
+    #green {
+      background-color: rgb(0, 134, 0);
+    }
+    #bluef {
+      background-color: rgb(18, 18, 131);
+    }
+    #bluec {
+      background-color: rgb(20, 141, 172);
+    }
+    #pink {
+      background-color: pink;
+    }
+    #another {
+      background: radial-gradient(circle, rgb(7, 165, 177), rgb(191, 219, 159), rgb(201, 223, 7));
+    }
+    #zoom-contener {
+      background-color: rgba(255, 255, 255, 0.507);
+      width: 300px;
+      border-radius: 50px;
+      margin-top: 10px;
+      margin-left: 10px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+      padding: 7.5px;
+      height: 30px;
+      position: absolute;
+      bottom: 10px;
+      right: 35px;
+      z-index: 9999;
+    }
+    .barre-zoom {
+      position: absolute;
+      width: 60%;
+      left: 55px;
+      top: 13px;
+    }
+
+    #valeur-zoom {
+      position: absolute;
+      top: 14px;
+      right: 13px;
+    }
+    #zoom-image {
+      position: absolute;
+      top: 13px;
+      left: 20px;
+      height: 20px;
+      width: 20px;
+      opacity: 0.5;
+    }
+    #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+        }
+
+        #loader img {
+            width: 15%;
+        }
+
+        .bottom-content {
+            text-align: center;
+            margin: 20px 0;
+            position: absolute;
+            bottom: 0;
+        }
+        
+.container h1 {
+            text-align: center;
+            font-size: 160%;
+        }
+        .container h2 {
+          margin-top: -10px;
+            text-align: center;
+            font-size: 100%;
+        }
+        .container input {
+            width: 95%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: none;
+            background: #eee;
+            margin-top: 5%;
+        }
+
+        .container button {
+            width: 30%;
+            padding: 10px;
+            border: none;
+            background: #ff3333;
+            color: white;
+            cursor: pointer;
+        }
+
+        .container a {
+            color: rgb(0, 0, 0);
+            text-decoration: underline;
+            cursor: pointer;
+            border: none;
+        }
+        #createaccnt {
+          width: 50%;
+            padding: 10px;
+            border: none;
+            color: #ff3333;
+            background-color: transparent;
+            cursor: pointer;
+            text-align: left;
+        }
+        .buttons-container {
+    display: flex;
+    justify-content: space-between; /* Alignement horizontal au centre */
+    align-items: center; /* Alignement vertical au centre si nécessaire */
+    margin-top: 10%;
+    margin-bottom: 5%;
+}
+#image_logo {
+    margin-left: 50%;
+    transform: translateX(-50%);
+}
+#emailDisplayAt2 {
+    text-align: center;
+}
+#emailText {
+    color: grey;
+    text-align: left;
+    font-size: 12px;
+}
+#tool-container-text-b {
+        background-color: white;
+        width: 90px;
+        height: 40px;
+        border-radius: 50px;
+        margin-top: 10px;
+        margin-left: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+    }
+    #menu {
+            position: fixed;
+            top: 0;
+            left: -18%;
+            width: 18%;
+            height: 100%;
+            background-color: #fff;
+            transition: left 0.3s;
+            z-index: 9999;
+        }
+    #emailDisplay {
+      display: flex;
+    justify-content: space-between; /* Alignement horizontal au centre */
+    align-items: center; /* Alignement vertical au centre si nécessaire */
+    margin-top: 10px;
+    margin-left: 7px;
+    margin-right: 7px;
+    }
+        /* Style pour la fenêtre modale */
+.modal {
+  display: none; /* Par défaut, la fenêtre modale est cachée */
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.5); /* Fond semi-transparent */
+}
+
+/* Contenu de la fenêtre modale */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 50%; /* Largeur de la fenêtre modale */
+  height: 50%;
+}
+
+/* Style pour le bouton de fermeture */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+/* Ajoutez du style pour les onglets et le contenu des onglets */
+.tabcontent {
+  display: none;
+}
+
+/* Style actif pour les onglets */
+.tabcontent.active {
+  display: block;
+}
+
+/* Style pour les boutons des onglets */
+.tablinks {
+  background-color: #f2f2f2;
+  border: none;
+  cursor: pointer;
+  padding: 10px 20px;
+}
+
+.tablinks:hover {
+  background-color: #ddd;
+}
+@keyframes grow {
+  0% {
+    transform: scale(0.4);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.imgloaderorg {
+  animation: grow 2s ease-in-out forwards;
+}
+table {
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            resize: both; /* Permet le redimensionnement */
+            overflow: auto; /* Affiche les barres de défilement si nécessaire */
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            resize: both;
+            border: 2px solid transparent; /* Ajoute une bordure pour indiquer que l'image est redimensionnable */
+        }
+        #editor img {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid transparent; /* Ajoute une bordure pour indiquer que l'image est redimensionnable */
+            position: absolute; /* Permet le positionnement absolu */
+            user-select: none; /* Empêche la sélection du texte lors du déplacement de l'image */
+            cursor: grab; /* Curseur indiquant que l'image peut être déplacée */
+        }
+        /* Styles for custom context menu */
+        #custom-menu {
+      display: none;
+      position: absolute;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 8px;
+      box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+      min-width: 200px;
+      border-radius: 10px;
+      z-index: 99999;
+    }
+    #custom-menu ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+    #custom-menu li {
+      display: flex; /* Utiliser flexbox pour aligner les éléments horizontalement */
+      align-items: center; /* Aligner les éléments verticalement */
+      padding: 8px 20px;
+      cursor: pointer;
+    }
+    #custom-menu ul li:hover {
+      background-color: #f0f0f0;
+    }
+    /* Styles for icons */
+    .icon {
+      width: 20px; /* Adjust as needed */
+      height: 20px; /* Adjust as needed */
+      margin-right: 8px;
+    }
+    /* Styles for search bar */
+    #search-bar {
+      width: calc(100% - 20px); /* Adjust for padding */
+      padding: 8px;
+      margin-bottom: 8px;
+      border-radius: 5px;
+      border-style: solid;
+      border-color: gray;
+    }
+   /* Styles pour le tableur */
+   #editor {
+      display: flex;
+      flex-direction: column;
+      overflow-x: auto;
+    }
+
+    .row {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .cell {
+      border: 1px solid #ccc;
+      padding: 5px;
+      box-sizing: border-box;
+      text-align: center;
+      min-width: 50px;
+      flex: 1;
+    }
+
+    .col-label {
+      background-color: #f0f0f0;
+      font-weight: bold;
+      cursor: col-resize; /* Activer le curseur de redimensionnement */
+    }
+
+    .editable {
+      background-color: white;
+    }
+
+    .empty-cell {
+      background-color: #f0f0f0;
+    }
+    /* Styles pour le curseur de redimensionnement */
+    .resize-handle {
+      position: absolute;
+      top: 0;
+      right: -5px; /* Ajuster la position pour que le curseur soit aligné correctement */
+      bottom: 0;
+      width: 10px;
+      cursor: col-resize; /* Activer le curseur de redimensionnement */
+    }
+
+    
+.resizable:after {
+    content: ''; 
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 5px;
+    cursor: col-resize; /* Curseur de redimensionnement */
+    background-color: transparent; /* Masquer le curseur avec une couleur transparente */
+}
+
+.resizing .resizable:after {
+    background-color: rgba(0, 0, 255, 0.1); /* Rendre visible le curseur pendant le redimensionnement */
+}
+    #fonctionzone {
+        background-color: white;
+        width: 40%;
+        height: 40px;
+        border-radius: 50px;
+        margin-top: 10px;
+        margin-left: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+        padding-inline-start: 10px;
+        padding-inline: 20px;
+    }
+    /* Style du modal */
+.modal {
+    display: none; /* Le modal est caché par défaut */
+    position: fixed; 
+    z-index: 1000; /* Le modal doit être au-dessus de tout le reste */
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+}
+
+.modal-content {
+    background-color: white;
+    margin: 15% auto; /* Centrer le modal verticalement et horizontalement */
+    padding: 20px;
+    border-radius: 10px;
+    height: 200px;
+    width: 80%;
+    max-width: 400px; /* Limite la largeur du modal */
+    text-align: center;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+}
+
+.modal-content p {
+    margin: 20px 0;
+}
+#modal-ok-btn {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+#modal-ok-btn:hover {
+    background-color: #0056b3;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #aaa;
+}
+
+.close-btn:hover {
+    color: #000;
+}
+  </style>
+</head>
+<body>
+  <div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" id="close-btn">&times;</span>
+        <h2>⚠️ VERSION ALFA V0.1 ⚠️</h2>
+        <h2>Actuellement en Développement</h2>
+        <p>Ce projet est actuellement en développement. Merci de revenir bientôt pour plus de fonctionnalités !</p>
+        <button id="modal-ok-btn">OK</button>
+    </div>
+</div>
+  <div id="loader">
+    <img class="imgloaderorg" src="Res/fichier (3).png">
+    <div class="bottom-content">
+        <img src="Res/logo-text-big.png">
+    </div> 
+</div>
+<div id="custom-menu">
+  <input type="text" id="search-bar" placeholder="Search..."> <!-- Search bar -->
+  <ul>
+    <li id="menucut"><img src="Res/scissors.png" alt="Icon 1" class="icon"> Couper</li>
+    <li id="menucopy"><img src="Res/copy.png" alt="Icon 1" class="icon"> Copier</li>
+    <li id="menupast"><img src="Res/paste.png" alt="Icon 2" class="icon"> Coller</li>
+    <li id="openModalinster"><img src="Res/image.png" alt="Icon 2" class="icon"> Inserer</li>
+    <li id="openModalpara"><img src="Res/setting.png" alt="Icon 2" class="icon"> Paramètre page</li>
+    <li><img src="Res/link.png" alt="Icon 2" class="icon"> Lien</li>
+    <li><img src="Res/question.png" alt="Icon 2" class="icon"> Aide en ligne</li>
+  </ul>
+</div>
+  <div id="top-bar">
+    <button class="button-with-image" id="menudev"><img src="Res/applications.png" alt="Image 1"></button>
+    <button id="save" class="button-with-image"><img src="Res/save.png" alt="Image 2"></button>
+    <button id="open" class="button-with-image"><img src="Res/open.png" alt="Image 4"></button>
+    <input type="file" id="file-input" style="display: none;">
+    <button class="button-with-image" id="openModalBtn"><img src="Res/settings-sliders.png" alt="Image 3"></button>
+    <button class="button-with-image" onclick="openPopup()"><img src="Res/profile-user.png" alt="connexion au service"></button>
+    <div id="menu" class="hidden">
+      <div id="emailDisplay">
+          <button id="menu-return-button" onclick="window.location.href = 'index.html';">Retour au menu principale</button>
+          <button id="Conn-btn" onclick="openPopup(); toggleMenu();">Connectez vous</button>
+      </div>
+      
+  </div>
+
+</div>
+<div id="middle-bar">
+<div id="tool-contener-line1">
+    <div id="tool-container-text-adv">
+        <button class="class2-button"><img src="Res/copy.png" alt="img"></button>
+        <button class="class2-button"><img src="Res/paste.png" alt="img"></button>
+        <button class="class2-button"><img src="Res/scissors.png" alt="img"></button>
+    </div>
+    <select id="font-family">
+    
+    <option value="Agency FB">Agency FB</option>
+    <option value="Algerian">Algerian</option>
+    <option value="Andalus">Andalus</option>
+    <option value="Arial Narrow">Arial Narrow</option>
+    <option value="Arial Black">Arial Black</option>
+    <option value="Arial Rounded MT Bold">Arial Rounded MT Bold</option>
+    <option value="Bauhaus 93">Bauhaus 93</option>
+    <option value="Bell MT">Bell MT</option>
+    <option value="Berlin Sans FB">Berlin Sans FB</option>
+    <option value="Bernard MT Condensed">Bernard MT Condensed</option>
+    <option value="Blackadder ITC">Blackadder ITC</option>
+    <option value="Bodoni MT">Bodoni MT</option>
+    <option value="Bodoni MT Poster Compressed">Bodoni MT Poster Compressed</option>
+    <option value="Bookshelf Symbol 7">Bookshelf Symbol 7</option>
+    <option value="Bradley Hand ITC">Bradley Hand ITC</option>
+    <option value="Broadway">Broadway</option>
+    <option value="Brush Script MT">Brush Script MT</option>
+    <option value="Bodoni MT">Bodoni MT</option>
+    <option value="Bodoni MT Black">Bodoni MT Black</option>
+    <option value="Bodoni MT Condensed">Bodoni MT Condensed</option>
+    <option value="Bodoni MT Poster Compressed">Bodoni MT Poster Compressed</option>
+    <option value="Book Antiqua">Book Antiqua</option>
+    <option value="Bookman Old Style">Bookman Old Style</option>
+    <option value="Bookshelf Symbol 7">Bookshelf Symbol 7</option>
+    <option value="Bradley Hand ITC">Bradley Hand ITC</option>
+    <option value="Britannic Bold">Britannic Bold</option>
+    <option value="Broadway">Broadway</option>
+    <option value="Brush Script MT">Brush Script MT</option>
+    <option value="Bodoni MT">Bodoni MT</option>
+    <option value="Bodoni MT Black">Bodoni MT Black</option>
+    <option value="Bodoni MT Condensed">Bodoni MT Condensed</option>
+    <option value="Bodoni MT Poster Compressed">Bodoni MT Poster Compressed</option>
+    <option value="Book Antiqua">Book Antiqua</option>
+    <option value="Bookman Old Style">Bookman Old Style</option>
+    <option value="Bookshelf Symbol 7">Bookshelf Symbol 7</option>
+    <option value="Bradley Hand ITC">Bradley Hand ITC</option>
+    <option value="Britannic Bold">Britannic Bold</option>
+    <option value="Broadway">Broadway</option>
+    <option value="Brush Script MT">Brush Script MT</option>
+    <option value="Californian FB">Californian FB</option>
+    <option value="Calisto MT">Calisto MT</option>
+    <option value="Cambria">Cambria</option>
+    <option value="Candara">Candara</option>
+    <option value="Castellar">Castellar</option>
+    <option value="Centaur">Centaur</option>
+    <option value="Century">Century</option>
+    <option value="Century Gothic">Century Gothic</option>
+    <option value="Century Schoolbook">Century Schoolbook</option>
+    <option value="Chiller">Chiller</option>
+    <option value="Colonna MT">Colonna MT</option>
+    <option value="Comic Sans MS">Comic Sans MS</option>
+    <option value="Consolas">Consolas</option>
+    <option value="Constantia">Constantia</option>
+    <option value="Cooper Black">Cooper Black</option>
+    <option value="Copperplate Gothic Bold">Copperplate Gothic Bold</option>
+    <option value="Copperplate Gothic Light">Copperplate Gothic Light</option>
+    <option value="Corbel">Corbel</option>
+    <option value="Cordia New">Cordia New</option>
+    <option value="Courier New">Courier New</option>
+    <option value="Courier Std">Courier Std</option>
+    <option value="Curlz MT">Curlz MT</option>
+    <option value="Curlz MT">Curlz MT</option>
+    <option value="DejaVu Sans">DejaVu Sans</option>
+    <option value="DejaVu Sans Condensed">DejaVu Sans Condensed</option>
+    <option value="DejaVu Sans Light">DejaVu Sans Light</option>
+    <option value="DejaVu Sans Mono">DejaVu Sans Mono</option>
+    <option value="DejaVu Serif">DejaVu Serif</option>
+    <option value="DejaVu Serif Condensed">DejaVu Serif Condensed</option>
+    <option value="Dubai">Dubai</option>
+    <option value="Dubai Light">Dubai Light</option>
+    <option value="Dubai Medium">Dubai Medium</option>
+    <option value="Dubai SemiBold">Dubai SemiBold</option>
+    <option value="Dubai Bold">Dubai Bold</option>
+    <option value="Elephant">Elephant</option>
+    <option value="Engravers MT">Engravers MT</option>
+    <option value="Eras Bold ITC">Eras Bold ITC</option>
+    <option value="Eras Demi ITC">Eras Demi ITC</option>
+    <option value="Eras Light ITC">Eras Light ITC</option>
+    <option value="Eras Medium ITC">Eras Medium ITC</option>
+    <option value="Eras Ultra ITC">Eras Ultra ITC</option>
+    <option value="Felix Titling">Felix Titling</option>
+    <option value="Footlight MT Light">Footlight MT Light</option>
+    <option value="Forte">Forte</option>
+    <option value="Franklin Gothic Book">Franklin Gothic Book</option>
+    <option value="Franklin Gothic Demi">Franklin Gothic Demi</option>
+    <option value="Franklin Gothic Demi Cond">Franklin Gothic Demi Cond</option>
+    <option value="Franklin Gothic Heavy">Franklin Gothic Heavy</option>
+    <option value="Franklin Gothic Medium">Franklin Gothic Medium</option>
+    <option value="Franklin Gothic Medium Cond">Franklin Gothic Medium Cond</option>
+    <option value="Freestyle Script">Freestyle Script</option>
+    <option value="French Script MT">French Script MT</option>
+    <option value="Gabriola">Gabriola</option>
+    <option value="Garamond">Garamond</option>
+    <option value="Gautami">Gautami</option>
+    <option value="Gigi">Gigi</option>
+    <option value="Gill Sans MT">Gill Sans MT</option>
+    <option value="Gill Sans MT Condensed">Gill Sans MT Condensed</option>
+    <option value="Gill Sans MT Ext Condensed Bold">Gill Sans MT Ext Condensed Bold</option>
+    <option value="Gloucester MT Extra Condensed">Gloucester MT Extra Condensed</option>
+    <option value="Goudy Old Style">Goudy Old Style</option>
+    <option value="Goudy Stout">Goudy Stout</option>
+    <option value="Gulim">Gulim</option>
+    <option value="GulimChe">GulimChe</option>
+    <option value="Haettenschweiler">Haettenschweiler</option>
+    <option value="Harlow Solid Italic">Harlow Solid Italic</option>
+    <option value="Harrington">Harrington</option>
+    <option value="High Tower Text">High Tower Text</option>
+    <option value="Impact">Impact</option>
+    <option value="Imprint MT Shadow">Imprint MT Shadow</option>
+    <option value="Informal Roman">Informal Roman</option>
+    <option value="Javanese Text">Javanese Text</option>
+    <option value="Jokerman">Jokerman</option>
+    <option value="Juice ITC">Juice ITC</option>
+    <option value="Kristen ITC">Kristen ITC</option>
+    <option value="Kunstler Script">Kunstler Script</option>
+    <option value="Leelawadee">Leelawadee</option>
+    <option value="Leelawadee UI">Leelawadee UI</option>
+    <option value="Lucida Bright">Lucida Bright</option>
+    <option value="Lucida Calligraphy">Lucida Calligraphy</option>
+    <option value="Lucida Console">Lucida Console</option>
+    <option value="Lucida Fax">Lucida Fax</option>
+    <option value="Lucida Handwriting">Lucida Handwriting</option>
+    <option value="Lucida Sans">Lucida Sans</option>
+    <option value="Lucida Sans Typewriter">Lucida Sans Typewriter</option>
+    <option value="Lucida Sans Unicode">Lucida Sans Unicode</option>
+    <option value="Magneto">Magneto</option>
+    <option value="Maiandra GD">Maiandra GD</option>
+    <option value="Malgun Gothic">Malgun Gothic</option>
+    <option value="Malgun Gothic">Malgun Gothic</option>
+    <option value="Malgun Gothic">Malgun Gothic</option>
+    <option value="Malgun Gothic">Malgun Gothic</option>
+    <option value="Marlett">Marlett</option>
+    <option value="Matura MT Script Capitals">Matura MT Script Capitals</option>
+    <option value="Microsoft Himalaya">Microsoft Himalaya</option>
+    <option value="Microsoft JhengHei">Microsoft JhengHei</option>
+    <option value="Microsoft JhengHei UI">Microsoft JhengHei UI</option>
+    <option value="Microsoft New Tai Lue">Microsoft New Tai Lue</option>
+    <option value="Microsoft PhagsPa">Microsoft PhagsPa</option>
+    <option value="Microsoft Sans Serif">Microsoft Sans Serif</option>
+    <option value="Microsoft Tai Le">Microsoft Tai Le</option>
+    <option value="Microsoft Uighur">Microsoft Uighur</option>
+    <option value="Microsoft YaHei">Microsoft YaHei</option>
+    <option value="Microsoft YaHei UI">Microsoft YaHei UI</option>
+    <option value="Microsoft Yi Baiti">Microsoft Yi Baiti</option>
+    <option value="MingLiU">MingLiU</option>
+    <option value="MingLiU-ExtB">MingLiU-ExtB</option>
+    <option value="MingLiU_HKSCS">MingLiU_HKSCS</option>
+    <option value="MingLiU_HKSCS-ExtB">MingLiU_HKSCS-ExtB</option>
+    <option value="Mistral">Mistral</option>
+    <option value="Modern No. 20">Modern No. 20</option>
+    <option value="Monotype Corsiva">Monotype Corsiva</option>
+    <option value="MS Gothic">MS Gothic</option>
+    <option value="MS Outlook">MS Outlook</option>
+    <option value="MS PGothic">MS PGothic</option>
+    <option value="MS PMincho">MS PMincho</option>
+    <option value="MS Reference Sans Serif">MS Reference Sans Serif</option>
+    <option value="MS Reference Specialty">MS Reference Specialty</option>
+    <option value="MV Boli">MV Boli</option>
+    <option value="Narkisim">Narkisim</option>
+    <option value="Niagara Engraved">Niagara Engraved</option>
+    <option value="Niagara Solid">Niagara Solid</option>
+    <option value="Nirmala UI">Nirmala UI</option>
+    <option value="OCR A Extended">OCR A Extended</option>
+    <option value="Old English Text MT">Old English Text MT</option>
+    <option value="Onyx">Onyx</option>
+    <option value="Palace Script MT">Palace Script MT</option>
+    <option value="Papyrus">Papyrus</option>
+    <option value="Parchment">Parchment</option>
+    <option value="Perpetua">Perpetua</option>
+    <option value="Perpetua Titling MT">Perpetua Titling MT</option>
+    <option value="Playbill">Playbill</option>
+    <option value="Poor Richard">Poor Richard</option>
+    <option value="Pristina">Pristina</option>
+    <option value="Rage Italic">Rage Italic</option>
+    <option value="Ravie">Ravie</option>
+    <option value="Rockwell">Rockwell</option>
+    <option value="Rockwell Condensed">Rockwell Condensed</option>
+    <option value="Rockwell Extra Bold">Rockwell Extra Bold</option>
+    <option value="Rod">Rod</option>
+    <option value="Sakkal Majalla">Sakkal Majalla</option>
+    <option value="Script">Script</option>
+    <option value="Script MT Bold">Script MT Bold</option>
+    <option value="Segoe MDL2 Assets">Segoe MDL2 Assets</option>
+    <option value="Segoe Print">Segoe Print</option>
+    <option value="Segoe Script">Segoe Script</option>
+    <option value="Segoe UI">Segoe UI</option>
+    <option value="Segoe UI Emoji">Segoe UI Emoji</option>
+    <option value="Segoe UI Historic">Segoe UI Historic</option>
+    <option value="Segoe UI Symbol">Segoe UI Symbol</option>
+    <option value="Showcard Gothic">Showcard Gothic</option>
+    <option value="Shruti">Shruti</option>
+    <option value="SimHei">SimHei</option>
+    <option value="SimSun">SimSun</option>
+    <option value="SimSun-ExtB">SimSun-ExtB</option>
+    <option value="Sitka Small">Sitka Small</option>
+    <option value="Snap ITC">Snap ITC</option>
+    <option value="Stencil">Stencil</option>
+    <option value="Sylfaen">Sylfaen</option>
+    <option value="Symbol">Symbol</option>
+    <option value="Tahoma">Tahoma</option>
+    <option value="Tempus Sans ITC">Tempus Sans ITC</option>
+    <option value="Terminal">Terminal</option>
+    <option value="Times New Roman">Times New Roman</option>
+    <option value="Trebuchet MS">Trebuchet MS</option>
+    <option value="Tw Cen MT">Tw Cen MT</option>
+    <option value="Tw Cen MT Condensed">Tw Cen MT Condensed</option>
+    <option value="Tw Cen MT Condensed Extra Bold">Tw Cen MT Condensed Extra Bold</option>
+    <option value="Verdana">Verdana</option>
+    <option value="Viner Hand ITC">Viner Hand ITC</option>
+    <option value="Vivaldi">Vivaldi</option>
+    <option value="Vladimir Script">Vladimir Script</option>
+    <option value="Webdings">Webdings</option>
+    <option value="Wide Latin">Wide Latin</option>
+    <option value="Wingdings">Wingdings</option>
+    <option value="Wingdings 2">Wingdings 2</option>
+    <option value="Wingdings 3">Wingdings 3</option>
+    <option value="Yu Gothic">Yu Gothic</option>
+    <option value="Yu Gothic UI">Yu Gothic UI</option>
+    <option value="Yu Gothic UI Semibold">Yu Gothic UI Semibold</option>
+    <option value="Yu Gothic UI Light">Yu Gothic UI Light</option>
+    <option value="Yu Gothic UI Semilight">Yu Gothic UI Semilight</option>
+    <option value="Yu Gothic UI Bold">Yu Gothic UI Bold</option>
+  </select>
+  <select id="font-size">
+    <option value="8">8</option>
+    <option value="9">9</option>
+    <option value="10">10</option>
+    <option value="11">11</option>
+    <option value="12">12</option>
+    <option value="14">14</option>
+    <option value="16">16</option>
+    <option value="20">20</option>
+    <option value="22">22</option>
+    <option value="24">24</option>
+    <option value="26">26</option>
+    <option value="28">28</option>
+    <option value="36">36</option>
+    <option value="48">48</option>
+    <option value="72">72</option>
+    <option value="96">96</option>
+    <option value="128">128</option>
+    <option value="256">256</option>
+    <option value="512">512</option>
+</select>
+  <button id="apply-stand" class="class2-button-solo"><img src="Res/bold.png" alt="img"></button>
+  <button class="class2-button-solo"><img src="Res/italic.png" alt="img"></button>
+  <button class="class2-button-solo"><img src="Res/underline.png" alt="img"></button>
+  <div id="tool-container-text-b">
+    <button class="class1-button" id="unordered-list-button"><img src="Res/lister.png" alt="img"></button>
+    <button class="class1-button" id="ordered-list-button"><img src="Res/listern-um.png" alt="img"></button>
+    
+  </div>
+</div>
+
+<div id="tool-contener-line2">
+  <button id="apply-stand-new-line" class="class2-button-solo"><img src="Res/print.png" alt="img"></button>
+  <button class="class2-button-solo"><img src="Res/eraser.png" alt="img"></button>
+  <div id="tool-container-text">
+    <button class="class1-button" style="margin-left: 5px;"><img src="Res/align-left.png" alt="img"></button>
+    <button class="class1-button"><img src="Res/align-center.png" alt="img"></button>
+    <button class="class1-button"><img src="Res/align-right.png" alt="img"></button>
+    <button class="class1-button"><img src="Res/exposant.png" alt="img"></button>
+    <button class="class1-button"><img src="Res/indice.png" alt="img"></button>
+</div>
+<div id="tool-container-color">
+  <button id="black" class="class1-color-button" data-color="black"></button>
+  <button id="red" class="class1-color-button" data-color="red"></button>
+  <button id="orange" class="class1-color-button" data-color="orange"></button>
+  <button id="yellow" class="class1-color-button" data-color="yellow"></button>
+  <button id="green" class="class1-color-button" data-color="green"></button>
+  <button id="bluec" class="class1-color-button" data-color="blue"></button>
+  <button id="bluef" class="class1-color-button" data-color="blue"></button>
+  <button id="pink" class="class1-color-button" data-color="pink"></button>
+  <button id="another" class="class1-color-button"></button>
+  <input type="color" id="custom-color-picker" style="display: none;">
+</div>
+<div id="fonctionzone" contenteditable="true">
+  
+</div>
+</div>
+
+</div>
+  <div id="content">
+    <div id="zoom-contener">
+      <img id="zoom-image" src="Res/magnifier.png" alt="Zomm1">
+      <input type="range" min="50" max="200" value="100" class="barre-zoom" id="zoomBar">
+      <span id="valeur-zoom">100%</span>
+    </div>
+    <div id="editor"></div>
+  </div>
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      
+      <!-- Onglets -->
+      <div class="tabs">
+        <button class="tablinks" onclick="openTab(event, 'Page')">Page</button>
+        <button class="tablinks" onclick="openTab(event, 'Insertion')">Insertion</button>
+        <button class="tablinks" onclick="openTab(event, 'MiseEnPage')">Mise en page</button>
+        <button class="tablinks" onclick="openTab(event, 'Autre')">Autre</button>
+      </div>
+      
+      <!-- Contenu des onglets -->
+      <div id="Page" class="tabcontent">
+        <!-- Ajoutez ici le contenu de l'onglet "Page" -->
+      </div>
+      
+      <div id="Insertion" class="tabcontent">
+        <h3>Insertion</h3>
+        <h4>Inserer un tableau</h4>
+        <label for="num-rows">Nombre de lignes :</label>
+        <input type="number" id="num-rows" min="1" value="3"><br>
+        <label for="num-cols">Nombre de colonnes :</label>
+        <input type="number" id="num-cols" min="1" value="3"><br>
+        <button id="insert-table-btn">Insérer un tableau</button>
+        <h4>Inserer une image :</h4>
+        <input type="file" id="image-input" accept="image/*">
+        <button id="insert-image-btn">Insérer une image</button>
+        <p>ATTENTION : Si votre image est plus grande que la zone de texte, elle sera automatiquement cachée</p>
+        <!--<button onclick="insererDiagramme()">Inserer un diagramme</button>    //en cours de developement-->
+      </div>
+      
+      <div id="MiseEnPage" class="tabcontent">
+        <h3>Mise en page</h3>
+      <h4>Orientation de la page :</h4>
+      <label><input type="radio" name="orientation" value="portrait" checked> Portrait</label>
+      <label><input type="radio" name="orientation" value="landscape"> Paysage</label>
+      <p>Le type de feuille est actuellement 'A4'</p>
+      <h4>Format de papier :</h4>
+      <select id="paper-size">
+        <option value="A4">A4</option>
+        <option value="A5">A5</option>
+        <option value="Letter">Lettre US</option>
+        <option value="Legal">Legal US</option>
+      </select>
+      <h4>Marges :</h4>
+      <select id="margin-size">
+        <option value="narrow">Étroite (marge de 10mm)</option>
+        <option value="normal" selected>Normale (marge de 20mm)</option>
+        <option value="wide">Large (marge de 30mm)</option>
+        <!-- Ajoutez d'autres options de marges si nécessaire -->
+      </select>
+      <ul>
+        <li><strong>Étroite :</strong> Une marge de 10 mm.</li>
+        <li><strong>Normale :</strong> Une marge de 20 mm.</li>
+        <li><strong>Large :</strong> Une marge de 30 mm.</li>
+      </ul>
+      
+      </div>
+      
+      <div id="Autre" class="tabcontent">
+        <h3>Autre</h3>
+        <!-- Ajoutez ici le contenu de l'onglet "Autre" -->
+      </div>
+    </div>
+  </div>
+  <script>
+    // Fonction pour afficher le modal lors du chargement de la page
+function stdev() {
+    var modal = document.getElementById("modal");
+    var closeBtn = document.getElementById("close-btn");
+    var okBtn = document.getElementById("modal-ok-btn");
+
+    // Afficher le modal
+    modal.style.display = "block";
+
+    // Fermer le modal en cliquant sur la croix
+    closeBtn.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // Fermer le modal en cliquant sur le bouton OK
+    okBtn.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // Fermer le modal en cliquant n'importe où en dehors de la fenêtre
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    }
+}
+
+  </script>
+<script src="Lib/OfficialEnCellLib/BaseContent.js"></script>
+<script src="Lib/OfficialEnCellLib/TableLib.js"></script>
+</body>
+</html>

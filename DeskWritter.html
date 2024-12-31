@@ -2,8 +2,8 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <link rel="icon" href="Res/fichier (7).png" type="image/x-icon">  
-<title>BlocText</title>
+  <link rel="icon" href="Res/fichier-2.svg" type="image/x-icon">  
+<title>Nouveau bloc note - DeskWritter</title>
   <style>
     body, html {
       margin: 0;
@@ -75,20 +75,7 @@
       width: 100%;
       z-index: 9999;
       touch-action: manipulation;
-      display: flex;
-      flex-direction: row;
       overflow: auto;
-    }
-    #all-bloc-text {
-      background-color: #e6e6e6;
-      height: 100%;
-      width: 20%;
-    }
-    #content-of-bloc-text {
-      background-color: rgb(245, 245, 245);
-      width: 80%;
-      height: 100%;
-      overflow: scroll;
     }
     .button-with-image {
       height: 45px;
@@ -168,6 +155,22 @@
         text-align: center;
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
     }
+    #editor {
+            background-color: #ffffff;
+            border: 30px solid #ffffff;
+            padding: 15px;
+            font-family: Arial, sans-serif;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+            border-radius: 5px;
+            width: 210mm;
+            height: 297mm;
+            margin-top: 50px;
+            margin-left: 50%;
+            margin-bottom: 25px;
+            transform: translateX(-50%);
+            overflow: hidden;
+            
+        }
       .class2-button-solo {
       height: 40px;
       width: 40px;
@@ -969,176 +972,11 @@ table {
 .special-character:hover {
   background-color: #e0e0e0; /* Couleur de fond au survol */
 }
-.page {
-    width: 21cm;
-    height: 29.7cm;
-    background: white;
-    padding: 2cm;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box;
-    overflow: hidden;
-    margin-top: 25px;
-    margin-left: 50%;
-    transform: translateX(-50%);
-}
-
-.page p {
-    margin: 0;
-    line-height: 1.5;
-}
-.resizers {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    z-index: 1000; /* Assurez-vous que les resizers sont au-dessus de tout */
-}
-
-.resizer {
-    width: 10px;
-    height: 10px;
-    background-color: blue;
-    position: absolute;
-    pointer-events: all; /* Permet de cliquer sur les resizers */
-}
-
-.resizer.top-left {
-    top: -5px;
-    left: -5px;
-    cursor: nwse-resize;
-}
-
-.resizer.top-right {
-    top: -5px;
-    right: -5px;
-    cursor: nesw-resize;
-}
-
-.resizer.bottom-left {
-    bottom: -5px;
-    left: -5px;
-    cursor: nesw-resize;
-}
-
-.resizer.bottom-right {
-    bottom: -5px;
-    right: -5px;
-    cursor: nwse-resize;
-}
-
-.resizer.top {
-    top: -5px;
-    left: 50%;
-    transform: translateX(-50%);
-    cursor: ns-resize;
-}
-
-.resizer.bottom {
-    bottom: -5px;
-    left: 50%;
-    transform: translateX(-50%);
-    cursor: ns-resize;
-}
-
-.resizer.left {
-    left: -5px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: ew-resize;
-}
-
-.resizer.right {
-    right: -5px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: ew-resize;
-}
-#separator {
-  height: 2px;
-  width: 25%;
-  background-color: #757575;
-  margin-left: 15px;
-}
-#title-of-text {
-  background-color: transparent;
-  border: none;
-  margin: 15px 5px 10px 15px;
-  font-size: 45px;
-  color: #757575;
-}
-#date-the-day {
-  background-color: transparent;
-  border: none;
-  margin: 10px 5px 15px 15px;
-  font-size: 25px;
-  color: #757575;
-}
-#editor {
-  margin-top: 20px;
-  margin-left: 15px;
-  color: black;
-  font-size: 18px;
-  min-height: 550px;
-}
-/* Styling for each feuille in the list */
-.feuille {
-    padding: 10px;
-    margin-bottom: 8px;
-    background-color: #ffffff;
-    color: black;
-    border: none;
-    border-radius: 10px;
-    margin: 10px 10px 10px 10px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.feuille:hover {
-    background-color: #7e7e7e;
-    color: #ffffff;
-}
-#delette {
-  color: white;
-  background-color: rgb(168, 0, 0);
-  height: 50px;
-  width: 500px;
-  margin-top: 15px;
-  border-radius: 15px;
-  border-style: none;
-}
-@media only screen and (max-width: 600px) {
-      #content {
-      background: linear-gradient(to bottom, #F0F0F0, #d8d8d8);
-      height: 82%;
-      border-top-right-radius: 20px;
-      border-top-left-radius: 20px;
-      width: 100%;
-      z-index: 9999;
-      touch-action: manipulation;
-      display: flex;
-      flex-direction: column;
-      overflow: auto;
-    }
-    #all-bloc-text {
-      background-color: #e6e6e6;
-      height: 20%;
-      width: 100%;
-      overflow: scroll;
-    }
-    #content-of-bloc-text {
-      background-color: rgb(245, 245, 245);
-      width: 100%;
-      height: 80%;
-      overflow: scroll;
-    }
-}
   </style>
 </head>
 <body>
   <div id="loader">
-    <img class="imgloaderorg" src="Res/fichier (7).png">
+    <img class="imgloaderorg" src="Res/fichier-2.svg">
     <div class="bottom-content">
         <img src="Res/logo-text-big.png">
     </div> 
@@ -1230,10 +1068,42 @@ table {
               <img id="to-writter" src="Res/page.png" alt="Image du Template">
               <p>Fichier texte vide</p>
               <div class="logo">
-                  <img id="to-writter" src="Res/fichier (7).png" alt="Logo">
-                  <p>BlocText</p>
+                  <img id="to-writter" src="Res/fichier (2).png" alt="Logo">
+                  <p>DeskWritter</p>
               </div>
           </div>
+          <div class="template" onclick="openmedel('lettre'); toggleMenu();">
+            <img id="to-writter" src="Res/pagelettre.png" alt="Image du Template">
+            <p>Lettre simple</p>
+            <div class="logo">
+                <img id="to-writter" src="Res/fichier (2).png" alt="Logo">
+                <p>DeskWritter</p>
+            </div>
+        </div>
+        <div class="template" onclick="openmedel('liste'); toggleMenu();">
+          <img id="to-writter" src="Res/pageliste.png" alt="Image du Template">
+          <p>Liste simple</p>
+          <div class="logo">
+              <img id="to-writter" src="Res/fichier (2).png" alt="Logo">
+              <p>DeskWritter</p>
+          </div>
+      </div>
+      <div class="template" onclick="openmedel('PV'); toggleMenu();">
+        <img id="to-writter" src="Res/pagepv.png" alt="Image du Template">
+        <p>Procès-verbal de réunion</p>
+        <div class="logo">
+            <img id="to-writter" src="Res/fichier (2).png" alt="Logo">
+            <p>DeskWritter</p>
+        </div>
+    </div>
+    <div class="template" onclick="openmedel('rapport'); toggleMenu();">
+      <img id="to-writter" src="Res/pagerapport.png" alt="Image du Template">
+      <p>Rapport simple</p>
+      <div class="logo">
+          <img id="to-writter" src="Res/fichier (2).png" alt="Logo">
+          <p>DeskWritter</p>
+      </div>
+  </div>
       </div>
       </div>
       </div>
@@ -2018,17 +1888,8 @@ table {
   <span id="valeur-zoom">100%</span>
 </div>
   <div id="content">
-    <div id="all-bloc-text">
-    </div>
-    <div id="content-of-bloc-text">
-      <div id="text-header">
-        <input type="text" id="title-of-text" placeholder="Votre titre ici">
-        <div id="separator"></div>
-        <input type="text" id="date-the-day" placeholder="Entrez la date ici"> 
-      </div>
-      <div id="editor" contenteditable="true">En écrivant, vous façonnez des univers où tout devient possible, même l’impossible.</div>
-    </div>
-  </div>
+    
+    <div id="editor" contenteditable="true"></div>
   </div>
   <div id="myModal" class="modal">
     <div class="modal-content">
@@ -2038,12 +1899,13 @@ table {
       <div class="tabs">
         <button class="tablinks" onclick="openTab(event, 'Page')">Page</button>
         <button class="tablinks" onclick="openTab(event, 'Insertion')">Insertion</button>
+        <button class="tablinks" onclick="openTab(event, 'MiseEnPage')">Mise en page</button>
+        <button class="tablinks" onclick="openTab(event, 'Autre')">Autre</button>
       </div>
       
       <!-- Contenu des onglets -->
       <div id="Page" class="tabcontent">
-        <button id="delette" onclick="deleteCurrentFeuille()">Supprimer la feuille actuel</button>
-        <button id="delette" onclick="deleteEntireBloc()">Supprimer le bloc actuel</button>
+        <!-- Ajoutez ici le contenu de l'onglet "Page" -->
       </div>
       
       <div id="Insertion" class="tabcontent">
@@ -2057,9 +1919,38 @@ table {
         <h4>Inserer une image :</h4>
         <input type="file" id="image-input" accept="image/*">
         <button id="insert-image-btn">Insérer une image</button>
+        <p>ATTENTION : Si votre image est plus grande que la zone de texte, elle sera automatiquement cachée</p>
         <!--<button onclick="insererDiagramme()">Inserer un diagramme</button>    //en cours de developement-->
       </div>
       
+      <div id="MiseEnPage" class="tabcontent">
+        <h3>Mise en page</h3>
+      <h4>Orientation de la page :</h4>
+      <label><input type="radio" name="orientation" value="portrait" checked> Portrait</label>
+      <label><input type="radio" name="orientation" value="landscape"> Paysage</label>
+      <p>Le type de feuille est actuellement 'A4'</p>
+      <h4>Format de papier :</h4>
+      <select id="paper-size">
+        <option value="A4">A4</option>
+        <option value="A5">A5</option>
+        <option value="Letter">Lettre US</option>
+        <option value="Legal">Legal US</option>
+      </select>
+      <h4>Marges :</h4>
+      <select id="margin-size">
+        <option value="no">Aucune marge</option>
+        <option value="narrow">Étroite (marge de 10mm)</option>
+        <option value="normal" selected>Normale (marge de 20mm)</option>
+        <option value="wide">Large (marge de 30mm)</option>
+        <!-- Ajoutez d'autres options de marges si nécessaire -->
+      </select>
+      <ul>
+        <li><strong>Étroite :</strong> Une marge de 10 mm.</li>
+        <li><strong>Normale :</strong> Une marge de 20 mm.</li>
+        <li><strong>Large :</strong> Une marge de 30 mm.</li>
+      </ul>
+      
+      </div>
       
       <div id="Autre" class="tabcontent">
         <h3>Autre</h3>
@@ -2068,616 +1959,7 @@ table {
     </div>
   </div>
 <script>
-//-----------------------------------------------------------------------Gestion de la connection a prismID-----------------------------------------------
-      var popupWindow;
-  
-      // Fonction pour ouvrir la fenêtre contextuelle
-      function openPopup() {
-          var width = 500;
-          var height = 600;
-          var left = (window.innerWidth - width) / 2;
-          var top = (window.innerHeight - height) / 2;
-          var options = 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + width + ', height=' + height + ', top=' + top + ', left=' + left;
-  
-          popupWindow = window.open('auth/0/Connection.html', 'Popup', options);
-      }
-  
-      // Fonction appelée après la connexion réussie dans la fenêtre contextuelle
-      function onLoginSuccess(userInfo) {
-          // Extrayez l'e-mail de l'utilisateur
-          var userEmail = userInfo.email;
-          // Fermez la fenêtre contextuelle après traitement des informations
-          if (popupWindow) {
-              popupWindow.close();
-          }
-      }
-  </script>
-  <script>
-    window.addEventListener('DOMContentLoaded', function() {
-  // Sélectionnez les éléments par leur ID
-  var topBar = document.getElementById('top-bar');
-  var middleBar = document.getElementById('middle-bar');
-  var content = document.getElementById('content');
-  
-  // Calcul de la hauteur du contenu en pourcentage
-  var topBarHeight = topBar.offsetHeight; // Hauteur de #topbar
-  var middleBarHeight = middleBar.offsetHeight; // Hauteur de #middle-bar
-  var windowHeight = window.innerHeight; // Hauteur de la fenêtre du navigateur
-  
-  var contentHeightPercentage = 100 - (topBarHeight / windowHeight * 100) - (middleBarHeight / windowHeight * 100); // Calcul de la hauteur de #content en pourcentage
-  
-  // Définir la hauteur de #content en pourcentage
-  content.style.height = contentHeightPercentage + '%';
-});
-//--------------------------NEW-----------------------------
-function openPrintPreviewModal() {
-       // Afficher la fenêtre modale
-    document.getElementById('imprprev').style.display = 'block';
-}
-
-// Fonction pour fermer le modal d'aperçu avant impression
-function closePrintPreviewModal() {
-  document.getElementById("imprprev").style.display = "none";
-}
-
-// Fonction pour afficher le contenu dans l'aperçu avant impression
-function displayContentForPrintPreview() {
-  // Insérez ici le code pour récupérer et afficher le contenu à imprimer dans l'aperçu
-}
-
-// Fonction appelée lorsque le bouton "Aperçu avant impression" est cliqué
-function handlePrintPreviewButtonClick() {
-  displayContentForPrintPreview(); // Afficher le contenu dans l'aperçu avant impression
-  openPrintPreviewModal(); // Ouvrir le modal d'aperçu avant impression
-}
-    //------------------------------------------------------Gestion menu---------------------------------------------------------
-    const menu = document.getElementById('menu');
-const menudev = document.getElementById('menudev');
-
-menudev.addEventListener('click', (event) => {
-    event.stopPropagation(); // Arrête la propagation de l'événement pour éviter la fermeture immédiate du menu
-    toggleMenu(); // Afficher ou masquer le menu
-});
-
-// Écouter les clics en dehors du menu pour le masquer
-document.addEventListener('click', (event) => {
-    const isClickInsideMenu = menu.contains(event.target);
-    if (!isClickInsideMenu) {
-        menu.style.left = "-100%"; // Masquer le menu si le clic est en dehors du menu
-    }
-});
-
-function toggleMenu() {
-    // Si le menu est actuellement affiché, masquez-le. Sinon, affichez-le.
-    if (menu.style.left === "0px" || menu.style.left === "") {
-        menu.style.left = "-100%"; // Masquer le menu
-    } else {
-        menu.style.left = "0"; // Afficher le menu
-    }
-}
-//---------------------------------------------Gestion du loader------------------------------------------------------
-setTimeout(function() {
-        var loader = document.getElementById('loader');
-        loader.style.display = 'none';
-        init();
-        }, 4320);
-//----------------------------------------------Gestion du modal pour les parametre------------------------------------
-// Fonction pour ouvrir un onglet spécifique
-function openTab(event, tabName) {
-  // Récupère tous les éléments avec la classe "tabcontent" et les masque
-  const tabcontent = document.getElementsByClassName('tabcontent');
-  for (let i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = 'none';
-  }
-
-  // Récupère tous les éléments avec la classe "tablinks" et supprime la classe "active"
-  const tablinks = document.getElementsByClassName('tablinks');
-  for (let i = 0; i < tablinks.length; i++) {
-    tablinks[i].classList.remove('active');
-  }
-
-  // Affiche l'onglet sélectionné et ajoute la classe "active" au bouton de l'onglet sélectionné
-  document.getElementById(tabName).style.display = 'block';
-  event.currentTarget.classList.add('active');
-}
-
-// Événement pour ouvrir la fenêtre modale
-document.getElementById('openModalBtn').addEventListener('click', () => {
-  document.getElementById('myModal').style.display = 'block';
-});
-
-// Événement pour ouvrir la fenêtre modale
-document.getElementById('openModalinster').addEventListener('click', () => {
-  document.getElementById('myModal').style.display = 'block';
-});
-
-document.getElementById('openModalpara').addEventListener('click', () => {
-  document.getElementById('myModal').style.display = 'block';
-});
-
-// Événement pour fermer la fenêtre modale
-document.querySelector('.closebtn').addEventListener('click', () => {
-  document.getElementById('myModal').style.display = 'none';
-});
-
-// Événement pour fermer la fenêtre modale en cliquant en dehors de celle-ci
-window.addEventListener('click', (event) => {
-  if (event.target === document.getElementById('myModal')) {
-    document.getElementById('myModal').style.display = 'none';
-  }
-});
-  //-----------------------------------------------------------------------Custom menu-----------------------------------------------------------
-  // Prevent default context menu
-  document.addEventListener('contextmenu', function(event) {
-    event.preventDefault();
-    // Show the custom context menu
-    var customMenu = document.getElementById('custom-menu');
-    customMenu.style.display = 'block';
-    customMenu.style.left = event.pageX + 'px';
-    customMenu.style.top = event.pageY + 'px';
-  });
-
-  // Hide the custom context menu when clicking outside
-  document.addEventListener('click', function(event) {
-    var customMenu = document.getElementById('custom-menu');
-    customMenu.style.display = 'none';
-  });
-//----------------------------------------------bloc-------------------------
-// Initialiser les données du bloc-notes
-let bloc = JSON.parse(localStorage.getItem('bloc')) || {
-    feuilles: [],
-    activeFeuille: null
-};
-
-// Sélection des éléments HTML
-const allBlocText = document.getElementById('all-bloc-text');
-const titleOfText = document.getElementById('title-of-text');
-const dateTheDay = document.getElementById('date-the-day');
-const editor = document.getElementById('editor');
-const saveBlocBtn = document.getElementById('save');
-
-function deleteEntireBloc() {
-    // Demande de confirmation pour la suppression complète
-    const confirmation = confirm("Êtes-vous sûr de vouloir supprimer toutes les feuilles ? Cette action est irréversible.");
-    
-    if (confirmation) {
-        // Réinitialise le bloc
-        bloc = {
-            feuilles: [],
-            activeFeuille: null
-        };
-        
-        // Supprime le bloc du localStorage
-        localStorage.removeItem('bloc');
-        
-        // Mettre à jour l'affichage
-        renderFeuillesList();
-        
-        // Efface l'éditeur
-        titleOfText.value = '';  // Efface le titre
-        editor.innerHTML = '';  // Efface le contenu de l'éditeur
-    }
-}
-
-function deleteCurrentFeuille() {
-    if (bloc.activeFeuille !== null) {
-        // Demande de confirmation pour la suppression
-        const confirmation = confirm("Êtes-vous sûr de vouloir supprimer cette feuille ?");
-        
-        if (confirmation) {
-            // Supprime la feuille active
-            bloc.feuilles.splice(bloc.activeFeuille, 1);
-            
-            // Remet l'activeFeuille à null ou à une autre feuille si nécessaire
-            bloc.activeFeuille = bloc.feuilles.length > 0 ? 0 : null;
-
-            // Sauvegarder les changements
-            saveBlocToStorage();
-            
-            // Mettre à jour la liste des feuilles affichées
-            renderFeuillesList();
-            
-            // Effacer l'éditeur si nécessaire
-            if (bloc.activeFeuille === null) {
-                titleOfText.value = '';  // Efface le titre
-                editor.innerHTML = '';  // Efface le contenu de l'éditeur
-            } else {
-                // Si une autre feuille est disponible, la charger dans l'éditeur
-                loadFeuille(bloc.activeFeuille);
-            }
-        }
-    } else {
-        alert("Aucune feuille active à supprimer.");
-    }
-}
-
-// Générer automatiquement la date
-function getCurrentDate() {
-    const today = new Date();
-    
-    // Tableau des jours de la semaine
-    const daysOfWeek = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
-    
-    // Tableau des mois
-    const monthsOfYear = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
-
-    // Récupérer le jour de la semaine, le jour du mois, le mois et l'année
-    const dayName = daysOfWeek[today.getDay()]; // Récupère le nom du jour de la semaine
-    const dayNumber = today.getDate(); // Récupère le numéro du jour dans le mois
-    const monthName = monthsOfYear[today.getMonth()]; // Récupère le nom du mois
-    const year = today.getFullYear(); // Récupère l'année
-    console.log(`${dayName} ${dayNumber} ${monthName} ${year}`)
-    // Retourne la date formatée
-    return `${dayName} ${dayNumber} ${monthName} ${year}`;
-}
-
-
-// Sauvegarder l'état du bloc dans le localStorage
-function saveBlocToStorage() {
-    localStorage.setItem('bloc', JSON.stringify(bloc));
-}
-
-// Afficher toutes les feuilles dans la liste
-function renderFeuillesList() {
-    allBlocText.innerHTML = ''; // Clear list
-    bloc.feuilles.forEach((feuille, index) => {
-        const feuilleDiv = document.createElement('div');
-        feuilleDiv.classList.add('feuille');
-        feuilleDiv.innerText = feuille.title;
-        feuilleDiv.addEventListener('click', () => {
-            selectFeuille(index);
-        });
-        allBlocText.appendChild(feuilleDiv);
-    });
-    // Créer un bouton
-        const addButton = document.createElement('button');
-
-        // Ajouter du texte au bouton
-        addButton.textContent = 'Ajouter une nouvelle feuille';
-
-        // Définir un ID pour le bouton
-        addButton.id = 'add-new-bloc';
-
-        const buttonStyle = {
-          padding: '10px',
-          marginBottom: '8px',
-          backgroundColor: '#ffffff',
-          color: 'black',
-          border: 'none',
-          borderRadius: '10px',
-          margin: '10px 10px 10px 10px',
-          cursor: 'pointer',
-          transition: 'background-color 0.3s'
-        };
-
-        Object.assign(addButton.style, buttonStyle); // Appliquer le style
-
-        // Ajouter un gestionnaire d'événement pour le clic
-        addButton.addEventListener('click', () => {
-            // Code à exécuter lors du clic (par exemple, ajouter une nouvelle feuille)
-            bloc.feuilles.push({ title: 'Nouvelle Feuille', date: getCurrentDate(), content: '' });
-            bloc.activeFeuille = bloc.feuilles.length - 1;  // Rendre active la nouvelle feuille
-            saveBlocToStorage();  // Sauvegarder dans le localStorage
-            renderFeuillesList();
-        });
-
-        // Ajouter le bouton dans un conteneur (par exemple dans le body ou un div spécifique)
-        allBlocText.appendChild(addButton);
-}
-
-// Sélectionner une feuille à afficher
-function selectFeuille(index) {
-    const feuille = bloc.feuilles[index];
-    bloc.activeFeuille = index;
-    titleOfText.value = feuille.title;
-    dateTheDay.value = feuille.date;
-    editor.innerHTML = feuille.content;
-    saveBlocToStorage(); // Sauvegarder l'état
-}
-
-// Sauvegarde automatique lorsque l'utilisateur édite le contenu
-editor.addEventListener('input', () => {
-    if (bloc.activeFeuille !== null) {
-        bloc.feuilles[bloc.activeFeuille].content = editor.innerHTML;
-        saveBlocToStorage(); // Sauvegarder à chaque changement
-    }
-});
-
-titleOfText.addEventListener('input', () => {
-    if (bloc.activeFeuille === null) {
-        // Si aucune feuille n'est active, créer une nouvelle feuille
-        const nouvelleFeuille = {
-            title: titleOfText.value,
-            content: '' // Contenu par défaut vide pour la nouvelle feuille
-        };
-
-        // Ajouter cette nouvelle feuille au tableau des feuilles
-        bloc.feuilles.push(nouvelleFeuille);
-
-        // Mettre cette nouvelle feuille comme active
-        bloc.activeFeuille = bloc.feuilles.length - 1;
-    } else {
-        // Si une feuille est déjà active, on met juste à jour son titre
-        bloc.feuilles[bloc.activeFeuille].title = titleOfText.value;
-    }
-
-    // Mettre à jour la liste des feuilles
-    renderFeuillesList();
-
-    // Sauvegarder dans le localStorage
-    saveBlocToStorage();
-});
-
-// Sauvegarder tout le bloc sous forme de fichier JSON
-saveBlocBtn.addEventListener('click', () => {
-    const blocData = JSON.stringify(bloc, null, 2);
-    const blob = new Blob([blocData], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'votre-bloc-notes.podb';
-    a.click();
-});
-
-// Charger les données initiales lors du chargement de la page
-function init() {
-    renderFeuillesList();
-    if (bloc.feuilles.length > 0) {
-        selectFeuille(0); // Sélectionner la première feuille
-    }
-}
-
-// Sélection des éléments HTML
-const openBlocBtn = document.getElementById('open');
-
-// Fonction pour ouvrir le fichier explorateur et charger un fichier JSON
-openBlocBtn.addEventListener('click', () => {
-    // Crée un input type="file" programmatique pour ne pas l'afficher à l'utilisateur
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = '.podb'; // Accepte uniquement les fichiers JSON
-    fileInput.style.display = 'none'; // On ne l'affiche pas
-
-    // Déclencher l'ouverture du dialogue de fichier
-    fileInput.click();
-
-    // Lorsqu'un fichier est sélectionné
-    fileInput.addEventListener('change', (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const importedBloc = JSON.parse(e.target.result);
-                    bloc = importedBloc;  // Charger le contenu du bloc
-                    saveBlocToStorage();  // Sauvegarder dans le localStorage
-                    renderFeuillesList(); // Mettre à jour la liste des feuilles
-                    if (bloc.feuilles.length > 0) {
-                        selectFeuille(0);  // Afficher la première feuille
-                    }
-                    alert('Bloc ouvert avec succès !');
-                } catch (error) {
-                    alert('Erreur lors de l\'ouverture du fichier : format non valide.');
-                }
-            };
-            reader.readAsText(file);  // Lire le contenu du fichier en tant que texte
-        }
-    });
-});
-//-------------------------------------------------Taille de police-------------------------------------
-    // Sélection des menus déroulants
-    const fontFamilySelect = document.getElementById('font-family');
-    const fontSizeSelect = document.getElementById('font-size');
-
-    // Écouteurs d'événements pour chaque menu déroulant
-    fontFamilySelect.addEventListener('change', () => {
-      const selectedFont = fontFamilySelect.value;
-      document.execCommand('fontName', false, selectedFont);
-    });
-    fontSizeSelect.addEventListener('change', () => {
-    const selection = window.getSelection();
-    if (selection.rangeCount > 0) {
-        const range = selection.getRangeAt(0);
-        const span = document.createElement('span');
-        span.style.fontSize = fontSizeSelect.value + 'px'; // Ajoutez 'px' à la valeur de la taille de police
-        range.surroundContents(span);
-    }
-});
-//--------------------------------------------------------preloadtitle---------------------------------------------
-function insertStyledText(name) {
-  const editor = document.getElementById('editor');
-  const styledText = document.createElement('span');
-  if(name === 'titre1') {
-    styledText.textContent = '[Votre titre ici]';
-  // Appliquer le style directement depuis JavaScript
-  styledText.style.color = 'rgb(18, 18, 131)';
-  styledText.style.fontFamily = 'Arial';
-  styledText.style.fontSize = '35px';
-  styledText.style.fontStyle = 'italic';
-  // Insérer le texte stylisé dans l'éditeur
-  editor.appendChild(styledText);
-  }
-  if(name === 'titre2') {
-    styledText.textContent = '[Votre titre ici]';
-  // Appliquer le style directement depuis JavaScript
-  styledText.style.color = 'rgb(252, 193, 0)';
-  styledText.style.fontFamily = 'sans-serif';
-  styledText.style.fontSize = '35px';
-  styledText.style.fontStyle = 'italic';
-  // Insérer le texte stylisé dans l'éditeur
-  editor.appendChild(styledText);
-  }
-  if(name === 'titre3') {
-    styledText.textContent = '[Votre titre ici]';
-  // Appliquer le style directement depuis JavaScript
-  styledText.style.color = 'rgb(61, 61, 61)';
-  styledText.style.fontFamily = 'sans-serif';
-  styledText.style.fontSize = '30px';
-  styledText.style.fontStyle = 'italic';
-  // Insérer le texte stylisé dans l'éditeur
-  editor.appendChild(styledText);
-  }
-  if(name === 'soustitre') {
-    styledText.textContent = '[Votre texte ici]';
-  // Appliquer le style directement depuis JavaScript
-  styledText.style.color = 'rgb(48, 48, 48)';
-  styledText.style.fontFamily = 'Arial';
-  styledText.style.fontSize = '23px';
-  // Insérer le texte stylisé dans l'éditeur
-  editor.appendChild(styledText);
-  }
-  if(name === 'citation') {
-    styledText.textContent = '"Votre citation ici"';
-  // Appliquer le style directement depuis JavaScript
-  styledText.style.color = 'gray';
-  styledText.style.fontFamily = 'Univers';
-  styledText.style.fontSize = '14px';
-  styledText.style.fontStyle = 'italic';
-  // Insérer le texte stylisé dans l'éditeur
-  editor.appendChild(styledText);
-  }
-  if(name === 'si') {
-    styledText.textContent = '[Votre texte ici]';
-  // Appliquer le style directement depuis JavaScript
-  styledText.style.color = 'black';
-  styledText.style.fontFamily = 'Univers';
-  styledText.style.fontSize = '12px';
-  // Insérer le texte stylisé dans l'éditeur
-  editor.appendChild(styledText);
-  }
-}
-//---------------------------------------------------ADVANCETEXTOPTION-----------------------------------------------------------
-    // Sélection des boutons
-    const alignLeftButton = document.querySelector('.class1-button:nth-of-type(1)');
-const alignCenterButton = document.querySelector('.class1-button:nth-of-type(2)');
-const alignRightButton = document.querySelector('.class1-button:nth-of-type(3)');
-const justifyButton = document.querySelector('.class1-button:nth-of-type(4)'); // Nouveau bouton pour le texte justifié
-const superscriptButton = document.querySelector('.class1-button:nth-of-type(5)');
-const subscriptButton = document.querySelector('.class1-button:nth-of-type(6)');
-const unorderedListButton = document.getElementById('unordered-list-button');
-const orderedListButton = document.getElementById('ordered-list-button');
-
-// Fonction pour récupérer la sélection de texte
-function getSelectedText() {
-  return window.getSelection().toString();
-}
-
-// Écouteurs d'événements pour chaque bouton
-alignLeftButton.addEventListener('click', () => {
-  document.execCommand('justifyLeft', false, null);
-});
-
-alignCenterButton.addEventListener('click', () => {
-  document.execCommand('justifyCenter', false, null);
-});
-
-alignRightButton.addEventListener('click', () => {
-  document.execCommand('justifyRight', false, null);
-});
-
-justifyButton.addEventListener('click', () => {
-  const selectedText = getSelectedText();
-  if (selectedText) {
-    document.execCommand('justifyFull', false, null);
-  }
-});
-
-superscriptButton.addEventListener('click', () => {
-  const selectedText = getSelectedText();
-  if (selectedText) {
-    document.execCommand('superscript', false, null);
-  }
-});
-
-subscriptButton.addEventListener('click', () => {
-  const selectedText = getSelectedText();
-  if (selectedText) {
-    document.execCommand('subscript', false, null);
-  }
-});
-
-unorderedListButton.addEventListener('click', () => {
-  document.execCommand('insertUnorderedList', false, null);
-});
-
-orderedListButton.addEventListener('click', () => {
-  document.execCommand('insertOrderedList', false, null);
-});
-    //-------------------------------------------------COPY/CUT/PAST-----------------------------------------------------------------
-    // Sélection des boutons de la classe 2
-    const copyButton = document.querySelector('.class2-button:nth-of-type(1)');
-    const pasteButton = document.querySelector('.class2-button:nth-of-type(2)');
-    const cutButton = document.querySelector('.class2-button:nth-of-type(3)');
-
-    // Écouteurs d'événements pour chaque bouton
-    copyButton.addEventListener('click', () => {
-    const selectedText = getSelectedText();
-    if (selectedText) {
-      document.execCommand('copy');
-    }
-    });
-
-    pasteButton.addEventListener('click', () => {
-      document.execCommand('paste');
-    });
-
-    cutButton.addEventListener('click', () => {
-      const selectedText = getSelectedText();
-      if (selectedText) {
-        document.execCommand('cut');
-      }
-    });
-    // Pour le menu deroulant 
-  document.getElementById('menucut').addEventListener('click', function() {
-    const selectedText = getSelectedText();
-      if (selectedText) {
-        document.execCommand('cut');
-      }
-  });
-
-  document.getElementById('menucopy').addEventListener('click', function() {
-    const selectedText = getSelectedText();
-    if (selectedText) {
-      document.execCommand('copy');
-    }
-  });
-
-  document.getElementById('menupast').addEventListener('click', function() {
-    document.execCommand('paste');
-  });
-    //-----------------------------------------------BOLT/ITALIC/UNDERLINE----------------------------------------------------------
-    // Sélection des boutons de la classe2-button-solo
-    const boldButton = document.getElementById('apply-stand');
-    const italicButton = document.querySelector('.class2-button-solo:nth-of-type(2)');
-    const underlineButton = document.querySelector('.class2-button-solo:nth-of-type(3)');
-
-    // Fonction pour vérifier si le texte est mis en forme
-    function isApplied(command) {
-      return document.queryCommandState(command);
-    }
-
-    // Écouteurs d'événements pour chaque bouton
-    boldButton.addEventListener('click', () => {
-    const selectedText = getSelectedText();
-      if (selectedText) {
-        document.execCommand('bold');
-      }
-    });
-
-    italicButton.addEventListener('click', () => {
-      const selectedText = getSelectedText();
-      if (selectedText) {
-        document.execCommand('italic');
-      }
-    });
-
-    underlineButton.addEventListener('click', () => {
-      const selectedText = getSelectedText();
-      if (selectedText) {
-        document.execCommand('underline');
-      }
-    });
-    //-------------------------------------------------------------------------charspe-----------------------------------------------------------
+//-------------------------------------------------------------------------charspe-----------------------------------------------------------
 function toggleSpecialCharacters() {
     var specialCharactersContainer = document.getElementById('special-characters-container');
     if (specialCharactersContainer.style.display === 'none') {
@@ -2836,8 +2118,139 @@ function stopSpeechRecognition() {
     recognition = null; // Réinitialisez l'objet de reconnaissance vocale
   }
 }
-//------------------------------------------------------IMPRESSION-----------------------------------------------------------
-const printButton = document.getElementById('apply-stand-new-line');
+//------------------------------------------------------------------------Styliste de texte-------------------------------------------------------------
+function insertStyledText(name) {
+  const editor = document.getElementById('editor');
+  const styledText = document.createElement('span');
+  if(name === 'titre1') {
+    styledText.textContent = '[Votre titre ici]';
+  // Appliquer le style directement depuis JavaScript
+  styledText.style.color = 'rgb(18, 18, 131)';
+  styledText.style.fontFamily = 'Arial';
+  styledText.style.fontSize = '35px';
+  styledText.style.fontStyle = 'italic';
+  // Insérer le texte stylisé dans l'éditeur
+  editor.appendChild(styledText);
+  }
+  if(name === 'titre2') {
+    styledText.textContent = '[Votre titre ici]';
+  // Appliquer le style directement depuis JavaScript
+  styledText.style.color = 'rgb(252, 193, 0)';
+  styledText.style.fontFamily = 'sans-serif';
+  styledText.style.fontSize = '35px';
+  styledText.style.fontStyle = 'italic';
+  // Insérer le texte stylisé dans l'éditeur
+  editor.appendChild(styledText);
+  }
+  if(name === 'titre3') {
+    styledText.textContent = '[Votre titre ici]';
+  // Appliquer le style directement depuis JavaScript
+  styledText.style.color = 'rgb(61, 61, 61)';
+  styledText.style.fontFamily = 'sans-serif';
+  styledText.style.fontSize = '30px';
+  styledText.style.fontStyle = 'italic';
+  // Insérer le texte stylisé dans l'éditeur
+  editor.appendChild(styledText);
+  }
+  if(name === 'soustitre') {
+    styledText.textContent = '[Votre texte ici]';
+  // Appliquer le style directement depuis JavaScript
+  styledText.style.color = 'rgb(48, 48, 48)';
+  styledText.style.fontFamily = 'Arial';
+  styledText.style.fontSize = '23px';
+  // Insérer le texte stylisé dans l'éditeur
+  editor.appendChild(styledText);
+  }
+  if(name === 'citation') {
+    styledText.textContent = '"Votre citation ici"';
+  // Appliquer le style directement depuis JavaScript
+  styledText.style.color = 'gray';
+  styledText.style.fontFamily = 'Univers';
+  styledText.style.fontSize = '14px';
+  styledText.style.fontStyle = 'italic';
+  // Insérer le texte stylisé dans l'éditeur
+  editor.appendChild(styledText);
+  }
+  if(name === 'si') {
+    styledText.textContent = '[Votre texte ici]';
+  // Appliquer le style directement depuis JavaScript
+  styledText.style.color = 'black';
+  styledText.style.fontFamily = 'Univers';
+  styledText.style.fontSize = '12px';
+  // Insérer le texte stylisé dans l'éditeur
+  editor.appendChild(styledText);
+  }
+
+
+}
+//-----------------------------------------------------------------------Gestion de la connection a prismID-----------------------------------------------
+      var popupWindow;
+  
+      // Fonction pour ouvrir la fenêtre contextuelle
+      function openPopup() {
+          var width = 500;
+          var height = 600;
+          var left = (window.innerWidth - width) / 2;
+          var top = (window.innerHeight - height) / 2;
+          var options = 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + width + ', height=' + height + ', top=' + top + ', left=' + left;
+  
+          popupWindow = window.open('auth/0/Connection.html', 'Popup', options);
+      }
+  
+      // Fonction appelée après la connexion réussie dans la fenêtre contextuelle
+      function onLoginSuccess(userInfo) {
+          // Extrayez l'e-mail de l'utilisateur
+          var userEmail = userInfo.email;
+          // Fermez la fenêtre contextuelle après traitement des informations
+          if (popupWindow) {
+              popupWindow.close();
+          }
+      }
+  </script>
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+  // Sélectionnez les éléments par leur ID
+  var topBar = document.getElementById('top-bar');
+  var middleBar = document.getElementById('middle-bar');
+  var content = document.getElementById('content');
+  
+  // Calcul de la hauteur du contenu en pourcentage
+  var topBarHeight = topBar.offsetHeight; // Hauteur de #topbar
+  var middleBarHeight = middleBar.offsetHeight; // Hauteur de #middle-bar
+  var windowHeight = window.innerHeight; // Hauteur de la fenêtre du navigateur
+  
+  var contentHeightPercentage = 100 - (topBarHeight / windowHeight * 100) - (middleBarHeight / windowHeight * 100); // Calcul de la hauteur de #content en pourcentage
+  
+  // Définir la hauteur de #content en pourcentage
+  content.style.height = contentHeightPercentage + '%';
+});
+    //------------------------------------------------------Gestion menu---------------------------------------------------------
+    const menu = document.getElementById('menu');
+const menudev = document.getElementById('menudev');
+
+menudev.addEventListener('click', (event) => {
+    event.stopPropagation(); // Arrête la propagation de l'événement pour éviter la fermeture immédiate du menu
+    toggleMenu(); // Afficher ou masquer le menu
+});
+
+// Écouter les clics en dehors du menu pour le masquer
+document.addEventListener('click', (event) => {
+    const isClickInsideMenu = menu.contains(event.target);
+    if (!isClickInsideMenu) {
+        menu.style.left = "-100%"; // Masquer le menu si le clic est en dehors du menu
+    }
+});
+
+function toggleMenu() {
+    // Si le menu est actuellement affiché, masquez-le. Sinon, affichez-le.
+    if (menu.style.left === "0px" || menu.style.left === "") {
+        menu.style.left = "-100%"; // Masquer le menu
+    } else {
+        menu.style.left = "0"; // Afficher le menu
+    }
+}
+    //------------------------------------------------------IMPRESSION-----------------------------------------------------------
+    const printButton = document.getElementById('apply-stand-new-line');
 
 // Ajoutez un écouteur d'événements au bouton d'impression
 function printContent() {
@@ -2857,7 +2270,15 @@ function printContent() {
             padding: 8px;
             overflow: hidden; /* Affiche les barres de défilement si nécessaire */
         }
-        </style>
+                @page {
+                    size: ${getPaperSize()} ${getOrientation()}; /* Définir la taille du papier et l'orientation */
+                    margin: ${getMargin()}; /* Définir les marges */
+                }
+                body {
+                    font-size: 12px; /* Définir la taille de la police */
+                    margin: 0; /* Réinitialiser les marges du corps */
+                }
+            </style>
         </head>
         <body>
             ${printContent}
@@ -2867,6 +2288,303 @@ function printContent() {
     printWindow.document.close();
     printWindow.print();
     printWindow.close();
+}
+
+// Fonction pour obtenir la taille du papier sélectionnée
+function getPaperSize() {
+    const paperSizeSelect = document.getElementById('paper-size');
+    return paperSizeSelect.value;
+}
+
+// Fonction pour obtenir l'orientation sélectionnée
+function getOrientation() {
+    const orientationSelect = document.querySelector('input[name="orientation"]:checked');
+    return orientationSelect.value;
+}
+
+// Fonction pour obtenir les marges sélectionnées
+function getMargin() {
+    const marginSelect = document.getElementById('margin-size');
+    return marginSelect.value + 'mm'; // Suppose que les marges sont en millimètres
+}
+//--------------------------NEW-----------------------------
+function openPrintPreviewModal() {
+       // Afficher la fenêtre modale
+    document.getElementById('imprprev').style.display = 'block';
+}
+
+// Fonction pour fermer le modal d'aperçu avant impression
+function closePrintPreviewModal() {
+  document.getElementById("imprprev").style.display = "none";
+}
+
+// Fonction pour afficher le contenu dans l'aperçu avant impression
+function displayContentForPrintPreview() {
+  // Insérez ici le code pour récupérer et afficher le contenu à imprimer dans l'aperçu
+}
+
+// Fonction appelée lorsque le bouton "Aperçu avant impression" est cliqué
+function handlePrintPreviewButtonClick() {
+  displayContentForPrintPreview(); // Afficher le contenu dans l'aperçu avant impression
+  openPrintPreviewModal(); // Ouvrir le modal d'aperçu avant impression
+}
+    //---------------------------------------------------ADVANCETEXTOPTION-----------------------------------------------------------
+    // Sélection des boutons
+const alignLeftButton = document.querySelector('.class1-button:nth-of-type(1)');
+const alignCenterButton = document.querySelector('.class1-button:nth-of-type(2)');
+const alignRightButton = document.querySelector('.class1-button:nth-of-type(3)');
+const justifyButton = document.querySelector('.class1-button:nth-of-type(4)'); // Nouveau bouton pour le texte justifié
+const superscriptButton = document.querySelector('.class1-button:nth-of-type(5)');
+const subscriptButton = document.querySelector('.class1-button:nth-of-type(6)');
+const unorderedListButton = document.getElementById('unordered-list-button');
+const orderedListButton = document.getElementById('ordered-list-button');
+
+// Fonction pour récupérer la sélection de texte
+function getSelectedText() {
+  return window.getSelection().toString();
+}
+
+// Écouteurs d'événements pour chaque bouton
+alignLeftButton.addEventListener('click', () => {
+  document.execCommand('justifyLeft', false, null);
+});
+
+alignCenterButton.addEventListener('click', () => {
+  document.execCommand('justifyCenter', false, null);
+});
+
+alignRightButton.addEventListener('click', () => {
+  document.execCommand('justifyRight', false, null);
+});
+
+justifyButton.addEventListener('click', () => {
+  const selectedText = getSelectedText();
+  if (selectedText) {
+    document.execCommand('justifyFull', false, null);
+  }
+});
+
+superscriptButton.addEventListener('click', () => {
+  const selectedText = getSelectedText();
+  if (selectedText) {
+    document.execCommand('superscript', false, null);
+  }
+});
+
+subscriptButton.addEventListener('click', () => {
+  const selectedText = getSelectedText();
+  if (selectedText) {
+    document.execCommand('subscript', false, null);
+  }
+});
+
+unorderedListButton.addEventListener('click', () => {
+  document.execCommand('insertUnorderedList', false, null);
+});
+
+orderedListButton.addEventListener('click', () => {
+  document.execCommand('insertOrderedList', false, null);
+});
+    //-------------------------------------------------COPY/CUT/PAST-----------------------------------------------------------------
+    // Sélection des boutons de la classe 2
+    const copyButton = document.querySelector('.class2-button:nth-of-type(1)');
+    const pasteButton = document.querySelector('.class2-button:nth-of-type(2)');
+    const cutButton = document.querySelector('.class2-button:nth-of-type(3)');
+
+    // Écouteurs d'événements pour chaque bouton
+    copyButton.addEventListener('click', () => {
+    const selectedText = getSelectedText();
+    if (selectedText) {
+      document.execCommand('copy');
+    }
+    });
+
+    pasteButton.addEventListener('click', () => {
+      document.execCommand('paste');
+    });
+
+    cutButton.addEventListener('click', () => {
+      const selectedText = getSelectedText();
+      if (selectedText) {
+        document.execCommand('cut');
+      }
+    });
+    // Pour le menu deroulant 
+  document.getElementById('menucut').addEventListener('click', function() {
+    const selectedText = getSelectedText();
+      if (selectedText) {
+        document.execCommand('cut');
+      }
+  });
+
+  document.getElementById('menucopy').addEventListener('click', function() {
+    const selectedText = getSelectedText();
+    if (selectedText) {
+      document.execCommand('copy');
+    }
+  });
+
+  document.getElementById('menupast').addEventListener('click', function() {
+    document.execCommand('paste');
+  });
+    //-----------------------------------------------BOLT/ITALIC/UNDERLINE----------------------------------------------------------
+    // Sélection des boutons de la classe2-button-solo
+    const boldButton = document.getElementById('apply-stand');
+    const italicButton = document.querySelector('.class2-button-solo:nth-of-type(2)');
+    const underlineButton = document.querySelector('.class2-button-solo:nth-of-type(3)');
+
+    // Fonction pour vérifier si le texte est mis en forme
+    function isApplied(command) {
+      return document.queryCommandState(command);
+    }
+
+    // Écouteurs d'événements pour chaque bouton
+    boldButton.addEventListener('click', () => {
+    const selectedText = getSelectedText();
+      if (selectedText) {
+        document.execCommand('bold');
+      }
+    });
+
+    italicButton.addEventListener('click', () => {
+      const selectedText = getSelectedText();
+      if (selectedText) {
+        document.execCommand('italic');
+      }
+    });
+
+    underlineButton.addEventListener('click', () => {
+      const selectedText = getSelectedText();
+      if (selectedText) {
+        document.execCommand('underline');
+      }
+    });
+    //-------------------------------------------------Taille de police-------------------------------------
+    // Sélection des menus déroulants
+    const fontFamilySelect = document.getElementById('font-family');
+    const fontSizeSelect = document.getElementById('font-size');
+
+    // Écouteurs d'événements pour chaque menu déroulant
+    fontFamilySelect.addEventListener('change', () => {
+      const selectedFont = fontFamilySelect.value;
+      document.execCommand('fontName', false, selectedFont);
+    });
+    fontSizeSelect.addEventListener('change', () => {
+    const selection = window.getSelection();
+    if (selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        const span = document.createElement('span');
+        span.style.fontSize = fontSizeSelect.value + 'px'; // Ajoutez 'px' à la valeur de la taille de police
+        range.surroundContents(span);
+    }
+});
+    //-------------------------------------------------Save-------------------------------------------------
+    const saveButton = document.getElementById('save');
+const openButton = document.getElementById('open');
+const fileInput = document.getElementById('file-input');
+const editor = document.getElementById('editor');
+
+saveButton.addEventListener('click', () => {
+  const podxContent = editor.innerHTML;
+  const blob = new Blob([podxContent], { type: 'application/podx' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'Document.podx';
+  a.click();
+  URL.revokeObjectURL(url);
+  adjustEditorHeight()
+});
+
+openButton.addEventListener('click', () => {
+  fileInput.click();
+  adjustEditorHeight()
+});
+
+fileInput.addEventListener('change', () => {
+  const file = fileInput.files[0];
+  const reader = new FileReader();
+  adjustEditorHeight()
+  reader.onload = (event) => {
+    const podxContent = event.target.result;
+    editor.innerHTML = podxContent;
+  };
+  reader.readAsText(file);
+  adjustEditorHeight()
+});
+function openmedel(exemple){
+  if(exemple === 'lettre')
+    fetch('model/model-lettre.podx')
+      .then(response => response.text())
+      .then(podxContent => {
+        editor.innerHTML = podxContent;
+        adjustEditorHeight();
+      })
+      .catch(error => {
+        console.error('Une erreur est survenue lors du chargement du fichier modèle :', error);
+      }); 
+  if(exemple === 'liste')
+    fetch('model/model-listesimple.podx')
+      .then(response => response.text())
+      .then(podxContent => {
+        editor.innerHTML = podxContent;
+        adjustEditorHeight();
+      })
+      .catch(error => {
+        console.error('Une erreur est survenue lors du chargement du fichier modèle :', error);
+      }); 
+  if(exemple === 'rapport')
+    fetch('model/model-rapport.podx')
+      .then(response => response.text())
+      .then(podxContent => {
+        editor.innerHTML = podxContent;
+        adjustEditorHeight();
+      })
+      .catch(error => {
+        console.error('Une erreur est survenue lors du chargement du fichier modèle :', error);
+      }); 
+      if(exemple === 'PV')
+    fetch('model/model-procesverbal.podx')
+      .then(response => response.text())
+      .then(podxContent => {
+        editor.innerHTML = podxContent;
+        adjustEditorHeight();
+      })
+      .catch(error => {
+        console.error('Une erreur est survenue lors du chargement du fichier modèle :', error);
+      }); 
+}
+
+
+//--------------------------------------------------color--------------------------------------------------------
+const colorButtons = document.querySelectorAll('.class1-color-button');
+const anotherColorButton = document.getElementById('another');
+const customColorPicker = document.getElementById('custom-color-picker');
+
+colorButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    const color = button.dataset.color;
+    applyColorToSelection(color);
+  });
+});
+
+anotherColorButton.addEventListener('click', () => {
+  customColorPicker.click();
+});
+
+customColorPicker.addEventListener('input', () => {
+  const color = customColorPicker.value;
+  applyColorToSelection(color);
+});
+
+function applyColorToSelection(color) {
+  const selection = window.getSelection();
+  if (selection.rangeCount > 0) {
+    const range = selection.getRangeAt(0);
+    const span = document.createElement('span');
+    span.style.color = color;
+    range.surroundContents(span);
+  }
 }
 //---------------------------------------------------------------------ZOOM----------------------------------------
 // Ajoute un écouteur d'événements pour la molette de la souris
@@ -2914,8 +2632,195 @@ zoomBar.addEventListener('input', function() {
 
   // Applique le zoom à l'élément que vous souhaitez zoomer (dans ce cas, la zone de texte)
   editor.style.zoom = valeur / 100;
+
+  // Centre horizontalement l'éditeur
+  editor.style.marginLeft = '50%';
 });
 });
+//--------------------------------------------GESTION PAGE----------------------------------------------------------
+let previousHeight = editor.scrollHeight;
+
+function adjustEditorHeight() {
+  const currentHeight = editor.scrollHeight;
+
+  if (currentHeight !== previousHeight) {
+    editor.style.height = 'fit-content';
+    previousHeight = currentHeight;
+  }
+}
+
+// Appelez la fonction pour ajuster la hauteur au chargement initial et à chaque modification du contenu
+window.addEventListener('DOMContentLoaded', adjustEditorHeight);
+editor.addEventListener('input', adjustEditorHeight);
+
+//---------------------------------------------Gestion du loader------------------------------------------------------
+setTimeout(function() {
+        var loader = document.getElementById('loader');
+        loader.style.display = 'none';
+        }, 20);
+//----------------------------------------------Gestion du modal pour les parametre------------------------------------
+// Fonction pour ouvrir un onglet spécifique
+function openTab(event, tabName) {
+  // Récupère tous les éléments avec la classe "tabcontent" et les masque
+  const tabcontent = document.getElementsByClassName('tabcontent');
+  for (let i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = 'none';
+  }
+
+  // Récupère tous les éléments avec la classe "tablinks" et supprime la classe "active"
+  const tablinks = document.getElementsByClassName('tablinks');
+  for (let i = 0; i < tablinks.length; i++) {
+    tablinks[i].classList.remove('active');
+  }
+
+  // Affiche l'onglet sélectionné et ajoute la classe "active" au bouton de l'onglet sélectionné
+  document.getElementById(tabName).style.display = 'block';
+  event.currentTarget.classList.add('active');
+}
+
+// Événement pour ouvrir la fenêtre modale
+document.getElementById('openModalBtn').addEventListener('click', () => {
+  document.getElementById('myModal').style.display = 'block';
+});
+
+// Événement pour ouvrir la fenêtre modale
+document.getElementById('openModalinster').addEventListener('click', () => {
+  document.getElementById('myModal').style.display = 'block';
+});
+
+document.getElementById('openModalpara').addEventListener('click', () => {
+  document.getElementById('myModal').style.display = 'block';
+});
+
+// Événement pour fermer la fenêtre modale
+document.querySelector('.closebtn').addEventListener('click', () => {
+  document.getElementById('myModal').style.display = 'none';
+});
+
+// Événement pour fermer la fenêtre modale en cliquant en dehors de celle-ci
+window.addEventListener('click', (event) => {
+  if (event.target === document.getElementById('myModal')) {
+    document.getElementById('myModal').style.display = 'none';
+  }
+});
+//------------------------------------------Option--------------------------------------------------------------------------------
+//Mise en page
+//-----------------------------------------oriantation-------------------------------------
+function changeOrientationAndPaperSize() {
+  const selectedOrientation = document.querySelector('input[name="orientation"]:checked').value;
+  const selectedPaperSize = document.getElementById('paper-size').value;
+  const editor = document.getElementById('editor');
+  
+  switch (selectedPaperSize) {
+    case 'A4':
+      if (selectedOrientation === 'portrait') {
+        editor.style.width = '210mm';
+        editor.style.height = '297mm';
+      } else if (selectedOrientation === 'landscape') {
+        editor.style.width = '297mm';
+        editor.style.height = '210mm';
+      }
+      break;
+    case 'A5':
+      if (selectedOrientation === 'portrait') {
+        editor.style.width = '148mm';
+        editor.style.height = '210mm';
+      } else if (selectedOrientation === 'landscape') {
+        editor.style.width = '210mm';
+        editor.style.height = '148mm';
+      }
+      break;
+    case 'Letter':
+      if (selectedOrientation === 'portrait') {
+        editor.style.width = '8.5in';
+        editor.style.height = '11in';
+      } else if (selectedOrientation === 'landscape') {
+        editor.style.width = '11in';
+        editor.style.height = '8.5in';
+      }
+      break;
+    case 'Legal':
+      if (selectedOrientation === 'portrait') {
+        editor.style.width = '8.5in';
+        editor.style.height = '14in';
+      } else if (selectedOrientation === 'landscape') {
+        editor.style.width = '14in';
+        editor.style.height = '8.5in';
+      }
+      break;
+    // Ajoutez d'autres cas pour d'autres formats de papier si nécessaire
+    default:
+      break;
+  }
+}
+
+// Événement pour détecter le changement d'orientation et de format de papier
+document.querySelectorAll('input[name="orientation"], #paper-size').forEach((input) => {
+  input.addEventListener('change', changeOrientationAndPaperSize);
+});
+//----------------------------------------------Taille--------------------------------------
+// Fonction pour détecter le changement de format de papier et ajuster la taille de la zone de texte éditable en conséquence
+function changePaperSize() {
+  const selectedPaperSize = document.getElementById('paper-size').value;
+  const editor = document.getElementById('editor');
+  
+  switch (selectedPaperSize) {
+    case 'A4':
+      editor.style.width = '210mm';
+      editor.style.height = '297mm';
+      break;
+    case 'A5':
+      editor.style.width = '148mm';
+      editor.style.height = '210mm';
+      break;
+    case 'Letter':
+      editor.style.width = '8.5in';
+      editor.style.height = '11in';
+      break;
+    case 'Legal':
+      editor.style.width = '8.5in';
+      editor.style.height = '14in';
+      break;
+    // Ajoutez d'autres cas pour d'autres formats de papier si nécessaire
+    default:
+      break;
+  }
+}
+
+// Événement pour détecter le changement de format de papier
+document.getElementById('paper-size').addEventListener('change', changePaperSize);
+//---------------------------------------------marge-----------------------------------------
+// Fonction pour détecter le changement de marges et ajuster la taille de la zone de texte éditable en conséquence
+function changeMarginSize() {
+  const selectedMarginSize = document.getElementById('margin-size').value;
+  const editor = document.getElementById('editor');
+  console.log(selectedMarginSize);
+  switch (selectedMarginSize) {
+    case 'narrow':
+      editor.style.padding = '10mm';
+      console.log("10mm");
+      break;
+    case 'normal':
+      editor.style.padding = '20mm';
+      console.log("20mm");
+      break;
+    case 'wide':
+      editor.style.padding = '30mm';
+      console.log("30mm");
+      break;
+    case 'no':
+      editor.style.padding = '0mm';
+      console.log("0mm");
+      break;
+    // Ajoutez d'autres cas pour d'autres options de marges si nécessaire
+    default:
+    console.log("no mm");
+      break;
+  }
+}
+
+// Événement pour détecter le changement de marges
+document.getElementById('margin-size').addEventListener('change', changeMarginSize);
 //-----------------------------------------------Tableau----------------------------------------------
 // Sélectionnez le bouton d'insertion de tableau
 const insertTableButton = document.getElementById('insert-table-btn');
@@ -2940,36 +2845,36 @@ insertTableButton.addEventListener('click', () => {
     // Insérez le tableau dans l'éditeur
     document.getElementById('editor').insertAdjacentHTML('beforeend', tableHtml);
 });
-//--------------------------------------------------color--------------------------------------------------------
-const colorButtons = document.querySelectorAll('.class1-color-button');
-const anotherColorButton = document.getElementById('another');
-const customColorPicker = document.getElementById('custom-color-picker');
+//-----------------------------------------------------------------------Custom menu-----------------------------------------------------------
+// Prevent default context menu
+document.addEventListener('contextmenu', function(event) {
+    event.preventDefault();
 
-colorButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    const color = button.dataset.color;
-    applyColorToSelection(color);
-  });
+    // Cacher le menu contextuel de l'image si présent
+    const imageMenu = document.getElementById('image-context-menu');
+    if (imageMenu) {
+        imageMenu.style.display = 'none';
+    }
+
+    // Afficher le menu contextuel personnalisé
+    const customMenu = document.getElementById('custom-menu');
+    customMenu.style.display = 'block';
+    customMenu.style.left = event.pageX + 'px';
+    customMenu.style.top = event.pageY + 'px';
 });
 
-anotherColorButton.addEventListener('click', () => {
-  customColorPicker.click();
+// Hide the custom context menu when clicking outside
+document.addEventListener('click', function(event) {
+    const customMenu = document.getElementById('custom-menu');
+    customMenu.style.display = 'none';
+    
+    // Supprimer également le menu contextuel de l'image
+    const imageMenu = document.getElementById('image-context-menu');
+    if (imageMenu) {
+        imageMenu.remove();
+    }
 });
 
-customColorPicker.addEventListener('input', () => {
-  const color = customColorPicker.value;
-  applyColorToSelection(color);
-});
-
-function applyColorToSelection(color) {
-  const selection = window.getSelection();
-  if (selection.rangeCount > 0) {
-    const range = selection.getRangeAt(0);
-    const span = document.createElement('span');
-    span.style.color = color;
-    range.surroundContents(span);
-  }
-}
 //---------------------------------------------------------Image-----------------------------------------------
 // Sélectionnez la zone de texte éditable
 const imageInput = document.getElementById('image-input');
@@ -2983,63 +2888,163 @@ imageInput.addEventListener('change', () => {
         const imageUrl = event.target.result; // Obtenez l'URL de l'image chargée
 
         // Insérez l'image dans l'éditeur à l'emplacement du curseur
-        const imageHtml = `<img src="${imageUrl}" alt="Image" class="inserted-image">`;
+        const imageHtml = `<div style="position: relative; display: inline-block;">
+                              <img src="${imageUrl}" alt="Image" style="position: relative; max-width: 100%; cursor: move;">
+                              <div class="resizer top-left"></div>
+                              <div class="resizer top-right"></div>
+                              <div class="resizer bottom-left"></div>
+                              <div class="resizer bottom-right"></div>
+                          </div>`;
         editor.focus(); // Assurez-vous que l'éditeur est sélectionné
         document.execCommand('insertHTML', false, imageHtml); // Insérez l'image dans l'éditeur
 
-        // Sélectionner toutes les images insérées dans l'éditeur
-        const insertedImages = editor.querySelectorAll('.inserted-image');
+        // Ajouter un gestionnaire d'événements pour les images insérées
+        const insertedImages = editor.querySelectorAll('img');
         insertedImages.forEach(img => {
             let isResizing = false;
-            let startX, startY, startWidth, startHeight;
+            let isDragging = false;
+            let startX, startY, startLeft, startTop, startWidth, startHeight;
 
-            // Style de l'image pour empêcher qu'elle ne sorte de l'éditeur
-            img.style.position = 'relative'; // Position relative pour rester dans l'éditeur
-            img.style.maxWidth = '100%'; // Empêcher l'image d'excéder la largeur de l'éditeur
-            img.style.height = 'auto'; // Garder le ratio d'aspect
-            img.style.cursor = 'move'; // Curseur en forme de main pour le déplacement
+            // Assurez-vous que l'image ne dépasse pas les dimensions de l'éditeur
+            const editorRect = editor.getBoundingClientRect();
 
-            // Redimensionnement de l'image
             img.addEventListener('mousedown', (event) => {
+                event.preventDefault(); // Empêche le comportement par défaut de glisser-déposer de l'image
+                startX = event.clientX;
+                startY = event.clientY;
+                startLeft = img.offsetLeft;
+                startTop = img.offsetTop;
+                startWidth = img.clientWidth;
+                startHeight = img.clientHeight;
+
                 if (event.target.classList.contains('resizer')) {
                     isResizing = true;
-                    startX = event.clientX;
-                    startY = event.clientY;
-                    startWidth = img.clientWidth;
-                    startHeight = img.clientHeight;
+                } else {
+                    isDragging = true;
                 }
             });
 
             img.addEventListener('mousemove', (event) => {
                 if (isResizing) {
-                    const newWidth = startWidth + (event.clientX - startX);
-                    const newHeight = startHeight + (event.clientY - startY);
-                    img.style.width = `${newWidth}px`;
-                    img.style.height = `${newHeight}px`;
+                    const width = startWidth + (event.clientX - startX);
+                    const height = startHeight + (event.clientY - startY);
+                    img.style.width = `${width}px`;
+                    img.style.height = `${height}px`;
+                } else if (isDragging) {
+                    const offsetX = event.clientX - startX;
+                    const offsetY = event.clientY - startY;
+
+                    // Limiter le déplacement pour que l'image reste dans l'éditeur
+                    let newLeft = startLeft + offsetX;
+                    let newTop = startTop + offsetY;
+
+                    // Vérifier les limites de l'éditeur
+                    if (newLeft < 0) newLeft = 0;
+                    if (newTop < 0) newTop = 0;
+                    if (newLeft + img.clientWidth > editorRect.width) {
+                        newLeft = editorRect.width - img.clientWidth;
+                    }
+                    if (newTop + img.clientHeight > editorRect.height) {
+                        newTop = editorRect.height - img.clientHeight;
+                    }
+
+                    img.style.left = `${newLeft}px`;
+                    img.style.top = `${newTop}px`;
                 }
             });
 
             img.addEventListener('mouseup', () => {
                 isResizing = false;
-            });
-
-            img.addEventListener('mouseleave', () => {
-                isResizing = false;
-            });
-
-            // Empêcher l'image de sortir de l'éditeur en lui ajoutant des limites
-            img.addEventListener('dragstart', (event) => {
-                event.preventDefault(); // Empêche le glisser-déposer par défaut
+                isDragging = false;
             });
 
             img.addEventListener('contextmenu', (event) => {
-                event.preventDefault(); // Empêche le clic droit sur l'image
+                event.preventDefault(); // Empêche l'affichage du menu contextuel natif
+                displayImageContextMenu(event, img);
             });
         });
     };
 
     reader.readAsDataURL(file); // Lire le contenu du fichier sous forme d'URL de données
 });
+
+// Fonction pour afficher un menu contextuel personnalisé pour les images
+const displayImageContextMenu = (event, img) => {
+    const menu = document.createElement('div');
+    menu.id = 'image-context-menu';
+    menu.style.position = 'absolute';
+    menu.style.left = `${event.clientX}px`;
+    menu.style.top = `${event.clientY}px`;
+    menu.style.background = '#fff';
+    menu.style.border = '1px solid #ccc';
+    menu.style.padding = '10px';
+    menu.style.boxShadow = '0 2px 6px rgba(0,0,0,0.2)';
+    menu.style.zIndex = '1001'; // S'assurer que le menu est au-dessus des autres éléments
+
+    // Options du menu contextuel
+    menu.innerHTML = `
+        <button onclick="alignImage('left', '${img.src}')">Aligner à gauche</button><br>
+        <button onclick="alignImage('center', '${img.src}')">Aligner au centre</button><br>
+        <button onclick="alignImage('right', '${img.src}')">Aligner à droite</button><br>
+        <button onclick="removeImage('${img.src}')">Supprimer</button>
+    `;
+
+    // Supprimez tout menu contextuel existant
+    const existingMenu = document.getElementById('image-context-menu');
+    if (existingMenu) existingMenu.remove();
+
+    document.body.appendChild(menu);
+
+    // Supprimez le menu si vous cliquez ailleurs
+    document.addEventListener('click', () => {
+        menu.remove();
+    }, { once: true });
+};
+
+// Fonctions utilitaires pour les options du menu contextuel
+const alignImage = (alignment, imgSrc) => {
+    const img = Array.from(editor.querySelectorAll('img')).find(i => i.src === imgSrc);
+    if (img) {
+        img.style.display = alignment === 'center' ? 'block' : 'inline-block';
+        img.style.margin = alignment === 'center' ? '0 auto' : '0';
+        img.style.float = alignment === 'left' ? 'left' : alignment === 'right' ? 'right' : 'none';
+    }
+};
+
+const removeImage = (imgSrc) => {
+    const img = Array.from(editor.querySelectorAll('img')).find(i => i.src === imgSrc);
+    if (img) img.remove();
+};
+
+//---------------------------------------------------------------shape fonction-----------------------------------
+function createShape(x, y, label) {
+        var shape = document.createElement('div');
+        shape.classList.add('shape');
+        shape.style.left = x + 'px';
+        shape.style.top = y + 'px';
+        shape.textContent = label;
+        shape.draggable = true;
+
+        // Ajouter un gestionnaire d'événements pour le déplacement
+        shape.addEventListener('dragstart', function(event) {
+            event.dataTransfer.setData('text/plain', ''); // Nécessaire pour certains navigateurs
+        });
+
+        // Ajouter la forme à la zone de dessin
+        document.getElementById('diagram').appendChild(shape);
+    }
+    function insererDiagramme() {
+            // Récupérez le contenu du diagramme à insérer
+            var diagramme = '<div id="diagram" style="position: relative; width: 600px; height: 400px; border: 1px solid black;"></div>';
+            
+            // Insérez le diagramme dans l'éditeur de texte
+            document.getElementById('editor').innerHTML += diagramme;
+            createShape(50, 50, 'Processus 1');
+            createShape(200, 100, 'Processus 2');
+            createShape(350, 150, 'Processus 3');
+            // Fermez la fenêtre modale après l'insertion
+            closeModal();
+        }
 
 //-----------------------------------------------------------------------Math Formula Editor Modal-----------------------------------------------------------
 

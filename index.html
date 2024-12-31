@@ -10,6 +10,7 @@
         font-family: Arial, sans-serif;
         margin: 0;
         padding: 0;
+        background-color: #dbdbdb;
     }
     .container {
         display: flex;
@@ -60,6 +61,11 @@
             margin-left: 50px;
             align-items: center;
             margin-top: 20px;
+            transition: 400ms;
+        }
+
+        .template:hover {
+            background: #adadada4; /* Fond blanc */
         }
 
         .template img {
@@ -87,6 +93,10 @@
             border-radius: 10px;
             margin-top: 9px; /* Marge pour l'espacement */
             margin-left: 25px;
+            transition: 500ms;
+        }
+        .logooth:hover {
+            background: rgba(143, 143, 143, 0.438); /* Fond gris */
         }
         #logomenu {
             width: 35px; /* Ajustez la taille de la case grise */
@@ -152,7 +162,7 @@
 .modal {
     display: none; /* Masquer le modal par défaut */
     position: fixed; /* Position fixe */
-    z-index: 1; /* Mettre le modal au-dessus du reste du contenu */
+    z-index: 10000000; /* Mettre le modal au-dessus du reste du contenu */
     left: 0;
     top: 0;
     width: 100%;
@@ -184,6 +194,102 @@
     text-decoration: none;
     cursor: pointer;
 }
+#connectt {
+    display: none;
+}
+#connectk {
+    display: none;
+}
+#connectt {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f5f5;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    padding: 30px;
+    width: 300px;
+    margin-top: 50px;
+    margin: 50px auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#connectt:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+#connectt h1 {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+#connectt button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#connectt button:hover {
+    background-color: #45a049;
+}
+/* Conteneur du tableau */
+#connectk {
+    display: block;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    width: 93%;
+    margin: 20px auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Style du tableau */
+#fileTable {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-family: 'Arial', sans-serif;
+}
+
+#fileTable th, #fileTable td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+}
+
+#fileTable th {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+}
+
+#fileTable tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#fileTable tr:hover {
+    background-color: #e2e2e2;
+}
+
+#fileTable a {
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#fileTable a:hover {
+    color: #4CAF50;
+}
 
 </style>
 </head>
@@ -191,7 +297,8 @@
     <div id="unsupportedModal" class="modal">
         <div class="modal-content">
           <span class="close">&times;</span>
-          <p>L'accès à ce service n'est pas pris en charge sur cet appareil.</p>
+          <p>L'accès à ce service n'est pas pris en charge sur cet appareil. Si vous êtes actuellement sur un Ordinateur (Ou une tablette Prism), veuillez agrandir votre navigateur.</p>
+          <p>ERREUR 0x008569N</p>
         </div>
       </div>
     <div id="menu" class="hidden">
@@ -210,11 +317,21 @@
             <img id="app1" src="Res/fichier (2).png" alt="Logo 2">
         </div>
         <div class="logooth">
+            <img id="app2" src="Res/fichier (7).png" alt="Logo 2">
+        </div>
+        <div class="logooth">
             <img id="app3" src="Res/fichier (4).png" alt="Logo 3">
+        </div>
+        <div class="logooth">
+            <img id="app5" src="Res/fichier (3).png" alt="Logo 5">
+        </div>
+        <div class="logooth">
+            <img id="app4" src="Res/fichier (6).png" alt="Logo 5">
         </div>
         <div class="logooth">
             <img id="coscript" src="Res/logo-co-script-solo.png" alt="Logo 4">
         </div>
+        
     </div>
     <div class="content">
         <div class="topbar">
@@ -247,6 +364,19 @@
                 </div>
             </div>
             <div class="template">
+                <img id="to-bloc" src="Res/pagebl.png" alt="Image du Template">
+                <p>Nouveau bloc-note</p>
+                <div class="logo">
+                    <img src="Res/fichier (7).png" alt="Logo">
+                    <p>BlocText</p>
+                </div>
+                <div id="compatible_device">
+                    <img class="icon_device" src="Res/smartphone.png" alt="smartphone">
+                    <img class="icon_device" src="Res/laptop.png" alt="laptop">
+                    <img class="icon_device" src="Res/computer-tablet.png" alt="computer-tablet">
+                </div>
+            </div>
+            <div class="template">
                 <img src="Res/pic.png" alt="Image du Template">
                 <p>Nouvelle image 1960x1450</p>
                 <div class="logo">
@@ -259,38 +389,20 @@
                     <img class="icon_device" src="Res/computer-tablet.png" alt="computer-tablet">
                 </div>
             </div>
+            
         </div>
         </div>
         <div id="list">
-            
+            <div id="connectt">
+                <h1>Vous n'êtes pas connecté</h1>
+                <button onclick="openPopup()">Connectez-vous</button>
+            </div>
+            <div id="connectk">
+                
+            </div>
         </div>
     </div>
 </div>
-<script>
-    //-----------------------------------------------------------------------Gestion de la connection a prismID-----------------------------------------------
-          var popupWindow;
-      
-          // Fonction pour ouvrir la fenêtre contextuelle
-          function openPopup() {
-              var width = 500;
-              var height = 600;
-              var left = (window.innerWidth - width) / 2;
-              var top = (window.innerHeight - height) / 2;
-              var options = 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + width + ', height=' + height + ', top=' + top + ', left=' + left;
-      
-              popupWindow = window.open('ConnectionService-FirebasePupUp.html', 'Popup', options);
-          }
-      
-          // Fonction appelée après la connexion réussie dans la fenêtre contextuelle
-          function onLoginSuccess(userInfo) {
-              // Extrayez l'e-mail de l'utilisateur
-              var userEmail = userInfo.email;
-              // Fermez la fenêtre contextuelle après traitement des informations
-              if (popupWindow) {
-                  popupWindow.close();
-              }
-          }
-      </script>
 <script>
     const menu = document.getElementById('menu');
 const menudev = document.getElementById('logomenu');
@@ -320,33 +432,56 @@ function toggleMenu() {
 // Sélectionnez les éléments à rediriger
 var toWritter = document.getElementById('to-writter');
     var toCode = document.getElementById('to-code');
+    var toBloc = document.getElementById('to-bloc');
     var tocodeleft = document.getElementById('app3');
     var towritterleft = document.getElementById('app1');
+    var toBlocleft = document.getElementById('app2');
+    var tocoudleft = document.getElementById('app4');
     var toCloud = document.getElementById('serv-button-cloud');
     var toConne = document.getElementById('serv-button-connection');
     var coscripbtn = document.getElementById('coscript');
 
     // Ajoutez des gestionnaires d'événements pour la redirection lors du clic
     toWritter.addEventListener('click', function() {
-        window.location.href = 'BlocText.html';
+        window.location.href = 'DeskWritter.html';
     });
     coscripbtn.addEventListener('click', function() {
-        window.location.href = 'co-script/index.html';
+        window.location.href = 'https://web-coscript.web.app/';
+    });
+
+    document.getElementById('app5').addEventListener('click', function() {
+        window.location.href = 'EnCell.html';
     });
     // Ajoutez des gestionnaires d'événements pour la redirection lors du clic
     towritterleft.addEventListener('click', function() {
+        window.location.href = 'DeskWritter.html';
+    });
+    tocoudleft.addEventListener('click', function() {
+        window.location.href = 'explorer.html';
+    });
+    toBlocleft.addEventListener('click', function() {
+        window.location.href = 'BlocText.html';
+    });
+    toBloc.addEventListener('click', function() {
         window.location.href = 'BlocText.html';
     });
 
     // Fonction pour rediriger si la largeur de l'écran est inférieure à 900px
-function redirectToDeskCodePage() {
-    if (window.innerWidth >= 900) {
-        window.location.href = 'DeskCode.html';
+    function redirectToDeskCodePage() {
+    var isSupported = document.documentElement.clientWidth >= 900;
+    
+    if (isSupported) {
+        window.location.href = "DeskCode.html"
     } else {
-        var modal = document.getElementById('unsupportedModal');
-        modal.style.display = "block";
+        displayUnsupportedModal();
     }
 }
+
+function displayUnsupportedModal() {
+    var modal = document.getElementById('unsupportedModal');
+    modal.style.display = "block";
+}
+
 // Fermer le modal lorsqu'on clique sur la croix
 var closeBtn = document.getElementsByClassName("close")[0];
 closeBtn.onclick = function() {
@@ -364,6 +499,223 @@ window.onclick = function(event) {
 // Appeler la fonction lors du clic sur les éléments
 toCode.addEventListener('click', redirectToDeskCodePage);
 tocodeleft.addEventListener('click', redirectToDeskCodePage);
+
+
+
+</script>
+<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-storage-compat.js"></script>
+<script>
+
+        //-----------------------------------------------------------------------Gestion de la connection a prismID-----------------------------------------------
+        var popupWindow;
+          
+          // Fonction pour ouvrir la fenêtre contextuelle
+          function openPopup() {
+              var width = 500;
+              var height = 600;
+              var left = (window.innerWidth - width) / 2;
+              var top = (window.innerHeight - height) / 2;
+              var options = 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + width + ', height=' + height + ', top=' + top + ', left=' + left;
+      
+              popupWindow = window.open('auth/0/Connection.html', 'Popup', options);
+          }
+      
+          // Fonction appelée après la connexion réussie dans la fenêtre contextuelle
+          function onLoginSuccess(userInfo) {
+                // Extrayez l'e-mail de l'utilisateur
+                var userEmail = userInfo.email;
+                const clsbtn = document.getElementById("search-box-button");
+                var UUIDRC = userInfo.uid;
+                setCookie('uuid-prism',UUIDRC, 1); // Cookie expire dans 1 heure
+                checkmodcookie()
+                UUID = UUIDRC;
+
+
+              if (popupWindow) {
+                  popupWindow.close();
+              }
+          }
+
+    function getUUID() {
+        return getCookie('uuid-prism');
+    }
+
+    let uuid = getUUID();
+    
+    if (!uuid) {
+        uuid = ' ';  // Générer un nouveau UUID si aucun n'est trouvé
+        eraseCookie();
+    }
+
+    
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAqvHUxMhKKBgpZ1TSjwlh6FHP9OVpYkKk",
+        authDomain: "prism-project-id.firebaseapp.com",
+        projectId: "prism-project-id",
+        storageBucket: "prism-project-id.appspot.com",
+        messagingSenderId: "113073047107",
+        appId: "1:113073047107:web:c1c52e3f99a6e083e0f6f6",
+        measurementId: "G-KX60DSFW9Y"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const storage = firebase.storage();
+    const auth = firebase.auth();
+
+    function checkCookie(name) {
+    const cookieValue = getCookie(name);
+    if (cookieValue !== null) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    checkmodcookie();
+});
+
+
+function checkmodcookie() {
+    const NC = document.getElementById('connectt');
+    const CN = document.getElementById('connectk');
+    if(checkCookie('uuid-prism') === true) {
+        NC.style.display = 'none';
+        CN.style.display = 'block';
+        const userId = getUUID(); // Récupérer l'UUID de l'utilisateur
+        // Lister les fichiers dans le stockage
+        listFiles(userId);
+    }else {
+        NC.style.display = 'flex';
+        CN.style.display = 'none';
+    }
+}
+// Fonction pour définir un cookie avec une durée d'expiration en heures
+function setCookie(name, value, hours) {
+            const date = new Date();
+            date.setTime(date.getTime() + (hours * 60 * 60 * 1000));
+            const expires = "expires=" + date.toUTCString();
+            document.cookie = name + "=" + value + ";" + expires + ";path=/";
+        }
+
+        // Fonction pour obtenir la valeur d'un cookie
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        // Fonction pour supprimer un cookie
+        function eraseCookie(name) {
+            document.cookie = name + "=; Max-Age=-99999999;";
+        }
+
+
+        function listFiles(userId) {
+    const storageRef = firebase.storage().ref();
+    const userFilesRef = storageRef.child('users/' + userId);
+
+    userFilesRef.listAll().then((res) => {
+        const connectkDiv = document.getElementById('connectk');
+        connectkDiv.innerHTML = ''; // Vider le contenu précédent
+
+        // Créer le tableau
+        const table = document.createElement('table');
+        table.id = 'fileTable';
+
+        // Créer l'en-tête du tableau
+        const thead = document.createElement('thead');
+        thead.innerHTML = `
+            <tr>
+                <th>Nom du fichier</th>
+                <th>Type</th>
+                <th>Date de modification</th>
+                <th>Utilisateur</th>
+            </tr>
+        `;
+        table.appendChild(thead);
+
+        // Créer le corps du tableau
+        const tbody = document.createElement('tbody');
+
+        // Parcourir chaque fichier
+        res.items.forEach((itemRef) => {
+            itemRef.getMetadata().then((metadata) => {
+                const fileName = metadata.name;
+                const fileType = fileName.split('.').pop();
+                const lastModified = new Date(metadata.updated).toLocaleDateString();
+                const user = metadata.customMetadata ? metadata.customMetadata['uploadedBy'] : userId;
+
+                // Vérifier l'extension de fichier
+                if (['podx', 'podb'].includes(fileType)) {
+                    // Créer une nouvelle ligne pour chaque fichier
+                    const row = document.createElement('tr');
+
+                    // Nom du fichier avec lien de téléchargement
+                    const fileLink = document.createElement('a');
+                    itemRef.getDownloadURL().then((url) => {
+                        let finalURL = url;
+
+                        // Vérifier le type de fichier et ajuster le lien en conséquence
+                        if (fileType === 'podx') {
+                            finalURL = `https://live-prism.web.app/DeskWritter.html?link=${encodeURIComponent(url)}`;
+                        } else if (fileType === 'podb') {
+                            finalURL = `https://live-prism.web.app/BlocText.html?link=${encodeURIComponent(url)}`;
+                        }
+
+                        // Créer le lien avec la bonne URL
+                        fileLink.href = finalURL;
+                        fileLink.textContent = fileName;
+                        fileLink.target = '_blank'; // Ouvrir dans un nouvel onglet
+                    });
+
+                    const nameCell = document.createElement('td');
+                    nameCell.appendChild(fileLink);
+
+                    // Type de fichier
+                    const typeCell = document.createElement('td');
+                    typeCell.textContent = fileType;
+
+                    // Date de modification
+                    const dateCell = document.createElement('td');
+                    dateCell.textContent = lastModified;
+
+                    // Utilisateur
+                    const userCell = document.createElement('td');
+                    const displayUser = (user === userId) ? 'Vous' : user;
+                    userCell.textContent = displayUser;
+
+                    // Ajouter les cellules à la ligne
+                    row.appendChild(nameCell);
+                    row.appendChild(typeCell);
+                    row.appendChild(dateCell);
+                    row.appendChild(userCell);
+
+                    // Ajouter la ligne au corps du tableau
+                    tbody.appendChild(row);
+                }
+            }).catch((error) => {
+                console.error("Erreur lors de la récupération des métadonnées :", error);
+            });
+        });
+
+        // Ajouter le corps au tableau
+        table.appendChild(tbody);
+
+        // Ajouter le tableau au div connectk
+        connectkDiv.appendChild(table);
+    }).catch((error) => {
+        console.error("Erreur lors de la liste des fichiers :", error);
+    });
+}
 </script>
 </body>
 </html>
