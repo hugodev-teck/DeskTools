@@ -972,6 +972,64 @@ table {
 .special-character:hover {
   background-color: #e0e0e0; /* Couleur de fond au survol */
 }
+/* Style de la div modal */
+.genema {
+    position: fixed;
+    bottom: 65px;
+    right: 50px;
+    min-width: 300px;
+    width: 12%;
+    height: 60%;
+    background-color: #f4f4f4;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    z-index: 100;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Style de la barre en-tête */
+#barre-gen {
+    height: 38px;
+    width: 100%;
+    display: flex;
+    align-items: center; /* aligne les éléments verticalement */
+}
+
+#barre-gen img {
+    height: 38px;
+    width: 38px;
+}
+
+#barre-gen h2 {
+    font-family: sans-serif;
+    font-size: 23px;
+    margin-left: 10px;
+}
+
+/* Style pour #output */
+#output {
+    flex-grow: 1; /* Permet à #output de prendre toute la place restante */
+    margin: 10px 0; /* Espacement autour de #output */
+    margin-bottom: 50px;
+    overflow-y: auto; /* Ajoute un défilement si le contenu dépasse */
+    height: 100%;
+}
+
+/* Style pour le bouton */
+#correct {
+    position: absolute;
+    bottom: 20px;
+    width: 90%;
+    height: 35px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: none;
+    color: black;
+    background-color: #00b0b390;
+}
+
   </style>
 </head>
 <body>
@@ -1027,6 +1085,7 @@ table {
     <li id="openModalpara"><img src="Res/setting.png" alt="Icon 2" class="icon"> Paramètre page</li>
     <li><img src="Res/link.png" alt="Icon 2" class="icon"> Lien</li>
     <li><img src="Res/question.png" alt="Icon 2" class="icon"> Aide en ligne</li>
+    <li id="GenemaPara"><img src="Res/GENEMA-logo.png" alt="Icon 2" class="icon"> Ouvrir GENEMA</li>
   </ul>
 </div>
   <div id="top-bar">
@@ -1445,8 +1504,11 @@ table {
   </button>
   <button id="tool-container-sc" onclick="loadMathJax();createMathEditorModal();">
     <img src="Res/formula.png" alt="Microphone">
-    <h1>Utilitaire</h1>
-    <h1>de formules</h1>
+    <h1>Formules</h1>
+  </button>
+  <button id="tool-container-sc" onclick="opengenema()">
+    <img src="Res/GENEMA-logo.png" alt="Microphone">
+    <h1>Assistant</h1>
   </button>
   <div id="special-characters-container" style="display: none;">
     <h1>--------Caractères spéciaux---------</h1>
@@ -1958,6 +2020,178 @@ table {
       </div>
     </div>
   </div>
+
+<div class="genema" id="genema-id">
+  <div id="barre-gen">
+    <img src="Res/GENEMA-logo.png" alt="logo">
+    <h2>GENAIMA</h2>
+  </div>
+  <p>Votre assistant intelligent pas si intelligent.</p>
+  <div id="output"></div>
+  <button id="correct" onclick="displayBotMessage('<p>Analyse du texte en cours... Votre navigateur peut ne plus répondre en fonction de votre machine.</p>'); setTimeout(function() { corriger(); }, 5000);">Analyser mon texte</button>
+</div>
+<script>
+  const chatOutput = document.getElementById('output');
+  
+  function displayBotMessage(message) {
+    const chatOutput = document.getElementById('output');
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('message', 'bot-message');
+
+    // Créer un conteneur pour l'image et le nom du bot
+    const botContainer = document.createElement('div');
+    botContainer.classList.add('user-container'); // Utilise le même style que pour l'utilisateur
+
+    // Ajouter le conteneur à l'élément de message
+    messageElement.appendChild(botContainer);
+
+    // Créer un élément pour le texte du message
+    const textElement = document.createElement('p');
+    textElement.classList.add('message-text');
+
+    // Ajouter le texte du message initialement vide
+    messageElement.appendChild(textElement);
+
+    chatOutput.appendChild(messageElement);
+
+    // Séparer les balises HTML et le texte brut
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = message; // Remplir temporairement un div avec le message HTML
+    const textContent = tempDiv.textContent || tempDiv.innerText || ''; // Récupérer seulement le texte
+    const htmlContent = tempDiv.innerHTML; // Récupérer le HTML complet
+
+    // Animer le texte une lettre à la fois
+    let index = 0;
+    textElement.textContent = '';  // Vider le texte avant de commencer l'animation
+
+    // Animer l'écriture du texte une lettre à la fois
+    const interval = setInterval(() => {
+        if (index < textContent.length) {
+            textElement.textContent += textContent.charAt(index); // Ajouter une lettre à la fois
+            index++;
+        } else {
+            clearInterval(interval);
+            textElement.innerHTML = htmlContent; // Insérer le HTML complet une fois l'animation terminée
+        }
+    }, 30);  // Intervalle de 30 ms entre chaque caractère
+}
+  //-------------------------------------------------------------------Backend genema-------------------------------------------------------------------
+
+let dictionnaire = new Set();
+
+fetch('genema/dictionary.csv')
+    .then(response => response.text())
+    .then(data => {
+        dictionnaire = new Set(data.split('\n').map(mot => mot.trim().toLowerCase()));
+    })
+    .catch(err => console.error('Erreur lors du chargement du dictionnaire:', err));
+
+function calculerDistanceLevenshtein(a, b) {
+    if (a.length === 0) return b.length;
+    if (b.length === 0) return a.length;
+
+    let matrix = Array(a.length + 1).fill(null).map(() => Array(b.length + 1).fill(null));
+
+    for (let i = 0; i <= a.length; i++) matrix[i][0] = i;
+    for (let j = 0; j <= b.length; j++) matrix[0][j] = j;
+
+    for (let i = 1; i <= a.length; i++) {
+        for (let j = 1; j <= b.length; j++) {
+            const cout = a[i - 1] === b[j - 1] ? 0 : 1;
+            matrix[i][j] = Math.min(
+                matrix[i - 1][j] + 1,   // Suppression
+                matrix[i][j - 1] + 1,   // Insertion
+                matrix[i - 1][j - 1] + cout // Substitution
+            );
+
+            // Transposition (ex: "paer" -> "père")
+            if (
+                i > 1 &&
+                j > 1 &&
+                a[i - 1] === b[j - 2] &&
+                a[i - 2] === b[j - 1]
+            ) {
+                matrix[i][j] = Math.min(matrix[i][j], matrix[i - 2][j - 2] + 1);
+            }
+        }
+    }
+
+    return matrix[a.length][b.length];
+}
+
+function trouverCorrections(mot) {
+    const seuil = mot.length <= 4 ? 1 : 2; // Petits mots = tolérance plus faible
+    let suggestions = [];
+
+    dictionnaire.forEach(dicoMot => {
+        const distance = calculerDistanceLevenshtein(mot, dicoMot);
+        if (distance <= seuil) {
+            suggestions.push({ mot: dicoMot, score: distance });
+        }
+    });
+
+    // Trier les suggestions par distance croissante
+    return suggestions.sort((a, b) => a.score - b.score).slice(0, 5).map(s => s.mot);
+}
+
+function remplacerMot(ancienMot, nouveauMot) {
+    const inputText = document.getElementById('editor');
+    let texte = inputText.innerHTML;
+
+    // Remplacement avec regex pour éviter les mauvaises substitutions
+    inputText.innerHTML = texte.replace(new RegExp(`\\b${ancienMot}\\b`, 'g'), nouveauMot);
+
+    // Refaire l'analyse après correction
+    corriger();
+}
+
+function corriger() {
+    const inputText = document.getElementById('editor');
+    
+    if (!inputText) {
+        console.error('Élément #editor introuvable');
+        return;
+    }
+
+    let texte = inputText.innerText.trim();
+    if (!texte) {
+        displayBotMessage('Aucun texte à analyser.');
+        return;
+    }
+
+    const mots = texte.split(/\s+/);
+    let resultatHTML = '<p>📝 <strong>Résultats de l\'analyse :</strong></p><ul>'; 
+    let erreurs = 0;
+
+    mots.forEach(mot => {
+        const motNettoye = mot.replace(/[.,!?;:()"']/g, '').toLowerCase();
+
+        if (motNettoye.length > 2 && !dictionnaire.has(motNettoye)) {
+            const suggestions = trouverCorrections(motNettoye);
+            erreurs++;
+
+            resultatHTML += `<li>❌ <strong>${mot}</strong> 
+                <ul class="suggestions-list">
+                    <li>🔹 Suggestions : ${
+                        suggestions.length > 0
+                            ? suggestions.map(s => `<a href="#" class="suggestion" onclick="remplacerMot('${mot}', '${s}')">${s}</a>`).join(', ')
+                            : 'Aucune suggestion disponible'
+                    }</li>
+                </ul>
+            </li>`;
+        }
+    });
+
+    resultatHTML += '</ul>';
+
+    if (erreurs === 0) {
+        resultatHTML = '<p>✅ Aucune erreur détectée !</p>';
+    }
+
+    displayBotMessage(resultatHTML);
+}
+
+  </script>
 <script>
 //-------------------------------------------------------------------------charspe-----------------------------------------------------------
 function toggleSpecialCharacters() {
@@ -2655,6 +2889,8 @@ editor.addEventListener('input', adjustEditorHeight);
 
 //---------------------------------------------Gestion du loader------------------------------------------------------
 setTimeout(function() {
+  opengenema();
+  opengenema();
         var loader = document.getElementById('loader');
         loader.style.display = 'none';
         }, 20);
@@ -2690,6 +2926,10 @@ document.getElementById('openModalinster').addEventListener('click', () => {
 
 document.getElementById('openModalpara').addEventListener('click', () => {
   document.getElementById('myModal').style.display = 'block';
+});
+
+document.getElementById('GenemaPara').addEventListener('click', () => {
+  opengenema();
 });
 
 // Événement pour fermer la fenêtre modale
@@ -3167,6 +3407,15 @@ const insertMathToEditor = (latex) => {
     }
 };
   
+
+function opengenema() {
+  var genemaDiv = document.getElementById("genema-id");
+    if (genemaDiv.style.display === "none" || genemaDiv.style.display === "") {
+        genemaDiv.style.display = "block";
+    } else {
+        genemaDiv.style.display = "none";
+    }
+}
   </script>
 </body>
 </html>
