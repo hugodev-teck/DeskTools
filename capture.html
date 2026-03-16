@@ -1,0 +1,2933 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="Res/fichier (7).png" type="image/x-icon">  
+<title>BlocText</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background-color: rgb(255, 255, 255);
+      overflow: hidden;
+    }
+    #top-bar {
+      background: linear-gradient(to top, #F0F0F0, #d8d8d8);
+      height: 48px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding-left: 10px;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+      touch-action: manipulation;
+      overflow: hidden;
+    }
+    #tool-contener-line1 {
+        display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      
+    }
+    #tool-contener-line2 {
+        display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+    #middle-bar {
+      background-color: rgb(255, 255, 255);
+      padding: 10px;
+      overflow-x: scroll;
+      overflow-y: hidden;
+      display: flex;
+    align-items: center; /* Alignement vertical au centre si nécessaire */
+    }
+    #middle-bar::-webkit-scrollbar {
+  height: 5px; /* Largeur de la barre de défilement */
+}
+
+/* Style de la poignée de la barre de défilement */
+#middle-bar::-webkit-scrollbar-thumb {
+  background-color: rgba(179, 179, 179, 0.5); /* Couleur de la poignée */
+  border-radius: 5px; /* Bord arrondi de la poignée */
+}
+
+/* Style de la piste de la barre de défilement (la piste est la partie de la barre de défilement où se déplace la poignée) */
+#middle-bar::-webkit-scrollbar-track {
+  background-color: transparent; /* Fond de la piste transparent */
+}
+
+/* Masquer les flèches de défilement */
+#middle-bar::-webkit-scrollbar-button {
+  display: none; /* Masquer les flèches de défilement */
+}
+
+/* Masquer les coins de défilement */
+#middle-bar::-webkit-scrollbar-corner {
+  background-color: transparent; /* Fond des coins transparent */
+}
+    #content {
+      background: linear-gradient(to bottom, #F0F0F0, #d8d8d8);
+      height: 82%;
+      border-top-right-radius: 20px;
+      border-top-left-radius: 20px;
+      width: 100%;
+      z-index: 9999;
+      touch-action: manipulation;
+      display: flex;
+      flex-direction: row;
+      overflow: auto;
+    }
+    #all-bloc-text {
+      background-color: #e6e6e6;
+      height: 100%;
+      width: 20%;
+      overflow-y: scroll;
+    }
+    #content-of-bloc-text {
+      background-color: rgb(245, 245, 245);
+      width: 80%;
+      height: 100%;
+      overflow: scroll;
+    }
+    .button-with-image {
+      height: 45px;
+      width: 45px;
+      background-color: transparent;
+      border-color: transparent;
+      cursor: pointer;
+      display: inline-block;
+      margin-right: 10px;
+    }
+    .button-with-image img {
+      height: 30px;
+      width: 30px;
+    }
+    .class1-button {
+      height: 40px;
+      width: 40px;
+      background-color: transparent;
+      border-color: transparent;
+      cursor: pointer;
+      display: inline-block;
+      height: 40px;
+    }
+    .class1-button img {
+      height: 20px;
+      width: 20px;
+    }
+    #tool-container-text {
+        background-color: white;
+        width: 270px;
+        height: 40px;
+        border-radius: 50px;
+        margin-top: 10px;
+        margin-left: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+    }
+    .class2-button {
+      height: 40px;
+      width: 40px;
+      background-color: transparent;
+      border-color: transparent;
+      cursor: pointer;
+      display: inline-block;
+      margin-left: 5px;
+    }
+    .class2-button img {
+      height: 20px;
+      width: 20px;
+    }
+    #tool-container-text-adv {
+        background-color: white;
+        width: 153px;
+        border-radius: 50px;
+        margin-top: 10px;
+        margin-left: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+    }
+    #font-family {
+        background-color: white;
+        width: 200px;
+        border-radius: 50px;
+        margin-top: 10px;
+        margin-left: 10px;
+        height: 40px;
+        border-color: transparent;
+        text-align: center;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+    }
+    #font-size {
+        background-color: white;
+        width: 80px;
+        border-radius: 50px;
+        margin-top: 10px;
+        margin-left: 10px;
+        height: 40px;
+        border-color: transparent;
+        text-align: center;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+    }
+      .class2-button-solo {
+      height: 40px;
+      width: 40px;
+      margin-top: 15px;
+      background-color: transparent;
+      border-color: transparent;
+      cursor: pointer;
+      display: inline-block;
+    }
+    .class2-button-solo img {
+      height: 20px;
+      width: 20px;
+    }
+    #apply-stand {
+      margin-left: 12px;
+    }
+    #apply-stand-new-line {
+      margin-left: 6px;
+    }
+    #tool-container-color {
+      background-color: white;
+      width: 310px;
+      border-radius: 50px;
+      margin-top: 10px;
+      margin-left: 10px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+      padding: 7.5px;
+    }
+    .class1-color-button {
+      height: 25px;
+      width: 25px;
+      margin-left: 5px;
+      border-radius: 50px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+      border-color: transparent;
+    }
+    #black {
+      background-color: black;
+    }
+    #red {
+      background-color: rgb(202, 48, 48);
+    }
+    #orange {
+      background-color: rgb(243, 162, 10);
+    }
+    #yellow {
+      background-color: rgb(235, 235, 0);
+    }
+    #green {
+      background-color: rgb(0, 134, 0);
+    }
+    #bluef {
+      background-color: rgb(18, 18, 131);
+    }
+    #bluec {
+      background-color: rgb(20, 141, 172);
+    }
+    #pink {
+      background-color: pink;
+    }
+    #another {
+      background: radial-gradient(circle, rgb(7, 165, 177), rgb(191, 219, 159), rgb(201, 223, 7));
+    }
+    #zoom-contener {
+      background-color: rgba(255, 255, 255, 0.507);
+      width: 300px;
+      border-radius: 50px;
+      margin-top: 10px;
+      margin-left: 10px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+      padding: 7.5px;
+      height: 30px;
+      position: absolute;
+      bottom: 10px;
+      right: 35px;
+      z-index: 9999;
+    }
+    .barre-zoom {
+      position: absolute;
+      width: 60%;
+      left: 55px;
+      top: 13px;
+    }
+
+    #valeur-zoom {
+      position: absolute;
+      top: 14px;
+      right: 13px;
+    }
+    #zoom-image {
+      position: absolute;
+      top: 13px;
+      left: 20px;
+      height: 20px;
+      width: 20px;
+      opacity: 0.5;
+    }
+    #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+        }
+
+        #loader img {
+            width: 15%;
+        }
+
+        .bottom-content {
+            text-align: center;
+            margin: 20px 0;
+            position: absolute;
+            bottom: 0;
+        }
+        
+.container h1 {
+            text-align: center;
+            font-size: 160%;
+        }
+        .container h2 {
+          margin-top: -10px;
+            text-align: center;
+            font-size: 100%;
+        }
+        .container input {
+            width: 95%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: none;
+            background: #eee;
+            margin-top: 5%;
+        }
+
+        .container button {
+            width: 30%;
+            padding: 10px;
+            border: none;
+            background: #ff3333;
+            color: white;
+            cursor: pointer;
+        }
+
+        .container a {
+            color: rgb(0, 0, 0);
+            text-decoration: underline;
+            cursor: pointer;
+            border: none;
+        }
+        #createaccnt {
+          width: 50%;
+            padding: 10px;
+            border: none;
+            color: #ff3333;
+            background-color: transparent;
+            cursor: pointer;
+            text-align: left;
+        }
+        .buttons-container {
+    display: flex;
+    justify-content: space-between; /* Alignement horizontal au centre */
+    align-items: center; /* Alignement vertical au centre si nécessaire */
+    margin-top: 10%;
+    margin-bottom: 5%;
+}
+#image_logo {
+    margin-left: 50%;
+    transform: translateX(-50%);
+}
+#emailDisplayAt2 {
+    text-align: center;
+}
+#emailText {
+    color: rgb(204, 204, 204);
+    text-align: left;
+    font-size: 12px;
+}
+#tool-container-text-b {
+        background-color: white;
+        width: 90px;
+        height: 40px;
+        padding-left: 5px;
+        border-radius: 50px;
+        margin-top: 10px;
+        margin-left: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+    }
+    #menu {
+      display: flex;
+      align-items: center; /* Alignement vertical au centre si nécessaire */
+      flex-direction: row;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            transition: left 0.8s;
+            z-index: 9999999;
+        }
+    #emailDisplay {
+      background-color: rgb(216, 216, 216);
+      display: flex;
+      flex-direction: column;
+    align-items: center; /* Alignement vertical au centre si nécessaire */
+    margin-top: 0px;
+    margin-left: 0px;
+    width: 19%;
+    height: 100%;
+    }
+        /* Style pour la fenêtre modale */
+.modal {
+  display: none; /* Par défaut, la fenêtre modale est cachée */
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.5); /* Fond semi-transparent */
+}
+
+/* Contenu de la fenêtre modale */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 50%; /* Largeur de la fenêtre modale */
+  height: 50%;
+}
+
+/* Style pour le bouton de fermeture */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+.closebtn {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.closebtn:hover,
+.closebtn:focus {
+  color: rgb(155, 32, 32);
+  text-decoration: none;
+  cursor: pointer;
+}
+/* Ajoutez du style pour les onglets et le contenu des onglets */
+.tabcontent {
+  display: none;
+}
+
+/* Style actif pour les onglets */
+.tabcontent.active {
+  display: block;
+}
+
+/* Style pour les boutons des onglets */
+.tablinks {
+  background-color: #f2f2f2;
+  border: none;
+  cursor: pointer;
+  padding: 10px 20px;
+}
+
+.tablinks:hover {
+  background-color: #ddd;
+}
+@keyframes grow {
+  0% {
+    transform: scale(0.4);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.imgloaderorg {
+  animation: grow 2s ease-in-out forwards;
+}
+table {
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            resize: both; /* Permet le redimensionnement */
+            overflow: auto; /* Affiche les barres de défilement si nécessaire */
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            resize: both;
+            border: 2px solid transparent; /* Ajoute une bordure pour indiquer que l'image est redimensionnable */
+        }
+        #editor img {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid transparent; /* Ajoute une bordure pour indiquer que l'image est redimensionnable */
+            position: absolute; /* Permet le positionnement absolu */
+            user-select: none; /* Empêche la sélection du texte lors du déplacement de l'image */
+            cursor: grab; /* Curseur indiquant que l'image peut être déplacée */
+        }
+        /* Styles for custom context menu */
+        #custom-menu {
+      display: none;
+      position: absolute;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 8px;
+      box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+      min-width: 200px;
+      border-radius: 10px;
+      z-index: 99999;
+    }
+    #custom-menu ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+    #custom-menu li {
+      display: flex; /* Utiliser flexbox pour aligner les éléments horizontalement */
+      align-items: center; /* Aligner les éléments verticalement */
+      padding: 8px 20px;
+      cursor: pointer;
+    }
+    #custom-menu ul li:hover {
+      background-color: #f0f0f0;
+    }
+    /* Styles for icons */
+    .icon {
+      width: 20px; /* Adjust as needed */
+      height: 20px; /* Adjust as needed */
+      margin-right: 8px;
+    }
+    /* Styles for search bar */
+    #search-bar {
+      width: calc(100% - 20px); /* Adjust for padding */
+      padding: 8px;
+      margin-bottom: 8px;
+      border-radius: 5px;
+      border-style: solid;
+      border-color: gray;
+    }
+    /* Styles pour l'élément imprprev (modal d'aperçu avant impression) */
+#imprprev {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+}
+
+#imprprev .modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  border-radius: 10px;
+  width: 80%;
+  height: 52%;
+  max-width: 600px;
+}
+
+#imprprev .close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+#imprprev .close:hover,
+#imprprev .close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Styles pour le bouton d'aperçu avant impression */
+#print-preview-btn {
+  background-color: #4CAF50; /* Couleur de fond */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+#print-preview-btn:hover {
+  background-color: #45a049; /* Changement de couleur au survol */
+}
+
+/* Styles pour le bouton d'impression */
+#print-btn {
+  background-color: #008CBA; /* Couleur de fond */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-top: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+#print-btn:hover {
+  background-color: #0073a8; /* Changement de couleur au survol */
+}
+#zone2-tool-bar-top-line1-bis {
+  margin-top: 5px;
+  margin-left: 20px;
+  display: flex;
+    align-items: center; /* Alignement vertical au centre si nécessaire */
+}
+#zone1-tool-bar-top-line1-line2 {
+  margin-top: -7px;
+}
+.soussection {
+  
+  background-color: white;
+        align-items: center;
+        height: 75px;
+        width: 120px;
+        padding-left: 5px;
+        border-color: rgb(231, 231, 231);
+        border-style: solid;
+        border-radius: 10px;
+        margin-left: 10px;
+        cursor: pointer;
+  transition: background-color 0.3s ease; /* Ajoute une transition de couleur sur 0.3s */
+}
+.soussection:hover {
+  background-color: #f0f0f0; /* Change la couleur de fond au survol */
+}
+#tool-container-text-c {
+  display: flex;
+    align-items: center; /* Alignement vertical au centre si nécessaire */
+        background-color: white;
+        padding-right: 20px;
+        height: 100px;
+        padding-left: 5px;
+        border-radius: 10px;
+        margin-bottom: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+    }
+    #tool-container-micro {
+        background-color: white;
+        height: 100px;
+        padding-left: 6px;
+        border-color: transparent;
+        border-radius: 10px;
+        margin-bottom: 5px;
+        margin-left: 13px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+        transition: background-color 0.3s ease; /* Ajoute une transition de couleur sur 0.3s */
+    }
+    #tool-container-micro:hover {
+  background-color: #f0f0f0; /* Change la couleur de fond au survol */
+}
+    #tool-container-micro img {
+      width: 30px;
+      height: 30px;
+      margin-top: 15px;
+    }
+    #tool-container-micro h1 {
+      font-size: small;
+      font-family: sans-serif;
+      padding: 5px;
+      color: #757575;
+}
+    #soustitre h1{
+      font-size: 19px;
+      font-family: Arial;
+      color: rgb(48, 48, 48);
+    }
+    #titre1 h1{
+      font-size: 20px;
+      font-family: Arial;
+      color: rgb(18, 18, 131);
+      font-style: italic;
+    }
+    #titre2 h1{
+      font-size: 20px;
+      font-family: sans-serif;
+      color: rgb(252, 193, 0);
+      font-style: italic;
+    }
+    #titre3 h1{
+      font-size: 18px;
+      font-family: sans-serif;
+      color: rgb(61, 61, 61);
+      font-style: italic;
+    }
+    #citation h1{
+      font-size: 17px;
+      font-family: Arial;
+      color: gray;
+      font-style: italic;
+
+    }
+    #soustitre h2{
+      font-size: 10px;
+      font-family: Arial;
+      color: rgb(180, 180, 180);
+      font-style: italic;
+
+}
+#titre1 h2{
+  font-size: 10px;
+      font-family: Arial;
+      color: rgb(180, 180, 180);
+      font-style: italic;
+
+}
+#titre2 h2{
+  font-size: 10px;
+      font-family: Arial;
+      color: rgb(180, 180, 180);
+      font-style: italic;
+
+}
+#titre3 h2{
+  font-size: 10px;
+      font-family: Arial;
+      color: rgb(180, 180, 180);
+      font-style: italic;
+
+}
+#citation h2{
+  font-size: 10px;
+      font-family: Arial;
+      color: rgb(180, 180, 180);
+      font-style: italic;
+
+}
+#sansinterligna h1 {
+      font-size: 16px;
+      font-family: Arial;
+      color: rgb(27, 27, 27);
+      font-style: italic;
+
+}
+#sansinterligna h2 {
+  font-size: 10px;
+      font-family: Arial;
+      color: rgb(180, 180, 180);
+      font-style: italic;
+}
+.menubtnm {
+  display: flex;
+  align-items: center; /* Alignement vertical au centre si nécessaire */
+  text-align: center;
+  width: 100%;
+  height: 40px;
+  transition: background-color 0.3s ease;
+  background-color: transparent;
+  border-color: transparent;
+  margin-left: 25px;
+}
+.menubtnm img {
+  width: 25px;
+  height: auto;
+}
+.menubtnm h1 {
+  font-size: small;
+  margin-left: 15px;
+}
+.menubtnm:hover {
+  text-decoration: underline;
+}
+#textinpunmenu {
+  padding-inline-start: 10px;
+  width: 80%;
+  border-radius: 50px;
+  border-color: transparent;
+  height: 30px;
+  margin-top: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+}
+#infomodel {
+  height: 100%;
+  width: 81%;
+  background-color: #f7f7f7;
+}
+#start {
+        background-color: #4a6c7e96;
+        color: #fff;
+        padding: 10px;
+        width: 100%;
+        box-sizing: border-box;
+        height: 420px;
+        overflow-x: scroll;
+    }
+    .content {
+        flex: 1;
+        margin-left: 100px; /* Pour laisser de la place à la sidebar */
+    }
+    #list {
+        height: 600px;
+        width: 100%;
+        background-color: #dbdbdb;
+    }
+    .template {
+            width: 180px; /* Ajustez la largeur selon vos besoins */
+            border-radius: 10px;
+            background: #ececec8e; /* Fond blanc */
+            color: black;
+            padding: 20px;
+            text-align: center;
+            margin-left: 50px;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .template img {
+            width: 70%; /* Ajustez la taille de l'image selon vos besoins */
+            border-radius: 10px;
+        }
+
+        .logo {
+            background: #8888888c; /* Fond gris */
+            width: 100%; /* Ajustez la taille de la case grise */
+            height: 50px; /* Ajustez la taille de la case grise */
+            display: flex;
+            justify-content: center;
+            overflow: hidden;
+            align-items: center;
+            border-radius: 10px;
+            margin-top: 9px; /* Marge pour l'espacement */
+        }
+        .logooth {
+            background: rgba(255, 255, 255, 0.438); /* Fond gris */
+            width: 50px; /* Ajustez la taille de la case grise */
+            height: 50px; /* Ajustez la taille de la case grise */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            margin-top: 9px; /* Marge pour l'espacement */
+            margin-left: 25px;
+        }
+        #logomenu {
+            width: 35px; /* Ajustez la taille de la case grise */
+            height: 35px; /* Ajustez la taille de la case grise */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            margin-top: 9px; /* Marge pour l'espacement */
+            margin-top: 30px;
+            margin-left: 33px;
+            margin-bottom: 40px;
+        }
+        .logooth img {
+            width: 70%;
+            height: 70%;
+        }
+        .logo img {
+            width: 30px; /* Ajustez la taille du logo à l'intérieur de la case grise */
+        }
+        .logo p {
+            margin-left: 7px;
+        }
+        .carousel {
+          display: flex;
+          align-items: center; /* Alignement horizontal au centre */
+        }
+        #infomodel h1 {
+          margin-left: 25px;
+          font-size: x-large;
+          font-family: sans-serif;
+          
+        }
+        #tool-container-micro-act {
+        position: fixed;
+        z-index: 1000;
+        left: 200px;
+        top: 200px;
+        background-color: rgba(0, 0, 0, 0.5);
+        background-color: white;
+        height: 100px;
+        width: 100px;
+        padding-left: 6px;
+        border-color: transparent;
+        border-radius: 10px;
+        margin-bottom: 5px;
+        margin-left: 13px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+        transition: background-color 0.3s ease;
+        display: none;
+        overflow: hidden;
+    }
+    #tool-container-micro-act h1 {
+      font-size: 12px;
+      font-family: sans-serif;
+    }
+    #tool-container-micro-act button {
+      border-color: transparent;
+      background-color: transparent;
+    }
+    #tool-container-micro-act img {
+      width: 50px;
+      height: auto;
+      margin-top: 5px;
+      margin-left: 10px;
+    }
+    #microphoneIcon {
+  border-radius: 50%;
+}
+#tool-container-sc {
+        background-color: white;
+        height: 100px;
+        padding-left: 6px;
+        border-color: transparent;
+        border-radius: 10px;
+        margin-bottom: 5px;
+        margin-left: 13px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.253);
+        transition: background-color 0.3s ease; /* Ajoute une transition de couleur sur 0.3s */
+    }
+    #tool-container-sc:hover {
+  background-color: #f0f0f0; /* Change la couleur de fond au survol */
+}
+    #tool-container-sc img {
+      width: 30px;
+      height: 30px;
+      margin-top: 15px;
+    }
+    #tool-container-sc h1 {
+      font-size: small;
+      font-family: sans-serif;
+      color: #757575;
+      margin-top: 5px;
+}
+#tool-container-sc h1:last-child {
+      margin-top: -8px;
+}
+#special-characters-container {
+  position: fixed;
+  z-index: 9999;
+  right: 30px;
+  width: 210px;
+  height: 210px;
+  top: 175px;
+  display: none;
+  border-radius: 10px;
+  flex-wrap: wrap; /* Permettre le retour à la ligne des boutons si nécessaire */
+  background-color: #aaaaaa;
+  overflow-y: scroll;
+}
+#special-characters-container h1 {
+  font-size: small;
+  color: rgb(46, 46, 46);
+}
+
+.special-character {
+  margin: 3px; /* Espacement entre les boutons */
+  padding: 5px 10px; /* Espacement interne des boutons */
+  font-size: 16px; /* Taille de la police */
+  border: 1px solid #ccc; /* Bordure autour des boutons */
+  border-radius: 5px; /* Coins arrondis */
+  background-color: #808080; /* Couleur de fond */
+  cursor: pointer; /* Curseur de la souris */
+  width: 40px;
+  height: 40px;
+  transition: background-color 0.3s; /* Transition pour un changement de couleur en douceur */
+}
+
+.special-character:hover {
+  background-color: #e0e0e0; /* Couleur de fond au survol */
+}
+.page {
+    width: 21cm;
+    height: 29.7cm;
+    background: white;
+    padding: 2cm;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    overflow: hidden;
+    margin-top: 25px;
+    margin-left: 50%;
+    transform: translateX(-50%);
+}
+
+.page p {
+    margin: 0;
+    line-height: 1.5;
+}
+.resizers {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 1000; /* Assurez-vous que les resizers sont au-dessus de tout */
+}
+
+.resizer {
+    width: 10px;
+    height: 10px;
+    background-color: blue;
+    position: absolute;
+    pointer-events: all; /* Permet de cliquer sur les resizers */
+}
+
+.resizer.top-left {
+    top: -5px;
+    left: -5px;
+    cursor: nwse-resize;
+}
+
+.resizer.top-right {
+    top: -5px;
+    right: -5px;
+    cursor: nesw-resize;
+}
+
+.resizer.bottom-left {
+    bottom: -5px;
+    left: -5px;
+    cursor: nesw-resize;
+}
+
+.resizer.bottom-right {
+    bottom: -5px;
+    right: -5px;
+    cursor: nwse-resize;
+}
+
+.resizer.top {
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: ns-resize;
+}
+
+.resizer.bottom {
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: ns-resize;
+}
+
+.resizer.left {
+    left: -5px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: ew-resize;
+}
+
+.resizer.right {
+    right: -5px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: ew-resize;
+}
+#separator {
+  height: 2px;
+  width: 25%;
+  background-color: #757575;
+  margin-left: 15px;
+}
+#title-of-text {
+  background-color: transparent;
+  border: none;
+  margin: 15px 5px 10px 15px;
+  font-size: 45px;
+  color: #757575;
+}
+#date-the-day {
+  background-color: transparent;
+  border: none;
+  margin: 10px 5px 15px 15px;
+  font-size: 25px;
+  color: #757575;
+}
+#editor {
+  margin-top: 20px;
+  margin-left: 15px;
+  color: black;
+  font-size: 18px;
+  min-height: 550px;
+}
+/* Styling for each feuille in the list */
+.feuille {
+    padding: 10px;
+    margin-bottom: 8px;
+    background-color: #ffffff;
+    color: black;
+    border: none;
+    border-radius: 10px;
+    margin: 10px 10px 10px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.feuille:hover {
+    background-color: #7e7e7e;
+    color: #ffffff;
+}
+#delette {
+  color: white;
+  background-color: rgb(168, 0, 0);
+  height: 50px;
+  width: 500px;
+  margin-top: 15px;
+  border-radius: 15px;
+  border-style: none;
+}
+@media only screen and (max-width: 600px) {
+      #content {
+      background: linear-gradient(to bottom, #F0F0F0, #d8d8d8);
+      height: 82%;
+      border-top-right-radius: 20px;
+      border-top-left-radius: 20px;
+      width: 100%;
+      z-index: 9999;
+      touch-action: manipulation;
+      display: flex;
+      flex-direction: column;
+      overflow: auto;
+    }
+    #all-bloc-text {
+      background-color: #e6e6e6;
+      height: 20%;
+      width: 100%;
+      overflow: scroll;
+    }
+    #content-of-bloc-text {
+      background-color: rgb(245, 245, 245);
+      width: 100%;
+      height: 80%;
+      overflow: scroll;
+    }
+}
+
+/* Style de la div modal */
+.genema {
+    position: fixed;
+    bottom: 65px;
+    right: 50px;
+    min-width: 300px;
+    width: 12%;
+    height: 60%;
+    background-color: #f4f4f4;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    z-index: 100;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Style de la barre en-tête */
+#barre-gen {
+    height: 38px;
+    width: 100%;
+    display: flex;
+    align-items: center; /* aligne les éléments verticalement */
+}
+
+#barre-gen img {
+    height: 38px;
+    width: 38px;
+}
+
+#barre-gen h2 {
+    font-family: sans-serif;
+    font-size: 23px;
+    margin-left: 10px;
+}
+
+/* Style pour #output */
+#output {
+    flex-grow: 1; /* Permet à #output de prendre toute la place restante */
+    margin: 10px 0; /* Espacement autour de #output */
+    margin-bottom: 50px;
+    overflow-y: auto; /* Ajoute un défilement si le contenu dépasse */
+    height: 100%;
+    max-height: 100%;
+}
+
+/* Style pour le bouton */
+#correct {
+    position: absolute;
+    bottom: 20px;
+    width: 90%;
+    height: 35px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: none;
+    color: black;
+    background-color: #00b0b390;
+}
+
+/* --- STYLE MODALE SAUVEGARDE --- */
+#save-choice-modal {
+    display: none; 
+    position: fixed; 
+    z-index: 20000;
+    left: 0; top: 0;
+    width: 100%; height: 100%; 
+    background-color: rgba(0,0,0,0.5); 
+    backdrop-filter: blur(5px);
+}
+
+#save-choice-modal .modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 30px;
+    width: 450px;
+    border-radius: 20px;
+    text-align: center;
+    position: relative;
+    font-family: sans-serif;
+}
+
+.save-options-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.save-option-card {
+    background: #f9f9f9;
+    border: 2px solid transparent;
+    border-radius: 15px;
+    padding: 20px;
+    width: 140px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex; flex-direction: column; align-items: center;
+}
+
+.save-option-card:hover {
+    background-color: #eef6ff;
+    border-color: #4a90e2;
+    transform: translateY(-3px);
+}
+
+.save-option-card img { width: 48px; margin-bottom: 10px; }
+.save-option-card strong { display: block; margin-bottom: 5px; color: #333; }
+.save-option-card div { font-size: 0.8rem; color: #888; }
+
+.tool-group {
+    display: flex;
+    align-items: center;
+    border-right: 1px solid #ccc;
+    margin-right: 15px;
+    padding-right: 15px;
+    height: 100%
+}
+
+.group-label {
+    writing-mode: vertical-lr;
+    transform: rotate(180deg);
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-right: 8px;
+    user-select: none
+}
+  </style>
+</head>
+<body>
+  <div id="loader">
+    <img class="imgloaderorg" src="Res/fichier (7).png">
+    <div class="bottom-content">
+        <img src="Res/logo-text-big.png">
+    </div> 
+</div>
+<div id="tool-container-micro-act">
+  <h1 id="titled">Enregistrement</h1>
+  <button onclick="stopSpeechRecognition()"><img id="microphoneIcon" src="Res/stop-button.png" alt="stoprec"></button>
+</div>
+<div id="imprprev">
+  <div class="modal-content">
+    <span class="close" onclick="closePrintPreviewModal()">&times;</span>
+    <h2>Paramètre</h2>
+    <h3>Mise en page</h3>
+      <h4>Orientation de la page :</h4>
+      <label><input type="radio" name="orientation" value="portrait" checked> Portrait</label>
+      <label><input type="radio" name="orientation" value="landscape"> Paysage</label>
+      <p>Le type de feuille est actuellement 'A4'</p>
+      <h4>Format de papier :</h4>
+      <select id="paper-size-bis">
+        <option value="A4">A4</option>
+        <option value="A5">A5</option>
+        <option value="Letter">Lettre US</option>
+        <option value="Legal">Legal US</option>
+      </select>
+      <h4>Marges :</h4>
+      <select id="margin-size-bis">
+        <option value="no">Aucune marge</option>
+        <option value="narrow">Étroite (marge de 10mm)</option>
+        <option value="normal" selected>Normale (marge de 20mm)</option>
+        <option value="wide">Large (marge de 30mm)</option>
+        <!-- Ajoutez d'autres options de marges si nécessaire -->
+      </select>
+      <ul>
+        <li><strong>Étroite :</strong> Une marge de 10 mm.</li>
+        <li><strong>Normale :</strong> Une marge de 20 mm.</li>
+        <li><strong>Large :</strong> Une marge de 30 mm.</li>
+      </ul>
+    <button id="print-btn" onclick="printContent()">Imprimer</button>
+  </div>
+</div>
+<div id="custom-menu">
+  <input type="text" id="search-bar" placeholder="Search..."> <!-- Search bar -->
+  <ul>
+    <li id="menucut"><img src="Res/scissors.png" alt="Icon 1" class="icon"> Couper</li>
+    <li id="menucopy"><img src="Res/copy.png" alt="Icon 1" class="icon"> Copier</li>
+    <li id="menupast"><img src="Res/paste.png" alt="Icon 2" class="icon"> Coller</li>
+    <li id="openModalinster"><img src="Res/image.png" alt="Icon 2" class="icon"> Inserer</li>
+    <li id="openModalpara"><img src="Res/setting.png" alt="Icon 2" class="icon"> Paramètre page</li>
+    <li><img src="Res/link.png" alt="Icon 2" class="icon"> Lien</li>
+    <li><img src="Res/question.png" alt="Icon 2" class="icon"> Aide en ligne</li>
+  </ul>
+</div>
+  <div id="top-bar">
+    <button class="button-with-image" id="menudev"><img src="Res/applications.png" alt="Image 1"></button>
+    <button id="save" class="button-with-image"><img src="Res/save.png" alt="Image 2"></button>
+    <button id="open" class="button-with-image"><img src="Res/open.png" alt="Image 4"></button>
+    <input type="file" id="file-input" style="display: none;">
+    <button class="button-with-image" id="openModalBtn"><img src="Res/settings-sliders.png" alt="Image 3"></button>
+    <button class="button-with-image" onclick="openPopup()"><img src="Res/profile-user.png" alt="connexion au service"></button>
+    <div id="menu" class="hidden" style="left: -100%;">
+      <div id="emailDisplay">
+          <input placeholder="Recherche ici..." id="textinpunmenu" type="text"></input>
+          <button class="menubtnm" id="menu-return-button" onclick="window.location.href = 'index.html';">
+            <img src="Res/home.png" alt="arrow">
+            <h1>Accueil</h1>
+          </button>
+          <button class="menubtnm" id="save">
+            <img src="Res/save.png" alt="arrow">
+            <h1>Ouvrir</h1>
+          </button>
+          <button class="menubtnm" id="open">
+            <img src="Res/open.png" alt="arrow">
+            <h1>Sauvegarder</h1>
+          </button>
+          <button class="menubtnm" id="Conn-btn" onclick="openPopup(); toggleMenu();">
+            <img src="Res/profile-user.png" alt="arrow">
+            <h1>Connection à PRISMID</h1>
+          </button>
+          <button class="menubtnm" id="closebtn" onclick="toggleMenu();">
+            <img src="Res/arrow.png" alt="arrow">
+            <h1>Retour</h1>
+          </button>
+      </div>
+      <div id="infomodel">
+        <h1>Créer un nouveau document :</h1>
+        <div id="start">
+          <div class="carousel">
+          <div class="template">
+              <img id="to-writter" src="Res/page.png" alt="Image du Template">
+              <p>Fichier texte vide</p>
+              <div class="logo">
+                  <img id="to-writter" src="Res/fichier (7).png" alt="Logo">
+                  <p>BlocText</p>
+              </div>
+          </div>
+      </div>
+      </div>
+      </div>
+      
+  </div>
+
+</div>
+<div id="middle-bar">
+<div class="tool-group">
+        <div class="group-label">Édition</div>
+<div id="zone1-tool-bar-top-line1-line2">
+<div id="tool-contener-line1">
+    <div id="tool-container-text-adv">
+        <button class="class2-button"><img src="Res/copy.png" alt="img"></button>
+        <button class="class2-button"><img src="Res/paste.png" alt="img"></button>
+        <button class="class2-button"><img src="Res/scissors.png" alt="img"></button>
+    </div>
+    <div id="tool-container-text-b">
+      <button class="class1-button" ><img src="Res/undo.png" alt="img"></button>
+      <button class="class1-button"><img src="Res/forward.png" alt="img"></button>
+      
+    </div>
+<select id="font-family" style="font-family: Arial, sans-serif;">
+    <optgroup label="Sans-Serif">
+        <option value="Arial" selected>Arial</option>
+        <option value="Calibri">Calibri</option>
+        <option value="Century Gothic">Century Gothic</option>
+        <option value="Helvetica">Helvetica</option>
+        <option value="Segoe UI">Segoe UI</option>
+        <option value="Tahoma">Tahoma</option>
+        <option value="Trebuchet MS">Trebuchet MS</option>
+        <option value="Verdana">Verdana</option>
+    </optgroup>
+    
+    <optgroup label="Serif">
+        <option value="Book Antiqua">Book Antiqua</option>
+        <option value="Cambria">Cambria</option>
+        <option value="Garamond">Garamond</option>
+        <option value="Georgia">Georgia</option>
+        <option value="Times New Roman">Times New Roman</option>
+    </optgroup>
+    
+    <optgroup label="Monospace">
+        <option value="Consolas">Consolas</option>
+        <option value="Courier New">Courier New</option>
+        <option value="Monaco">Monaco</option>
+    </optgroup>
+    
+    <optgroup label="Fantaisie & Créatives">
+        <option value="Brush Script MT">Brush Script MT</option>
+        <option value="Comic Sans MS">Comic Sans MS</option>
+        <option value="Impact">Impact</option>
+    </optgroup>
+  </select>
+  <select id="font-size">
+    <option value="8">8</option>
+    <option value="9">9</option>
+    <option value="10">10</option>
+    <option value="11">11</option>
+    <option value="12">12</option>
+    <option value="14">14</option>
+    <option value="16">16</option>
+    <option value="20">20</option>
+    <option value="22">22</option>
+    <option value="24">24</option>
+    <option value="26">26</option>
+    <option value="28">28</option>
+    <option value="36">36</option>
+    <option value="48">48</option>
+    <option value="72">72</option>
+    <option value="96">96</option>
+    <option value="128">128</option>
+    <option value="256">256</option>
+    <option value="512">512</option>
+</select>
+  <button id="apply-stand" class="class2-button-solo"><img src="Res/bold.png" alt="img"></button>
+  <button class="class2-button-solo"><img src="Res/italic.png" alt="img"></button>
+  <button class="class2-button-solo"><img src="Res/underline.png" alt="img"></button>
+  <div id="tool-container-text-b">
+    <button class="class1-button" id="unordered-list-button"><img src="Res/lister.png" alt="img"></button>
+    <button class="class1-button" id="ordered-list-button"><img src="Res/listern-um.png" alt="img"></button>
+    
+  </div>
+</div>
+
+<div id="tool-contener-line2">
+  <button onclick="handlePrintPreviewButtonClick()" id="apply-stand-new-line" class="class2-button-solo"><img src="Res/print.png" alt="img"></button>
+  <button class="class2-button-solo"><img src="Res/eraser.png" alt="img"></button>
+  <div id="tool-container-text">
+    <button class="class1-button" style="margin-left: 5px;"><img src="Res/align-left.png" alt="img"></button>
+    <button class="class1-button"><img src="Res/align-center.png" alt="img"></button>
+    <button class="class1-button"><img src="Res/align-right.png" alt="img"></button>
+    <button class="class1-button"><img src="Res/justified-text.png" alt="img"></button>
+    <button class="class1-button"><img src="Res/exposant.png" alt="img"></button>
+    <button class="class1-button"><img src="Res/indice.png" alt="img"></button>
+</div>
+<div id="tool-container-color">
+  <button id="black" class="class1-color-button" data-color="black"></button>
+  <button id="red" class="class1-color-button" data-color="red"></button>
+  <button id="orange" class="class1-color-button" data-color="orange"></button>
+  <button id="yellow" class="class1-color-button" data-color="yellow"></button>
+  <button id="green" class="class1-color-button" data-color="green"></button>
+  <button id="bluec" class="class1-color-button" data-color="blue"></button>
+  <button id="bluef" class="class1-color-button" data-color="blue"></button>
+  <button id="pink" class="class1-color-button" data-color="pink"></button>
+  <button id="another" class="class1-color-button"></button>
+  <input type="color" id="custom-color-picker" style="display: none;">
+</div>
+
+</div>
+</div>
+</div>
+
+<div class="tool-group">
+<div class="group-label">Models</div>
+
+<div id="zone2-tool-bar-top-line1-bis">
+  <div id="tool-container-text-c">
+    <button class="soussection" id="titre1" onclick="insertStyledText('titre1')">
+      <h1>Titre 1</h1>
+      <h2>Arial, 35</h2>
+    </button>
+    <button class="soussection" id="titre2" onclick="insertStyledText('titre2')">
+      <h1>Titre 2</h1>
+      <h2>Sans Serif, 35</h2>
+    </button>
+    <button class="soussection" id="titre3" onclick="insertStyledText('titre3')">
+      <h1>Titre 3</h1>
+      <h2>Sans Serif, 30</h2>
+    </button>
+    <button class="soussection" id="soustitre" onclick="insertStyledText('soustitre')">
+      <h1>Sous-titre</h1>
+      <h2>Arial, 23</h2>
+    </button>
+    <button class="soussection" id="citation" onclick="insertStyledText('citation')">
+      <h1>Citation</h1>
+      <h2>Univers, 14</h2>
+    </button>
+    <button class="soussection" id="sansinterligna" onclick="insertStyledText('si')">
+      <h1>Sans Interligne</h1>
+      <h2>Univers, 12</h2>
+    </button>
+    
+  </div>
+  </div>
+  </div>
+  <div class="tool-group">
+  <div class="group-label">Outils</div>
+  <button id="tool-container-micro" onclick="startSpeechRecognition()">
+    <img src="Res/microphone.png" alt="Microphone">
+    <h1>Dicter</h1>
+  </button>
+  <button id="tool-container-sc" onclick="toggleSpecialCharacters()">
+    <img src="Res/omega.png" alt="Microphone">
+    <h1>Caractères</h1>
+    <h1>spéciaux</h1>
+  </button>
+  <button id="tool-container-sc" onclick="loadMathJax();createMathEditorModal();">
+    <img src="Res/formula.png" alt="Microphone">
+    <h1>Formules</h1>
+  </button>
+  </div>
+</div>
+
+</div>
+<div id="zoom-contener">
+  <img id="zoom-image" src="Res/magnifier.png" alt="Zomm1">
+  <input type="range" min="50" max="200" value="100" class="barre-zoom" id="zoomBar">
+  <span id="valeur-zoom">100%</span>
+</div>
+  <div id="content">
+    <div id="all-bloc-text">
+    </div>
+    <div id="content-of-bloc-text">
+      <div id="text-header">
+        <input type="text" id="title-of-text" placeholder="Votre titre ici">
+        <div id="separator"></div>
+        <input type="text" id="date-the-day" placeholder="Entrez la date ici"> 
+      </div>
+      <div id="editor" contenteditable="true"></div>
+    </div>
+  </div>
+  </div>
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <span class="closebtn">&times;</span>
+      
+      <!-- Onglets -->
+      <div class="tabs">
+        <button class="tablinks" onclick="openTab(event, 'Page')">Page</button>
+        <button class="tablinks" onclick="openTab(event, 'Insertion')">Insertion</button>
+      </div>
+      
+      <!-- Contenu des onglets -->
+      <div id="Page" class="tabcontent">
+        <button id="delette" onclick="deleteCurrentFeuille()">Supprimer la feuille actuel</button>
+        <button id="delette" onclick="deleteEntireBloc()">Supprimer le bloc actuel</button>
+      </div>
+      
+      <div id="Insertion" class="tabcontent">
+        <h3>Insertion</h3>
+        <h4>Inserer un tableau</h4>
+        <label for="num-rows">Nombre de lignes :</label>
+        <input type="number" id="num-rows" min="1" value="3"><br>
+        <label for="num-cols">Nombre de colonnes :</label>
+        <input type="number" id="num-cols" min="1" value="3"><br>
+        <button id="insert-table-btn">Insérer un tableau</button>
+        <h4>Inserer une image :</h4>
+        <input type="file" id="image-input" accept="image/*">
+        <button id="insert-image-btn">Insérer une image</button>
+        <!--<button onclick="insererDiagramme()">Inserer un diagramme</button>    //en cours de developement-->
+      </div>
+      
+      
+      <div id="Autre" class="tabcontent">
+        <h3>Autre</h3>
+        <!-- Ajoutez ici le contenu de l'onglet "Autre" -->
+      </div>
+    </div>
+  </div>
+
+  <div id="save-choice-modal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeSaveModal()">&times;</span>
+    
+    <h2>Enregistrer le fichier</h2>
+    <p>Où souhaitez-vous conserver ce document ?</p>
+    
+    <div class="save-options-container">
+        <div class="save-option-card" onclick="processSave('drive')">
+            <img src="Res/fichier (6).png" alt="Drive">
+            <strong>DeskDrive</strong>
+            <div>Cloud Local</div>
+        </div>
+
+        <div class="save-option-card" onclick="processSave('export')">
+            <img src="Res/download.png" alt="Export">
+            <strong>Exporter</strong>
+            <div>Sur ce PC</div>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div id="special-char-modal" class="modal" style="z-index: 1000000;">
+  <div class="modal-content" style="width: 450px; padding: 25px; border-radius: 12px;">
+    <span class="closebtn" onclick="document.getElementById('special-char-modal').style.display='none'">&times;</span>
+    <h2 style="margin-top: 0; color: #333; font-family: sans-serif;">Caractères spéciaux</h2>
+    
+    <div id="char-grid" style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px; margin-top: 20px;">
+    </div>
+    
+  </div>
+</div>
+<script>
+//-----------------------------------------------------------------------Gestion de la connection a prismID-----------------------------------------------
+      var popupWindow;
+  
+      // Fonction pour ouvrir la fenêtre contextuelle
+      function openPopup() {
+          var width = 500;
+          var height = 600;
+          var left = (window.innerWidth - width) / 2;
+          var top = (window.innerHeight - height) / 2;
+          var options = 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + width + ', height=' + height + ', top=' + top + ', left=' + left;
+  
+          popupWindow = window.open('auth/0/Connection.html', 'Popup', options);
+      }
+  
+      // Fonction appelée après la connexion réussie dans la fenêtre contextuelle
+      function onLoginSuccess(userInfo) {
+          // Extrayez l'e-mail de l'utilisateur
+          var userEmail = userInfo.email;
+          // Fermez la fenêtre contextuelle après traitement des informations
+          if (popupWindow) {
+              popupWindow.close();
+          }
+      }
+  </script>
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+  // Sélectionnez les éléments par leur ID
+  var topBar = document.getElementById('top-bar');
+  var middleBar = document.getElementById('middle-bar');
+  var content = document.getElementById('content');
+  
+  // Calcul de la hauteur du contenu en pourcentage
+  var topBarHeight = topBar.offsetHeight; // Hauteur de #topbar
+  var middleBarHeight = middleBar.offsetHeight; // Hauteur de #middle-bar
+  var windowHeight = window.innerHeight; // Hauteur de la fenêtre du navigateur
+  
+  var contentHeightPercentage = 100 - (topBarHeight / windowHeight * 100) - (middleBarHeight / windowHeight * 100); // Calcul de la hauteur de #content en pourcentage
+  
+  // Définir la hauteur de #content en pourcentage
+  content.style.height = contentHeightPercentage + '%';
+});
+//--------------------------NEW-----------------------------
+function openPrintPreviewModal() {
+       // Afficher la fenêtre modale
+    document.getElementById('imprprev').style.display = 'block';
+}
+
+// Fonction pour fermer le modal d'aperçu avant impression
+function closePrintPreviewModal() {
+  document.getElementById("imprprev").style.display = "none";
+}
+
+// Fonction pour afficher le contenu dans l'aperçu avant impression
+function displayContentForPrintPreview() {
+  // Insérez ici le code pour récupérer et afficher le contenu à imprimer dans l'aperçu
+}
+
+// Fonction appelée lorsque le bouton "Aperçu avant impression" est cliqué
+function handlePrintPreviewButtonClick() {
+  displayContentForPrintPreview(); // Afficher le contenu dans l'aperçu avant impression
+  openPrintPreviewModal(); // Ouvrir le modal d'aperçu avant impression
+}
+    //------------------------------------------------------Gestion menu---------------------------------------------------------
+    const menu = document.getElementById('menu');
+const menudev = document.getElementById('menudev');
+
+menudev.addEventListener('click', (event) => {
+    event.stopPropagation(); // Arrête la propagation de l'événement pour éviter la fermeture immédiate du menu
+    toggleMenu(); // Afficher ou masquer le menu
+});
+
+// Écouter les clics en dehors du menu pour le masquer
+document.addEventListener('click', (event) => {
+    const isClickInsideMenu = menu.contains(event.target);
+    if (!isClickInsideMenu) {
+        menu.style.left = "-100%"; // Masquer le menu si le clic est en dehors du menu
+    }
+});
+
+function toggleMenu() {
+    // Si le menu est actuellement affiché, masquez-le. Sinon, affichez-le.
+    if (menu.style.left === "0px" || menu.style.left === "") {
+        menu.style.left = "-100%"; // Masquer le menu
+    } else {
+        menu.style.left = "0"; // Afficher le menu
+    }
+}
+//---------------------------------------------Gestion du loader------------------------------------------------------
+setTimeout(function() {
+        var loader = document.getElementById('loader');
+        loader.style.display = 'none';
+        init();
+        opengenema();
+        opengenema();
+        }, 5846);
+//----------------------------------------------Gestion du modal pour les parametre------------------------------------
+// Fonction pour ouvrir un onglet spécifique
+function openTab(event, tabName) {
+  // Récupère tous les éléments avec la classe "tabcontent" et les masque
+  const tabcontent = document.getElementsByClassName('tabcontent');
+  for (let i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = 'none';
+  }
+
+  // Récupère tous les éléments avec la classe "tablinks" et supprime la classe "active"
+  const tablinks = document.getElementsByClassName('tablinks');
+  for (let i = 0; i < tablinks.length; i++) {
+    tablinks[i].classList.remove('active');
+  }
+
+  // Affiche l'onglet sélectionné et ajoute la classe "active" au bouton de l'onglet sélectionné
+  document.getElementById(tabName).style.display = 'block';
+  event.currentTarget.classList.add('active');
+}
+
+// Événement pour ouvrir la fenêtre modale
+document.getElementById('openModalBtn').addEventListener('click', () => {
+  document.getElementById('myModal').style.display = 'block';
+});
+
+// Événement pour ouvrir la fenêtre modale
+document.getElementById('openModalinster').addEventListener('click', () => {
+  document.getElementById('myModal').style.display = 'block';
+});
+
+document.getElementById('openModalpara').addEventListener('click', () => {
+  document.getElementById('myModal').style.display = 'block';
+});
+
+// Événement pour fermer la fenêtre modale
+document.querySelector('.closebtn').addEventListener('click', () => {
+  document.getElementById('myModal').style.display = 'none';
+});
+
+// Événement pour fermer la fenêtre modale en cliquant en dehors de celle-ci
+window.addEventListener('click', (event) => {
+  if (event.target === document.getElementById('myModal')) {
+    document.getElementById('myModal').style.display = 'none';
+  }
+});
+  //-----------------------------------------------------------------------Custom menu-----------------------------------------------------------
+  // Prevent default context menu
+  document.addEventListener('contextmenu', function(event) {
+    event.preventDefault();
+    // Show the custom context menu
+    var customMenu = document.getElementById('custom-menu');
+    customMenu.style.display = 'block';
+    customMenu.style.left = event.pageX + 'px';
+    customMenu.style.top = event.pageY + 'px';
+  });
+
+  // Hide the custom context menu when clicking outside
+  document.addEventListener('click', function(event) {
+    var customMenu = document.getElementById('custom-menu');
+    customMenu.style.display = 'none';
+  });
+//----------------------------------------------bloc-------------------------
+// Initialiser les données du bloc-notes
+let bloc = JSON.parse(localStorage.getItem('bloc')) || {
+    feuilles: [],
+    activeFeuille: null
+};
+
+// Sélection des éléments HTML
+const allBlocText = document.getElementById('all-bloc-text');
+const titleOfText = document.getElementById('title-of-text');
+const dateTheDay = document.getElementById('date-the-day');
+const editor = document.getElementById('editor');
+const saveBlocBtn = document.getElementById('save');
+
+function deleteEntireBloc() {
+    // Demande de confirmation pour la suppression complète
+    const confirmation = confirm("Êtes-vous sûr de vouloir supprimer toutes les feuilles ? Cette action est irréversible.");
+    
+    if (confirmation) {
+        // Réinitialise le bloc
+        bloc = {
+            feuilles: [],
+            activeFeuille: null
+        };
+        
+        // Supprime le bloc du localStorage
+        localStorage.removeItem('bloc');
+        
+        // Mettre à jour l'affichage
+        renderFeuillesList();
+        
+        // Efface l'éditeur
+        titleOfText.value = '';  // Efface le titre
+        editor.innerHTML = '';  // Efface le contenu de l'éditeur
+    }
+}
+
+function deleteCurrentFeuille() {
+    if (bloc.activeFeuille !== null) {
+        // Demande de confirmation pour la suppression
+        const confirmation = confirm("Êtes-vous sûr de vouloir supprimer cette feuille ?");
+        
+        if (confirmation) {
+            // Supprime la feuille active
+            bloc.feuilles.splice(bloc.activeFeuille, 1);
+            
+            // Remet l'activeFeuille à null ou à une autre feuille si nécessaire
+            bloc.activeFeuille = bloc.feuilles.length > 0 ? 0 : null;
+
+            // Sauvegarder les changements
+            saveBlocToStorage();
+            
+            // Mettre à jour la liste des feuilles affichées
+            renderFeuillesList();
+            
+            // Effacer l'éditeur si nécessaire
+            if (bloc.activeFeuille === null) {
+                titleOfText.value = '';  // Efface le titre
+                editor.innerHTML = '';  // Efface le contenu de l'éditeur
+            } else {
+                // Si une autre feuille est disponible, la charger dans l'éditeur
+                loadFeuille(bloc.activeFeuille);
+            }
+        }
+    } else {
+        alert("Aucune feuille active à supprimer.");
+    }
+}
+
+// Générer automatiquement la date
+function getCurrentDate() {
+    const today = new Date();
+    
+    // Tableau des jours de la semaine
+    const daysOfWeek = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+    
+    // Tableau des mois
+    const monthsOfYear = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+
+    // Récupérer le jour de la semaine, le jour du mois, le mois et l'année
+    const dayName = daysOfWeek[today.getDay()]; // Récupère le nom du jour de la semaine
+    const dayNumber = today.getDate(); // Récupère le numéro du jour dans le mois
+    const monthName = monthsOfYear[today.getMonth()]; // Récupère le nom du mois
+    const year = today.getFullYear(); // Récupère l'année
+    console.log(`${dayName} ${dayNumber} ${monthName} ${year}`)
+    // Retourne la date formatée
+    return `${dayName} ${dayNumber} ${monthName} ${year}`;
+}
+
+
+// Sauvegarder l'état du bloc dans le localStorage
+function saveBlocToStorage() {
+    localStorage.setItem('bloc', JSON.stringify(bloc));
+}
+
+// Afficher toutes les feuilles dans la liste
+function renderFeuillesList() {
+    allBlocText.innerHTML = ''; // Clear list
+    bloc.feuilles.forEach((feuille, index) => {
+        const feuilleDiv = document.createElement('div');
+        feuilleDiv.classList.add('feuille');
+        feuilleDiv.innerText = feuille.title;
+        feuilleDiv.addEventListener('click', () => {
+            selectFeuille(index);
+        });
+        allBlocText.appendChild(feuilleDiv);
+    });
+    // Créer un bouton
+        const addButton = document.createElement('button');
+
+        // Ajouter du texte au bouton
+        addButton.textContent = 'Ajouter une nouvelle feuille';
+
+        // Définir un ID pour le bouton
+        addButton.id = 'add-new-bloc';
+
+        const buttonStyle = {
+          padding: '10px',
+          marginBottom: '8px',
+          backgroundColor: '#ffffff',
+          color: 'black',
+          border: 'none',
+          borderRadius: '10px',
+          margin: '10px 10px 10px 10px',
+          cursor: 'pointer',
+          transition: 'background-color 0.3s'
+        };
+
+        Object.assign(addButton.style, buttonStyle); // Appliquer le style
+
+        // Ajouter un gestionnaire d'événement pour le clic
+        addButton.addEventListener('click', () => {
+            // Code à exécuter lors du clic (par exemple, ajouter une nouvelle feuille)
+            bloc.feuilles.push({ title: 'Nouvelle Feuille', date: getCurrentDate(), content: '' });
+            bloc.activeFeuille = bloc.feuilles.length - 1;  // Rendre active la nouvelle feuille
+            saveBlocToStorage();  // Sauvegarder dans le localStorage
+            renderFeuillesList();
+        });
+
+        // Ajouter le bouton dans un conteneur (par exemple dans le body ou un div spécifique)
+        allBlocText.appendChild(addButton);
+}
+
+// Sélectionner une feuille à afficher
+function selectFeuille(index) {
+    const feuille = bloc.feuilles[index];
+    bloc.activeFeuille = index;
+    titleOfText.value = feuille.title;
+    dateTheDay.value = feuille.date;
+    editor.innerHTML = feuille.content;
+    saveBlocToStorage(); // Sauvegarder l'état
+}
+
+// Sauvegarde automatique lorsque l'utilisateur édite le contenu
+editor.addEventListener('input', () => {
+    if (bloc.activeFeuille !== null) {
+        bloc.feuilles[bloc.activeFeuille].content = editor.innerHTML;
+        saveBlocToStorage(); // Sauvegarder à chaque changement
+    }
+});
+
+titleOfText.addEventListener('input', () => {
+    if (bloc.activeFeuille === null) {
+        // Si aucune feuille n'est active, créer une nouvelle feuille
+        const nouvelleFeuille = {
+            title: titleOfText.value,
+            content: '' // Contenu par défaut vide pour la nouvelle feuille
+        };
+
+        // Ajouter cette nouvelle feuille au tableau des feuilles
+        bloc.feuilles.push(nouvelleFeuille);
+
+        // Mettre cette nouvelle feuille comme active
+        bloc.activeFeuille = bloc.feuilles.length - 1;
+    } else {
+        // Si une feuille est déjà active, on met juste à jour son titre
+        bloc.feuilles[bloc.activeFeuille].title = titleOfText.value;
+    }
+
+    // Mettre à jour la liste des feuilles
+    renderFeuillesList();
+
+    // Sauvegarder dans le localStorage
+    saveBlocToStorage();
+});
+
+// Sauvegarder tout le bloc sous forme de fichier JSON
+saveBlocBtn.addEventListener('click', () => {
+    const blocData = JSON.stringify(bloc, null, 2);
+    const blob = new Blob([blocData], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'votre-bloc-notes.podb';
+    a.click();
+});
+
+// Charger les données initiales lors du chargement de la page
+function init() {
+    renderFeuillesList();
+    if (bloc.feuilles.length > 0) {
+        selectFeuille(0); // Sélectionner la première feuille
+    }
+}
+
+// Sélection des éléments HTML
+const openBlocBtn = document.getElementById('open');
+
+// Fonction pour ouvrir le fichier explorateur et charger un fichier JSON
+openBlocBtn.addEventListener('click', () => {
+    // Crée un input type="file" programmatique pour ne pas l'afficher à l'utilisateur
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.podb'; // Accepte uniquement les fichiers JSON
+    fileInput.style.display = 'none'; // On ne l'affiche pas
+
+    // Déclencher l'ouverture du dialogue de fichier
+    fileInput.click();
+
+    // Lorsqu'un fichier est sélectionné
+    fileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedBloc = JSON.parse(e.target.result);
+                    bloc = importedBloc;  // Charger le contenu du bloc
+                    saveBlocToStorage();  // Sauvegarder dans le localStorage
+                    renderFeuillesList(); // Mettre à jour la liste des feuilles
+                    if (bloc.feuilles.length > 0) {
+                        selectFeuille(0);  // Afficher la première feuille
+                    }
+                    alert('Bloc ouvert avec succès !');
+                } catch (error) {
+                    alert('Erreur lors de l\'ouverture du fichier : format non valide.');
+                }
+            };
+            reader.readAsText(file);  // Lire le contenu du fichier en tant que texte
+        }
+    });
+});
+//-------------------------------------------------Taille de police-------------------------------------
+    // Sélection des menus déroulants
+    const fontFamilySelect = document.getElementById('font-family');
+    const fontSizeSelect = document.getElementById('font-size');
+
+    // Écouteurs d'événements pour chaque menu déroulant
+    fontFamilySelect.addEventListener('change', () => {
+      const selectedFont = fontFamilySelect.value;
+      document.execCommand('fontName', false, selectedFont);
+    });
+    fontSizeSelect.addEventListener('change', () => {
+    const selection = window.getSelection();
+    if (selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        const span = document.createElement('span');
+        span.style.fontSize = fontSizeSelect.value + 'px'; // Ajoutez 'px' à la valeur de la taille de police
+        range.surroundContents(span);
+    }
+});
+//--------------------------------------------------------preloadtitle---------------------------------------------
+function insertStyledText(name) {
+  const editor = document.getElementById('editor');
+  const styledText = document.createElement('span');
+  if(name === 'titre1') {
+    styledText.textContent = '[Votre titre ici]';
+  // Appliquer le style directement depuis JavaScript
+  styledText.style.color = 'rgb(18, 18, 131)';
+  styledText.style.fontFamily = 'Arial';
+  styledText.style.fontSize = '35px';
+  styledText.style.fontStyle = 'italic';
+  // Insérer le texte stylisé dans l'éditeur
+  editor.appendChild(styledText);
+  }
+  if(name === 'titre2') {
+    styledText.textContent = '[Votre titre ici]';
+  // Appliquer le style directement depuis JavaScript
+  styledText.style.color = 'rgb(252, 193, 0)';
+  styledText.style.fontFamily = 'sans-serif';
+  styledText.style.fontSize = '35px';
+  styledText.style.fontStyle = 'italic';
+  // Insérer le texte stylisé dans l'éditeur
+  editor.appendChild(styledText);
+  }
+  if(name === 'titre3') {
+    styledText.textContent = '[Votre titre ici]';
+  // Appliquer le style directement depuis JavaScript
+  styledText.style.color = 'rgb(61, 61, 61)';
+  styledText.style.fontFamily = 'sans-serif';
+  styledText.style.fontSize = '30px';
+  styledText.style.fontStyle = 'italic';
+  // Insérer le texte stylisé dans l'éditeur
+  editor.appendChild(styledText);
+  }
+  if(name === 'soustitre') {
+    styledText.textContent = '[Votre texte ici]';
+  // Appliquer le style directement depuis JavaScript
+  styledText.style.color = 'rgb(48, 48, 48)';
+  styledText.style.fontFamily = 'Arial';
+  styledText.style.fontSize = '23px';
+  // Insérer le texte stylisé dans l'éditeur
+  editor.appendChild(styledText);
+  }
+  if(name === 'citation') {
+    styledText.textContent = '"Votre citation ici"';
+  // Appliquer le style directement depuis JavaScript
+  styledText.style.color = 'gray';
+  styledText.style.fontFamily = 'Univers';
+  styledText.style.fontSize = '14px';
+  styledText.style.fontStyle = 'italic';
+  // Insérer le texte stylisé dans l'éditeur
+  editor.appendChild(styledText);
+  }
+  if(name === 'si') {
+    styledText.textContent = '[Votre texte ici]';
+  // Appliquer le style directement depuis JavaScript
+  styledText.style.color = 'black';
+  styledText.style.fontFamily = 'Univers';
+  styledText.style.fontSize = '12px';
+  // Insérer le texte stylisé dans l'éditeur
+  editor.appendChild(styledText);
+  }
+}
+//---------------------------------------------------ADVANCETEXTOPTION-----------------------------------------------------------
+    // Sélection des boutons
+    const alignLeftButton = document.querySelector('.class1-button:nth-of-type(1)');
+const alignCenterButton = document.querySelector('.class1-button:nth-of-type(2)');
+const alignRightButton = document.querySelector('.class1-button:nth-of-type(3)');
+const justifyButton = document.querySelector('.class1-button:nth-of-type(4)'); // Nouveau bouton pour le texte justifié
+const superscriptButton = document.querySelector('.class1-button:nth-of-type(5)');
+const subscriptButton = document.querySelector('.class1-button:nth-of-type(6)');
+const unorderedListButton = document.getElementById('unordered-list-button');
+const orderedListButton = document.getElementById('ordered-list-button');
+
+// Fonction pour récupérer la sélection de texte
+function getSelectedText() {
+  return window.getSelection().toString();
+}
+
+// Écouteurs d'événements pour chaque bouton
+alignLeftButton.addEventListener('click', () => {
+  document.execCommand('justifyLeft', false, null);
+});
+
+alignCenterButton.addEventListener('click', () => {
+  document.execCommand('justifyCenter', false, null);
+});
+
+alignRightButton.addEventListener('click', () => {
+  document.execCommand('justifyRight', false, null);
+});
+
+justifyButton.addEventListener('click', () => {
+  const selectedText = getSelectedText();
+  if (selectedText) {
+    document.execCommand('justifyFull', false, null);
+  }
+});
+
+superscriptButton.addEventListener('click', () => {
+  const selectedText = getSelectedText();
+  if (selectedText) {
+    document.execCommand('superscript', false, null);
+  }
+});
+
+subscriptButton.addEventListener('click', () => {
+  const selectedText = getSelectedText();
+  if (selectedText) {
+    document.execCommand('subscript', false, null);
+  }
+});
+
+unorderedListButton.addEventListener('click', () => {
+  document.execCommand('insertUnorderedList', false, null);
+});
+
+orderedListButton.addEventListener('click', () => {
+  document.execCommand('insertOrderedList', false, null);
+});
+    //-------------------------------------------------COPY/CUT/PAST-----------------------------------------------------------------
+    // Sélection des boutons de la classe 2
+    const copyButton = document.querySelector('.class2-button:nth-of-type(1)');
+    const pasteButton = document.querySelector('.class2-button:nth-of-type(2)');
+    const cutButton = document.querySelector('.class2-button:nth-of-type(3)');
+
+    // Écouteurs d'événements pour chaque bouton
+    copyButton.addEventListener('click', () => {
+    const selectedText = getSelectedText();
+    if (selectedText) {
+      document.execCommand('copy');
+    }
+    });
+
+    pasteButton.addEventListener('click', () => {
+      document.execCommand('paste');
+    });
+
+    cutButton.addEventListener('click', () => {
+      const selectedText = getSelectedText();
+      if (selectedText) {
+        document.execCommand('cut');
+      }
+    });
+    // Pour le menu deroulant 
+  document.getElementById('menucut').addEventListener('click', function() {
+    const selectedText = getSelectedText();
+      if (selectedText) {
+        document.execCommand('cut');
+      }
+  });
+
+  document.getElementById('menucopy').addEventListener('click', function() {
+    const selectedText = getSelectedText();
+    if (selectedText) {
+      document.execCommand('copy');
+    }
+  });
+
+  document.getElementById('menupast').addEventListener('click', function() {
+    document.execCommand('paste');
+  });
+    //-----------------------------------------------BOLT/ITALIC/UNDERLINE----------------------------------------------------------
+    // Sélection des boutons de la classe2-button-solo
+    const boldButton = document.getElementById('apply-stand');
+    const italicButton = document.querySelector('.class2-button-solo:nth-of-type(2)');
+    const underlineButton = document.querySelector('.class2-button-solo:nth-of-type(3)');
+
+    // Fonction pour vérifier si le texte est mis en forme
+    function isApplied(command) {
+      return document.queryCommandState(command);
+    }
+
+    // Écouteurs d'événements pour chaque bouton
+    boldButton.addEventListener('click', () => {
+    const selectedText = getSelectedText();
+      if (selectedText) {
+        document.execCommand('bold');
+      }
+    });
+
+    italicButton.addEventListener('click', () => {
+      const selectedText = getSelectedText();
+      if (selectedText) {
+        document.execCommand('italic');
+      }
+    });
+
+    underlineButton.addEventListener('click', () => {
+      const selectedText = getSelectedText();
+      if (selectedText) {
+        document.execCommand('underline');
+      }
+    });
+    //-------------------------------------------------------------------------charspe-----------------------------------------------------------
+const specialChars = [
+    '€', '£', '¥', '©', '®', '™', '°', '•',
+    '±', '≠', '≤', '≥', '÷', '×', '∞', 'µ',
+    'α', 'β', 'π', 'Ω', '∑', '∆', '√', '∫',
+    '✓', '✗', '★', '♥', '♦', '♣', '♠', '♪',
+    '←', '↑', '→', '↓', '↔', '⇒', '⇔', '½',
+    
+    '😀', '😂', '🥰', '😎', '🤔', '😭', '😡', '😱',
+    '👍', '👎', '👏', '🙏', '🤝', '✌️', '💪', '👀',
+    '📅', '📁', '✉️', '📞', '📌', '📎', '🔒', '🔑',
+    '✅', '❌', '⚠️', '⛔', '💡', '🔥', '✨', '🚩'
+];
+
+window.toggleSpecialCharacters = function() {
+    const modal = document.getElementById('special-char-modal');
+    const grid = document.getElementById('char-grid');
+    
+    if (modal && grid) {
+        if (grid.innerHTML.trim() === '') {
+            specialChars.forEach(char => {
+                const btn = document.createElement('button');
+                btn.className = 'dw-char-btn';
+                btn.innerText = char;
+                btn.onclick = () => insertSpecialChar(char);
+                grid.appendChild(btn);
+            });
+        }
+        
+        modal.style.display = 'block';
+    }
+};
+
+window.insertSpecialChar = function(char) {
+    if (typeof insertAtCursorHTML === 'function') {
+        insertAtCursorHTML(char);
+    } else {
+        document.execCommand('insertText', false, char);
+    }
+    
+    document.getElementById('special-char-modal').style.display = 'none';
+};
+// Sélection de la div contenant les caractères spéciaux
+const specialCharactersContainer = document.getElementById('special-characters-container');
+
+// Sélection de tous les boutons de caractères spéciaux
+const specialCharacterButtons = document.querySelectorAll('.special-character');
+
+// Ajout d'un gestionnaire d'événements pour chaque bouton de caractères spéciaux
+specialCharacterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        // Récupérer le caractère spécial associé à ce bouton
+        const specialCharacter = button.textContent;
+
+        // Insérer le caractère spécial dans l'éditeur de texte
+        const editor = document.getElementById('editor');
+        editor.focus();
+        document.execCommand('insertText', false, specialCharacter);
+    });
+});
+
+//------------------------------------------------------------------------Voice rec----------------------------------------------------------
+// Variables globales pour l'élément de l'icône du microphone et l'objet AnalyserNode
+let microphoneIcon;
+let analyser;
+
+// Fonction pour démarrer la visualisation audio
+function startAudioVisualization() {
+  // Récupérer l'élément de l'icône du microphone
+  microphoneIcon = document.getElementById('microphoneIcon');
+  
+  // Créer un objet AnalyserNode pour analyser les données audio
+  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  analyser = audioContext.createAnalyser();
+
+  // Configurer l'analyser
+  analyser.fftSize = 256;
+  const bufferLength = analyser.frequencyBinCount;
+  const dataArray = new Uint8Array(bufferLength);
+
+  // Obtenir le flux audio du microphone
+  navigator.mediaDevices.getUserMedia({ audio: true })
+    .then(stream => {
+      const source = audioContext.createMediaStreamSource(stream);
+      source.connect(analyser);
+
+      // Mettre à jour l'effet visuel en fonction du niveau audio
+      function draw() {
+        requestAnimationFrame(draw);
+        analyser.getByteFrequencyData(dataArray);
+        // Calculer la valeur moyenne des données de fréquence pour obtenir un niveau audio global
+        const audioLevel = dataArray.reduce((acc, val) => acc + val, 0) / bufferLength / 255;
+        updateMicrophoneVisuals(audioLevel);
+      }
+      draw();
+    })
+    .catch(error => {
+      console.error('Erreur lors de la récupération du flux audio du microphone :', error);
+    });
+}
+
+// Fonction pour arrêter la visualisation audio
+function stopAudioVisualization() {
+  if (analyser) {
+    analyser.disconnect(); // Déconnecter l'analyser du flux audio
+    resetMicrophoneVisuals(); // Réinitialiser l'effet visuel
+  }
+}
+
+// Fonction pour mettre à jour l'effet visuel en fonction du niveau audio
+function updateMicrophoneVisuals(audioLevel) {
+  // Convertir le niveau audio en une valeur d'ombre pour l'effet de box-shadow
+  const boxShadowValue = `${audioLevel * 20}px ${audioLevel * 20}px ${audioLevel * 40}px rgba(255, 0, 0, ${audioLevel})`;
+  // Appliquer l'effet de box-shadow à l'icône du microphone
+  microphoneIcon.style.boxShadow = boxShadowValue;
+}
+
+// Fonction pour réinitialiser l'effet visuel
+function resetMicrophoneVisuals() {
+  // Réinitialiser l'effet de box-shadow à sa valeur par défaut
+  if (microphoneIcon) {
+    microphoneIcon.style.boxShadow = 'none';
+  }
+}
+//---------------PUR----------------
+// Fonction pour initialiser la reconnaissance vocale
+function initializeSpeechRecognition() {
+  const microphoneIcon = document.getElementById('microphoneIcon');
+  const titreElement = document.getElementById('titled');
+
+  // Vérifiez si SpeechRecognition est pris en charge par le navigateur
+  if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+    // Créez un objet SpeechRecognition
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+
+    // Configurez les paramètres de reconnaissance
+    recognition.continuous = true; // Permet une dictée continue
+    recognition.lang = 'fr-FR'; // Langue de reconnaissance (français)
+
+    // Événement appelé lorsque la reconnaissance de la parole est terminée
+    recognition.onresult = function(event) {
+      const transcript = event.results[event.results.length - 1][0].transcript;
+      // Insérez le texte reconnu dans votre éditeur
+      const editor = document.getElementById('editor');
+      editor.innerHTML += transcript + ' '; // Ajoute le texte à l'éditeur
+    };
+
+    // Événement appelé en cas d'erreur
+    recognition.onerror = function(event) {
+      console.error('Une erreur est survenue lors de la reconnaissance vocale :', event.error);
+      microphoneIcon.src = 'Res/close.png';
+      titreElement.textContent = event.error + " error";
+    };
+
+    // Retournez l'objet de reconnaissance vocale pour permettre l'arrêt ultérieur
+    return recognition;
+  } else {
+    // Le navigateur ne prend pas en charge l'API Web Speech
+    console.error('Le navigateur ne prend pas en charge l\'API Web Speech');
+    titreElement.textContent = "Non supporté";
+    return null;
+  }
+}
+
+// Variable pour stocker l'objet de reconnaissance vocale
+let recognition;
+const stopper = document.getElementById('tool-container-micro-act');
+// Fonction pour démarrer la reconnaissance vocale
+function startSpeechRecognition() {
+  // Vérifiez si la reconnaissance n'est pas déjà en cours
+  if (!recognition) {
+    recognition = initializeSpeechRecognition();
+    stopper.style.display = 'block';
+    startAudioVisualization();
+  }
+  // Vérifiez si la reconnaissance est prête
+  if (recognition) {
+    recognition.start();
+    stopper.style.display = 'block';
+  }
+}
+
+// Fonction pour arrêter la reconnaissance vocale
+function stopSpeechRecognition() {
+  stopAudioVisualization();
+  // Vérifiez si la reconnaissance est en cours
+  if (recognition && recognition.abort) {
+    stopper.style.display = 'none';
+    recognition.abort();
+    recognition = null; // Réinitialisez l'objet de reconnaissance vocale
+  }
+}
+//------------------------------------------------------IMPRESSION-----------------------------------------------------------
+const printButton = document.getElementById('apply-stand-new-line');
+
+// Ajoutez un écouteur d'événements au bouton d'impression
+function printContent() {
+    const printContent = document.getElementById('editor').innerHTML;
+    const printWindow = window.open('', '', 'width=600,height=600');
+    printWindow.document.open();
+    printWindow.document.write(`
+        <html>
+        <head>
+            <title>Impression</title>
+            <style>
+              table {
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            overflow: hidden; /* Affiche les barres de défilement si nécessaire */
+        }
+        </style>
+        </head>
+        <body>
+            ${printContent}
+        </body>
+        </html>
+    `);
+    printWindow.document.close();
+    printWindow.print();
+    printWindow.close();
+}
+//---------------------------------------------------------------------ZOOM----------------------------------------
+// Ajoute un écouteur d'événements pour la molette de la souris
+document.addEventListener('wheel', function(event) {
+  // Vérifie si la touche Ctrl est enfoncée
+  if (event.ctrlKey === true) {
+    const zoomBar = document.getElementById('zoomBar');
+    const valeurZoom = document.getElementById('valeur-zoom');
+    // Empêche le comportement par défaut du zoom du navigateur
+    event.preventDefault();
+
+    // Récupère l'élément que vous souhaitez zoomer (dans ce cas, la zone de texte)
+    var editor = document.getElementById('editor');
+
+    // Récupère le facteur de zoom actuel
+    var currentZoom = parseFloat(editor.style.zoom) || 1;
+
+    // Ajuste le facteur de zoom en fonction de la direction de la molette
+    var delta = event.deltaY > 0 ? -0.1 : 0.1; // Sens de défilement de la molette
+    var newZoom = currentZoom + delta;
+
+    // Limite le facteur de zoom entre 0.5 et 3 (à ajuster selon vos besoins)
+    newZoom = Math.min(Math.max(0.5, newZoom), 2);
+
+    valeurZoom.textContent = Math.floor(newZoom * 100) + '%';
+    zoomBar.value = newZoom*100 ;
+
+    // Applique le nouveau facteur de zoom
+    editor.style.zoom = newZoom;
+  }
+}, { passive: false });
+
+document.addEventListener('DOMContentLoaded', function() {
+  var editor = document.getElementById('editor');
+  var zoomBar = document.getElementById('zoomBar');
+  var valeurZoom = document.getElementById('valeur-zoom');
+
+  // Ajoute un écouteur d'événements pour la modification de la barre de zoom
+zoomBar.addEventListener('input', function() {
+  // Récupère la valeur de la barre de zoom
+  var valeur = zoomBar.value;
+
+  // Met à jour l'affichage de la valeur de zoom
+  valeurZoom.textContent = valeur + '%';
+
+  // Applique le zoom à l'élément que vous souhaitez zoomer (dans ce cas, la zone de texte)
+  editor.style.zoom = valeur / 100;
+});
+});
+//-----------------------------------------------Tableau----------------------------------------------
+// Sélectionnez le bouton d'insertion de tableau
+const insertTableButton = document.getElementById('insert-table-btn');
+
+// Ajoutez un écouteur d'événements pour l'insertion de tableau
+insertTableButton.addEventListener('click', () => {
+    // Récupérez le nombre de lignes et de colonnes à partir des champs d'entrée
+    const numRows = parseInt(document.getElementById('num-rows').value);
+    const numCols = parseInt(document.getElementById('num-cols').value);
+
+    // Générez le code HTML pour le tableau en fonction du nombre de lignes et de colonnes
+    let tableHtml = '<table border="1">';
+    for (let i = 0; i < numRows; i++) {
+        tableHtml += '<tr>';
+        for (let j = 0; j < numCols; j++) {
+            tableHtml += '<td contenteditable="true" style="width: 100px;"></td>'; // Vous pouvez ajuster la largeur selon vos besoins
+        }
+        tableHtml += '</tr>';
+    }
+    tableHtml += '</table>';
+
+    // Insérez le tableau dans l'éditeur
+    document.getElementById('editor').insertAdjacentHTML('beforeend', tableHtml);
+});
+//--------------------------------------------------color--------------------------------------------------------
+const colorButtons = document.querySelectorAll('.class1-color-button');
+const anotherColorButton = document.getElementById('another');
+const customColorPicker = document.getElementById('custom-color-picker');
+
+colorButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    const color = button.dataset.color;
+    applyColorToSelection(color);
+  });
+});
+
+anotherColorButton.addEventListener('click', () => {
+  customColorPicker.click();
+});
+
+customColorPicker.addEventListener('input', () => {
+  const color = customColorPicker.value;
+  applyColorToSelection(color);
+});
+
+function applyColorToSelection(color) {
+  const selection = window.getSelection();
+  if (selection.rangeCount > 0) {
+    const range = selection.getRangeAt(0);
+    const span = document.createElement('span');
+    span.style.color = color;
+    range.surroundContents(span);
+  }
+}
+//---------------------------------------------------------Image-----------------------------------------------
+// Sélectionnez la zone de texte éditable
+const imageInput = document.getElementById('image-input');
+
+// Ajoutez un écouteur d'événements pour détecter la sélection d'un fichier image
+imageInput.addEventListener('change', () => {
+    const file = imageInput.files[0]; // Obtenez le fichier image sélectionné
+    const reader = new FileReader(); // Créez un objet FileReader pour lire le contenu du fichier
+
+    reader.onload = function(event) {
+        const imageUrl = event.target.result; // Obtenez l'URL de l'image chargée
+
+        // Insérez l'image dans l'éditeur à l'emplacement du curseur
+        const imageHtml = `<img src="${imageUrl}" alt="Image" class="inserted-image">`;
+        editor.focus(); // Assurez-vous que l'éditeur est sélectionné
+        document.execCommand('insertHTML', false, imageHtml); // Insérez l'image dans l'éditeur
+
+        // Sélectionner toutes les images insérées dans l'éditeur
+        const insertedImages = editor.querySelectorAll('.inserted-image');
+        insertedImages.forEach(img => {
+            let isResizing = false;
+            let startX, startY, startWidth, startHeight;
+
+            // Style de l'image pour empêcher qu'elle ne sorte de l'éditeur
+            img.style.position = 'relative'; // Position relative pour rester dans l'éditeur
+            img.style.maxWidth = '100%'; // Empêcher l'image d'excéder la largeur de l'éditeur
+            img.style.height = 'auto'; // Garder le ratio d'aspect
+            img.style.cursor = 'move'; // Curseur en forme de main pour le déplacement
+
+            // Redimensionnement de l'image
+            img.addEventListener('mousedown', (event) => {
+                if (event.target.classList.contains('resizer')) {
+                    isResizing = true;
+                    startX = event.clientX;
+                    startY = event.clientY;
+                    startWidth = img.clientWidth;
+                    startHeight = img.clientHeight;
+                }
+            });
+
+            img.addEventListener('mousemove', (event) => {
+                if (isResizing) {
+                    const newWidth = startWidth + (event.clientX - startX);
+                    const newHeight = startHeight + (event.clientY - startY);
+                    img.style.width = `${newWidth}px`;
+                    img.style.height = `${newHeight}px`;
+                }
+            });
+
+            img.addEventListener('mouseup', () => {
+                isResizing = false;
+            });
+
+            img.addEventListener('mouseleave', () => {
+                isResizing = false;
+            });
+
+            // Empêcher l'image de sortir de l'éditeur en lui ajoutant des limites
+            img.addEventListener('dragstart', (event) => {
+                event.preventDefault(); // Empêche le glisser-déposer par défaut
+            });
+
+            img.addEventListener('contextmenu', (event) => {
+                event.preventDefault(); // Empêche le clic droit sur l'image
+            });
+        });
+    };
+
+    reader.readAsDataURL(file); // Lire le contenu du fichier sous forme d'URL de données
+});
+
+//-----------------------------------------------------------------------Math Formula Editor Modal-----------------------------------------------------------
+
+// Charger MathJax pour le rendu des formules
+const loadMathJax = () => {
+    if (!window.MathJax) {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+        script.async = true;
+        document.head.appendChild(script);
+    }
+};
+
+// Créer le modal pour l'éditeur de formules mathématiques
+const createMathEditorModal = () => {
+    const modal = document.createElement('div');
+    modal.id = 'math-editor-modal';
+    modal.style.position = 'fixed';
+    modal.style.top = '50%';
+    modal.style.left = '50%';
+    modal.style.transform = 'translate(-50%, -50%)';
+    modal.style.background = '#fff';
+    modal.style.border = '1px solid #ccc';
+    modal.style.padding = '20px';
+    modal.style.boxShadow = '0 2px 6px rgba(0,0,0,0.2)';
+    modal.style.zIndex = '1003';
+    modal.style.display = 'block';
+    modal.style.width = '500px';
+
+    modal.innerHTML = `
+        <h3>Éditeur de Formules Mathématiques</h3>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            <!-- Zone de texte pour LaTeX -->
+            <textarea id="math-latex-input" rows="4" placeholder="Écrivez votre formule en LaTeX..." style="width: 100%;"></textarea>
+
+            <!-- Zone de rendu -->
+            <div id="math-render" style="min-height: 50px; border: 1px solid #ddd; padding: 10px; font-size: 18px; background-color: #f9f9f9;">
+                <!-- Le rendu sera inséré ici -->
+            </div>
+
+            <!-- Panneau des boutons -->
+            <div id="math-toolbar" style="display: flex; flex-wrap: wrap; gap: 5px;">
+                <button class="math-button" data-latex="\\frac{}{}">Fraction</button>
+                <button class="math-button" data-latex="\\sqrt{}">Racine</button>
+                <button class="math-button" data-latex="\\sum">Somme</button>
+                <button class="math-button" data-latex="\\int">Intégrale</button>
+                <button class="math-button" data-latex="\\pi">Pi</button>
+                <button class="math-button" data-latex="\\theta">Thêta</button>
+                <button class="math-button" data-latex="\\infty">Infini</button>
+                <button class="math-button" data-latex="\\div">Division</button>
+            </div>
+
+            <!-- Boutons d'action -->
+            <div style="margin-top: 10px; display: flex; justify-content: space-between;">
+                <button id="insert-math-editor" style="background-color: #4CAF50; color: white; padding: 5px 10px;">Insérer</button>
+                <button id="close-math-editor" style="background-color: #f44336; color: white; padding: 5px 10px;">Annuler</button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    // Gestion des événements
+    const latexInput = document.getElementById('math-latex-input');
+    const renderDiv = document.getElementById('math-render');
+
+    latexInput.addEventListener('input', () => {
+        renderMath(latexInput.value, renderDiv);
+    });
+
+    document.querySelectorAll('.math-button').forEach(button => {
+        button.addEventListener('click', (event) => {
+            const latex = event.target.dataset.latex;
+            latexInput.value += latex;
+            renderMath(latexInput.value, renderDiv);
+        });
+    });
+
+    document.getElementById('insert-math-editor').addEventListener('click', () => {
+        insertMathToEditor(latexInput.value);
+        closeMathEditorModal();
+    });
+
+    document.getElementById('close-math-editor').addEventListener('click', closeMathEditorModal);
+};
+
+// Fonction pour afficher le modal
+const openMathEditorModal = () => {
+    const modal = document.getElementById('math-editor-modal');
+    if (modal) {
+        modal.style.display = 'block';
+    }
+};
+
+// Fonction pour fermer le modal
+const closeMathEditorModal = () => {
+    const modal = document.getElementById('math-editor-modal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.getElementById('math-latex-input').value = '';
+        document.getElementById('math-render').innerHTML = '';
+    }
+};
+
+// Fonction pour rendre les formules avec MathJax
+const renderMath = (latex, element) => {
+    if (window.MathJax) {
+        element.innerHTML = `\\(${latex}\\)`;
+        MathJax.typesetPromise([element]);
+    }
+};
+
+// Fonction pour insérer la formule dans l'éditeur
+const insertMathToEditor = (latex) => {
+    const formulaHtml = `<span class="math-formula" style="font-family: 'Courier New', Courier, monospace; background-color: #f9f9f9; border: 1px solid #ccc; padding: 2px 4px; border-radius: 4px;">\\(${latex}\\)</span>`;
+    editor.focus();
+    document.execCommand('insertHTML', false, formulaHtml);
+    if (window.MathJax) {
+        MathJax.typesetPromise();
+    }
+};
+
+// --- LOGIQUE D'INTÉGRATION DESKDRIVE ---
+
+let currentFileId = null; // ID du fichier ouvert (null si nouveau)
+
+// 1. DÉMARRAGE ET CONNEXION
+window.onload = async () => {
+    // Initialisation DB
+    if(typeof initDB === 'function') await initDB();
+
+    // Connexion silencieuse (Obligatoire pour sauvegarder/ouvrir)
+    const lastUid = localStorage.getItem('desk_current_uid');
+    if (lastUid) {
+        try {
+            await loginWithFirebase({ uid: lastUid });
+            console.log("Connecté à DeskDrive en tant que", lastUid);
+        } catch (e) { console.error("Erreur auth:", e); }
+    }
+
+    // Gestion Loader (Code existant)
+    setTimeout(() => {
+        const loader = document.getElementById('loader');
+        if(loader) loader.style.display = 'none';
+        if(typeof init === 'function') init();
+    }, 1000);
+
+    // VÉRIFICATION URL : Doit-on ouvrir un fichier ?
+    await checkUrlForFile();
+};
+
+// 2. OUVERTURE DEPUIS EXPLORER
+async function checkUrlForFile() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const fileId = urlParams.get('fileId');
+
+    if (!fileId) return; // Pas de fichier demandé
+
+    if (!currentUser) {
+        alert("Veuillez vous connecter pour accéder à ce fichier.");
+        return;
+    }
+
+    try {
+        const fileRecord = await getFileById(fileId);
+        if (fileRecord) {
+            // Conversion du Blob en texte pour lire le JSON
+            const textContent = await blobToText(fileRecord.content);
+            const importedBloc = JSON.parse(textContent);
+            
+            // Chargement dans l'éditeur
+            bloc = importedBloc;
+            currentFileId = fileId; 
+            
+            // Mise à jour UI
+            renderFeuillesList();
+            if (bloc.feuilles.length > 0) selectFeuille(0);
+            
+            // Mise à jour du titre (sans l'extension)
+            document.getElementById('title-of-text').value = fileRecord.name.replace('.podb', '');
+        }
+    } catch (e) {
+        console.error(e);
+        alert("Impossible d'ouvrir le fichier : " + e);
+    }
+}
+
+// 3. GESTION DU BOUTON SAUVEGARDER
+const btnSave = document.getElementById('save'); // Ton bouton disquette
+// On enlève les anciens écouteurs pour éviter les conflits (optionnel mais propre)
+const newBtnSave = btnSave.cloneNode(true);
+btnSave.parentNode.replaceChild(newBtnSave, btnSave);
+
+newBtnSave.addEventListener('click', async () => {
+    // Si fichier existant -> Sauvegarde Rapide
+    if (currentFileId) {
+        await quickSave();
+    } else {
+        // Nouveau fichier -> Modale de choix
+        document.getElementById('save-choice-modal').style.display = 'block';
+    }
+});
+
+function closeSaveModal() {
+    document.getElementById('save-choice-modal').style.display = 'none';
+}
+
+// 4. SAUVEGARDE RAPIDE (Update)
+async function quickSave() {
+    const blocData = JSON.stringify(bloc, null, 2);
+    const blob = new Blob([blocData], { type: 'application/json' });
+    
+    let filename = document.getElementById('title-of-text').value || "Sans titre";
+    if(!filename.endsWith('.podb')) filename += '.podb';
+    
+    const fileObj = new File([blob], filename, { type: "application/json" });
+
+    try {
+        await updateFileContent(currentFileId, fileObj);
+        alert("Modifications enregistrées sur DeskDrive !");
+    } catch(e) { alert("Erreur sauvegarde: " + e); }
+}
+
+// 5. TRAITEMENT DU CHOIX (Nouveau Fichier)
+async function processSave(type) {
+    closeSaveModal();
+    const blocData = JSON.stringify(bloc, null, 2);
+    const blob = new Blob([blocData], { type: 'application/json' });
+    
+    let filename = document.getElementById('title-of-text').value || "Nouveau Document";
+    filename = filename.replace(/[^a-zA-Z0-9 -]/g, ""); // Nettoyage nom
+    if(!filename.endsWith('.podb')) filename += '.podb';
+
+    if (type === 'export') {
+        // Téléchargement classique
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+    } else if (type === 'drive') {
+        // Sauvegarde DB + Redirection Explorer
+        const finalName = prompt("Nom du fichier :", filename);
+        if (!finalName) return;
+
+        const fileObj = new File([blob], finalName, { type: "application/json" });
+
+        try {
+            if(!currentUser) await loginWithFirebase({ uid: localStorage.getItem('desk_current_uid') });
+            
+            // Sauvegarde à la racine ('root')
+            const newFile = await saveFile(fileObj, 'root');
+            
+            // Redirection vers Explorer pour choisir le dossier
+            window.location.href = `explorer.html?action=select-location&fileId=${newFile.fileId}`;
+        } catch(e) {
+            alert("Erreur : " + e);
+        }
+    }
+}
+
+// --- FONCTIONS HELPERS ---
+
+function getFileById(id) {
+    return new Promise((resolve, reject) => {
+        const tx = db.transaction(['files'], 'readonly');
+        const req = tx.objectStore('files').get(id);
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject("Non trouvé");
+    });
+}
+
+function updateFileContent(id, newFileObj) {
+    return new Promise((resolve, reject) => {
+        const tx = db.transaction(['files'], 'readwrite');
+        const store = tx.objectStore('files');
+        store.get(id).onsuccess = (e) => {
+            const data = e.target.result;
+            if (data) {
+                data.content = newFileObj;
+                data.name = newFileObj.name;
+                data.size = newFileObj.size;
+                data.updatedAt = new Date();
+                store.put(data);
+                resolve();
+            } else reject("Erreur update");
+        };
+    });
+}
+
+function blobToText(blob) {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.readAsText(blob);
+    });
+}
+  
+  </script>
+  <script src="db.js"></script>
+</body>
+</html>

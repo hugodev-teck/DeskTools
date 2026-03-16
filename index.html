@@ -1,721 +1,526 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Accuil | DeskTools</title>
-<link rel="icon" href="Res/logo-DeskTools.png" type="image/x-icon">
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #dbdbdb;
-    }
-    .container {
-        display: flex;
-        height: 100vh;
-    }
-    .sidebar {
-        width: 100px;
-        background-color: #818181;
-        color: #fff;
-        z-index: 9999;
-        position: fixed;
-        left: 0;
-        top: 0;
-        bottom: 0;
-    }
-    .topbar {
-        background-color: #8f8f8f;
-        color: #fff;
-        padding: 10px;
-        width: 100%;
-        box-sizing: border-box;
-        height: 70px;
-    }
-    #start {
-        background-color: #4a6c7e96;
-        color: #fff;
-        padding: 10px;
-        width: 100%;
-        box-sizing: border-box;
-        height: 420px;
-    }
-    .content {
-        flex: 1;
-        margin-left: 100px; /* Pour laisser de la place à la sidebar */
-    }
-    #list {
-        height: 600px;
-        width: 100%;
-        background-color: #dbdbdb;
-    }
-    .template {
-            width: 180px; /* Ajustez la largeur selon vos besoins */
-            border-radius: 10px;
-            background: #ececec8e; /* Fond blanc */
-            color: black;
-            padding: 20px;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeskTools | Workspace</title>
+    <link rel="icon" href="Res/logo-DeskTools.png" type="image/x-icon">
+
+
+    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-auth-compat.js"></script>
+
+    <style>
+        :root {
+            --primary: #1a73e8; /* Bleu Google */
+            --bg-body: #ffffff;
+            --bg-header: #ffffff;
+            --bg-sub-header: #f8f9fa; /* Gris clair section App */
+            --text-main: #202124;
+            --text-light: #5f6368;
+            --border: #dadce0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Roboto', sans-serif; }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        /* --- LOADER --- */
+        #loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #fff; z-index: 2000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 0.5s;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3; border-top: 4px solid var(--primary);
+            border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* --- GESTION DES ICÔNES LOCALES --- */
+        /* Remplace Material Icons */
+        .icon-btn {
+            width: 24px;
+            height: 24px;
+            opacity: 0.6;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.2s;
+            object-fit: contain;
+        }
+        .icon-btn:hover {
+            opacity: 1;
+            background-color: rgba(0,0,0,0.04);
+            border-radius: 50%;
+        }
+        .icon-small {
+            width: 20px; height: 20px; opacity: 0.6; vertical-align: middle;
+        }
+
+        /* --- HEADER --- */
+        header {
+            height: 64px;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 20px;
+            position: sticky; top: 0; z-index: 100;
+            background: var(--bg-header);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-left { display: flex; align-items: center; gap: 15px; width: 250px; }
+        .logo { height: 36px; }
+        .app-name { font-size: 22px; color: #5f6368; font-weight: 400; position: relative; top: 1px; }
+
+        /* Barre de recherche style Drive */
+        .search-bar {
+            flex: 1; max-width: 700px;
+            background: #f1f3f4;
+            border-radius: 8px;
+            height: 46px;
+            display: flex; align-items: center;
+            padding: 0 15px;
+            transition: 0.2s;
+        }
+        .search-bar:focus-within {
+            background: #fff;
+            box-shadow: 0 1px 1px 0 rgba(65,69,73,0.3), 0 1px 3px 1px rgba(65,69,73,0.15);
+        }
+        .search-input {
+            border: none; background: transparent; flex: 1; height: 100%;
+            margin-left: 10px; font-size: 16px; outline: none; color: var(--text-main);
+        }
+
+        .header-right { width: 250px; display: flex; justify-content: flex-end; align-items: center; gap: 20px; }
+
+        /* Bouton Connexion */
+        .btn-login {
+            background: var(--primary); color: white;
+            border: none; padding: 10px 24px; border-radius: 4px;
+            font-weight: 500; font-size: 14px; cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-login:hover { background: #1765cc; box-shadow: 0 1px 2px rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15); }
+
+        /* Avatar Utilisateur */
+        .user-avatar {
+            width: 34px; height: 34px; border-radius: 50%;
+            background: #8e24aa; color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; font-weight: 500; cursor: pointer;
+            display: none;
+        }
+        .user-avatar:hover { box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+
+        /* --- SECTION APPS --- */
+        .apps-section {
+            background-color: var(--bg-sub-header);
+            padding: 20px 0 40px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+        
+        .section-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 15px; font-size: 16px; color: var(--text-main); font-weight: 500;
+        }
+
+        .grid-apps {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 20px;
+        }
+
+        /* CARTE APPLICATION */
+        .app-card {
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .app-thumbnail {
+            height: 140px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.2s;
+        }
+        .app-thumbnail img { width: 64px; transition: transform 0.2s; }
+        
+        .app-card:hover .app-thumbnail { border-color: var(--primary); }
+        .app-card:hover .app-thumbnail img { transform: scale(1.1); }
+
+        .app-info {
+            margin-top: 8px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .mini-icon { width: 16px; height: 16px; object-fit: contain; }
+        .app-title { font-size: 14px; color: var(--text-main); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* --- LISTE FICHIERS --- */
+        .files-section { padding: 30px 0; }
+        .empty-state {
+            text-align: center; color: var(--text-light); margin-top: 50px;
+        }
+        .empty-img { width: 200px; opacity: 0.5; margin-bottom: 20px; }
+
+        /* MENU PROFIL */
+        .profile-menu {
+            position: absolute; top: 65px; right: 20px;
+            background: white; border: 1px solid #ccc;
+            border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            width: 280px; display: none; z-index: 200;
+            padding-bottom: 10px;
+        }
+        .menu-header { padding: 15px 20px; border-bottom: 1px solid #eee; margin-bottom: 5px; background: #f8f9fa; border-radius: 8px 8px 0 0; }
+        .menu-name { font-weight: bold; font-size: 15px; color: #202124; }
+        .menu-email { font-size: 13px; color: #5f6368; }
+        
+        .menu-item {
+            padding: 10px 20px; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 15px; color: #3c4043;
+        }
+        .menu-item:hover { background: #f1f3f4; }
+        .menu-item img { width: 20px; opacity: 0.6; }
+
+        /* --- TEMPLATES SECTION (Nouveau) --- */
+        .templates-section { padding: 30px 0; background: white; }
+        
+        .grid-templates { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 20px; }
+
+        .template-card { cursor: pointer; }
+        .template-card:hover .template-preview { border-color: var(--primary); transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+        .template-preview {
+            height: 180px; background: white; border: 1px solid #e8eaed; border-radius: 6px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: 0.2s; position: relative; overflow: hidden;
+        }
+        /* Effet "feuille de papier" */
+        .template-preview::before {
+            content: ''; position: absolute; top: 15px; left: 15px; right: 15px; bottom: 15px;
+            background: #f8f9fa; border-radius: 2px;
+        }
+        /* Lignes de texte factices */
+        .fake-lines {
+            position: absolute; width: 60%; height: 60%; top: 20%;
+            display: flex; flex-direction: column; gap: 8px; opacity: 0.3;
+        }
+        .line { height: 4px; background: #bdc1c6; width: 100%; border-radius: 2px; }
+        .line.short { width: 60%; }
+
+        /* Icone centrale par dessus */
+        .template-icon-overlay {
+            position: relative; z-index: 2; width: 40px; padding: 8px; background: white; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .template-name { margin-top: 10px; font-size: 13px; font-weight: 500; color: #3c4043; text-align: center; }
+        .template-sub { font-size: 11px; color: #5f6368; text-align: center; }
+
+        #offline-banner {
+            display: none;
+            background: #ea4335;
+            color: white;
             text-align: center;
-            margin-left: 50px;
-            align-items: center;
-            margin-top: 20px;
-            transition: 400ms;
-        }
-
-        .template:hover {
-            background: #adadada4; /* Fond blanc */
-        }
-
-        .template img {
-            width: 70%; /* Ajustez la taille de l'image selon vos besoins */
-            border-radius: 10px;
-        }
-
-        .logo {
-            background: #8888888c; /* Fond gris */
-            width: 100%; /* Ajustez la taille de la case grise */
-            height: 50px; /* Ajustez la taille de la case grise */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 10px;
-            margin-top: 9px; /* Marge pour l'espacement */
-        }
-        .logooth {
-            background: rgba(255, 255, 255, 0.438); /* Fond gris */
-            width: 50px; /* Ajustez la taille de la case grise */
-            height: 50px; /* Ajustez la taille de la case grise */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 10px;
-            margin-top: 9px; /* Marge pour l'espacement */
-            margin-left: 25px;
-            transition: 500ms;
-        }
-        .logooth:hover {
-            background: rgba(143, 143, 143, 0.438); /* Fond gris */
-        }
-        #logomenu {
-            width: 35px; /* Ajustez la taille de la case grise */
-            height: 35px; /* Ajustez la taille de la case grise */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 10px;
-            margin-top: 9px; /* Marge pour l'espacement */
-            margin-top: 30px;
-            margin-left: 33px;
-            margin-bottom: 40px;
-        }
-        .logooth img {
-            width: 70%;
-            height: 70%;
-        }
-        .logo img {
-            width: 30px; /* Ajustez la taille du logo à l'intérieur de la case grise */
-        }
-        .logo p {
-            margin-left: 7px;
-        }
-        .carousel {
-            display: flex;
-            align-items: center; /* Alignement horizontal au centre */
-        }
-        #menu {
+            padding: 10px;
+            font-size: 14px;
             position: fixed;
-            top: 0;
-            left: -18%;
-            width: 18%;
-            height: 100%;
-            background-color: #fff;
-            transition: left 0.3s;
-            z-index: 999999;
+            bottom: 0;
+            width: 100%;
+            z-index: 3000;
         }
-    #emailDisplay {
-      display: flex;
-    justify-content: space-between; /* Alignement horizontal au centre */
-    align-items: center; /* Alignement vertical au centre si nécessaire */
-    margin-top: 10px;
-    margin-left: 7px;
-    margin-right: 7px;
-    }
-    #compatible_device {
-        width: 100%;
-        height: 35px;
-        background-color: transparent;
-        margin-top: 10px;
-        text-align: left;
-    }
-    #compatible_device img {
-        padding: 4px;
-        width: 25px;
-        height: 25px;
-        background-color: gray;
-        border-radius: 5px;
-        text-align: center;
-
-    }
-    /* Style du modal */
-.modal {
-    display: none; /* Masquer le modal par défaut */
-    position: fixed; /* Position fixe */
-    z-index: 10000000; /* Mettre le modal au-dessus du reste du contenu */
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto; /* Activer le défilement si nécessaire */
-    background-color: rgba(0,0,0,0.4); /* Fond semi-transparent */
-}
-
-/* Contenu du modal */
-.modal-content {
-    background-color: #fefefe;
-    margin: 15% auto; /* Centrer verticalement et horizontalement */
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%; /* Largeur du contenu */
-}
-
-/* Style du bouton de fermeture */
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-#connectt {
-    display: none;
-}
-#connectk {
-    display: none;
-}
-#connectt {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: #f5f5f5;
-    border: 2px solid #ddd;
-    border-radius: 10px;
-    padding: 30px;
-    width: 300px;
-    margin-top: 50px;
-    margin: 50px auto;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-#connectt:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-}
-
-#connectt h1 {
-    font-family: 'Arial', sans-serif;
-    color: #333;
-    margin-bottom: 20px;
-    font-size: 1.5em;
-    text-align: center;
-}
-
-#connectt button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 1em;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-#connectt button:hover {
-    background-color: #45a049;
-}
-/* Conteneur du tableau */
-#connectk {
-    display: block;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 20px;
-    width: 93%;
-    margin: 20px auto;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Style du tableau */
-#fileTable {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: left;
-    font-family: 'Arial', sans-serif;
-}
-
-#fileTable th, #fileTable td {
-    padding: 12px 15px;
-    border: 1px solid #ddd;
-}
-
-#fileTable th {
-    background-color: #4CAF50;
-    color: white;
-    text-align: center;
-}
-
-#fileTable tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-#fileTable tr:hover {
-    background-color: #e2e2e2;
-}
-
-#fileTable a {
-    color: #333;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-#fileTable a:hover {
-    color: #4CAF50;
-}
-
-</style>
+    </style>
 </head>
 <body>
-    <div id="unsupportedModal" class="modal">
-        <div class="modal-content">
-          <span class="close">&times;</span>
-          <p>L'accès à ce service n'est pas pris en charge sur cet appareil. Si vous êtes actuellement sur un Ordinateur (Ou une tablette Prism), veuillez agrandir votre navigateur.</p>
-          <p>ERREUR 0x008569N</p>
-        </div>
-      </div>
-    <div id="menu" class="hidden">
-        <div id="emailDisplay">
-            <button id="menu-return-button" onclick="window.location.href = 'Start-Index-OfflineApp.html';">Retour au menu principale</button>
-            <button id="Conn-btn" onclick="openPopup(); toggleMenu();">Connectez vous</button>
-        </div>
+    <div id="offline-banner">Vous êtes actuellement hors ligne. Certaines fonctionnalités sont limitées.</div>
+    <div id="loader">
+        <div class="spinner"></div>
     </div>
-<div class="container">
-    <div class="sidebar">
-        <img id="logomenu" src="Res/menu.png" alt="Logo 1">
-        <div class="logooth">
-            <img src="Res/home.png" alt="Logo 1">
-        </div>
-        <div class="logooth">
-            <img id="app1" src="Res/fichier (2).png" alt="Logo 2">
-        </div>
-        <div class="logooth">
-            <img id="app2" src="Res/fichier (7).png" alt="Logo 2">
-        </div>
-        <div class="logooth">
-            <img id="app3" src="Res/fichier (4).png" alt="Logo 3">
-        </div>
-        <div class="logooth">
-            <img id="app5" src="Res/fichier (3).png" alt="Logo 5">
-        </div>
-        <div class="logooth">
-            <img id="app4" src="Res/fichier (6).png" alt="Logo 5">
-        </div>
-        <div class="logooth">
-            <img id="coscript" src="Res/logo-co-script-solo.png" alt="Logo 4">
-        </div>
-        
-    </div>
-    <div class="content">
-        <div class="topbar">
-            <img style="margin-top: 6px;" src="Res/logo-text-small-100px.png" alt="Logo 1">
-        </div>
-        <div id="start">
-            <div class="carousel">
-            <div class="template">
-                <img id="to-writter" src="Res/page.png" alt="Image du Template">
-                <p>Fichier texte vide</p>
-                <div class="logo">
-                    <img id="to-writter" src="Res/fichier (2).png" alt="Logo">
-                    <p>DeskWritter</p>
-                </div>
-                <div id="compatible_device">
-                    <img class="icon_device" src="Res/smartphone.png" alt="smartphone">
-                    <img class="icon_device" src="Res/laptop.png" alt="laptop">
-                    <img class="icon_device" src="Res/computer-tablet.png" alt="computer-tablet">
-                </div>
+
+    <header>
+        <div class="header-left">
+            <div style="cursor:pointer; display:flex; align-items:center; gap:5px;" onclick="window.location.reload()">
+                <img src="Res/logo-DeskTools.png" class="logo">
+                <span class="app-name">DeskTools</span>
             </div>
-            <div class="template">
-                <img id="to-code" src="Res/code.png" alt="Image du Template">
-                <p>Nouveau code</p>
-                <div class="logo">
-                    <img id="to-code" src="Res/fichier (4).png" alt="Logo">
-                    <p>DeskCode</p>
-                </div>
-                <div id="compatible_device">
-                    <img class="icon_device" src="Res/laptop.png" alt="laptop">
-                </div>
-            </div>
-            <div class="template">
-                <img id="to-bloc" src="Res/pagebl.png" alt="Image du Template">
-                <p>Nouveau bloc-note</p>
-                <div class="logo">
-                    <img src="Res/fichier (7).png" alt="Logo">
-                    <p>BlocText</p>
-                </div>
-                <div id="compatible_device">
-                    <img class="icon_device" src="Res/smartphone.png" alt="smartphone">
-                    <img class="icon_device" src="Res/laptop.png" alt="laptop">
-                    <img class="icon_device" src="Res/computer-tablet.png" alt="computer-tablet">
-                </div>
-            </div>
-            <div class="template">
-                <img src="Res/pic.png" alt="Image du Template">
-                <p>Nouvelle image 1960x1450</p>
-                <div class="logo">
-                    <img src="Res/fichier (5).png" alt="Logo">
-                    <p>Pic'Edit</p>
-                </div>
-                <div id="compatible_device">
-                    <img class="icon_device" src="Res/smartphone.png" alt="smartphone">
-                    <img class="icon_device" src="Res/laptop.png" alt="laptop">
-                    <img class="icon_device" src="Res/computer-tablet.png" alt="computer-tablet">
-                </div>
-            </div>
+        </div>
+
+        <div class="search-bar">
+            <img src="Res/magnifier.png" style="width:20px; opacity:0.6;">
+            <input type="text" class="search-input" placeholder="Rechercher...">
+        </div>
+
+        <div class="header-right">
             
+            <button id="btn-login" class="btn-login" onclick="openPopup()">Se connecter</button>
+
+            <div id="user-avatar" class="user-avatar" onclick="toggleProfileMenu()">U</div>
         </div>
+    </header>
+
+    <div id="profile-menu" class="profile-menu">
+        <div class="menu-header">
+            <div class="menu-name" id="menu-name">Utilisateur</div>
+            <div class="menu-email" id="menu-email">non-connecté</div>
         </div>
-        <div id="list">
-            <div id="connectt">
-                <h1>Vous n'êtes pas connecté</h1>
-                <button onclick="openPopup()">Connectez-vous</button>
-            </div>
-            <div id="connectk">
-                
-            </div>
+        <div class="menu-item" onclick="logout()">
+            <img src="Res/se-deconnecter.png" alt="Logout"> Se déconnecter
         </div>
     </div>
-</div>
-<script>
-    const menu = document.getElementById('menu');
-const menudev = document.getElementById('logomenu');
 
-menudev.addEventListener('click', (event) => {
-    event.stopPropagation(); // Arrête la propagation de l'événement pour éviter la fermeture immédiate du menu
-    toggleMenu(); // Afficher ou masquer le menu
-});
+    <section class="apps-section">
+        <div class="container">
+            <div class="section-header">
+                <span>Lancer une application</span>
+            </div>
 
-// Écouter les clics en dehors du menu pour le masquer
-document.addEventListener('click', (event) => {
-    const isClickInsideMenu = menu.contains(event.target);
-    if (!isClickInsideMenu) {
-        menu.style.left = "-18%"; // Masquer le menu si le clic est en dehors du menu
-    }
-});
+            <div class="grid-apps">
+                
+                <div class="app-card" onclick="window.location.href='paper.html'">
+                    <div class="app-thumbnail">
+                        <img src="Res/fichier (2).png" alt="DeskWritter">
+                    </div>
+                    <div class="app-info">
+                        <img src="Res/fichier (2).png" class="mini-icon">
+                        <span class="app-title">Paper</span>
+                    </div>
+                </div>
 
-function toggleMenu() {
-    // Si le menu est actuellement affiché, masquez-le. Sinon, affichez-le.
-    if (menu.style.left === "0px" || menu.style.left === "") {
-        menu.style.left = "-18%"; // Masquer le menu
-    } else {
-        menu.style.left = "0"; // Afficher le menu
-    }
-}
-//------------------------------------------------------lanceur-------------------------------------
-// Sélectionnez les éléments à rediriger
-var toWritter = document.getElementById('to-writter');
-    var toCode = document.getElementById('to-code');
-    var toBloc = document.getElementById('to-bloc');
-    var tocodeleft = document.getElementById('app3');
-    var towritterleft = document.getElementById('app1');
-    var toBlocleft = document.getElementById('app2');
-    var tocoudleft = document.getElementById('app4');
-    var toCloud = document.getElementById('serv-button-cloud');
-    var toConne = document.getElementById('serv-button-connection');
-    var coscripbtn = document.getElementById('coscript');
+                <div class="app-card" onclick="window.location.href='capture.html'">
+                    <div class="app-thumbnail">
+                        <img src="Res/fichier (7).png" alt="capture">
+                    </div>
+                    <div class="app-info">
+                        <img src="Res/fichier (7).png" class="mini-icon">
+                        <span class="app-title">Capture</span>
+                    </div>
+                </div>
 
-    // Ajoutez des gestionnaires d'événements pour la redirection lors du clic
-    toWritter.addEventListener('click', function() {
-        window.location.href = 'DeskWritter.html';
-    });
-    coscripbtn.addEventListener('click', function() {
-        window.location.href = 'https://web-coscript.web.app/';
-    });
+            </div>
+        </div>
+    </section>
 
-    document.getElementById('app5').addEventListener('click', function() {
-        window.location.href = 'EnCell.html';
-    });
-    // Ajoutez des gestionnaires d'événements pour la redirection lors du clic
-    towritterleft.addEventListener('click', function() {
-        window.location.href = 'DeskWritter.html';
-    });
-    tocoudleft.addEventListener('click', function() {
-        window.location.href = 'explorer.html';
-    });
-    toBlocleft.addEventListener('click', function() {
-        window.location.href = 'BlocText.html';
-    });
-    toBloc.addEventListener('click', function() {
-        window.location.href = 'BlocText.html';
-    });
+    <section class="templates-section">
+        <div class="container">
+            <div class="section-header">
+                <span>Démarrage rapide</span>
+                <span style="font-size:13px; color:var(--primary); cursor:pointer;">Galerie des modèles</span>
+            </div>
 
-    // Fonction pour rediriger si la largeur de l'écran est inférieure à 900px
-    function redirectToDeskCodePage() {
-    var isSupported = document.documentElement.clientWidth >= 900;
-    
-    if (isSupported) {
-        window.location.href = "DeskCode.html"
-    } else {
-        displayUnsupportedModal();
-    }
-}
+            <div class="grid-templates">
+                <!--<div class="template-card" onclick="window.location.href='DeskWritter.html'">
+                    <div class="template-preview">
+                        <div class="fake-lines">
+                            <div class="line" style="height:8px; width:30%; background:#1a73e8; margin-bottom:10px;"></div>
+                            <div class="line"></div><div class="line"></div>
+                            <div class="line short"></div>
+                            <div class="line" style="margin-top:10px;"></div><div class="line"></div>
+                        </div>
+                        <img src="Res/fichier (2).png" class="template-icon-overlay">
+                    </div>
+                    <div class="template-name">CV Moderne</div>
+                    <div class="template-sub">DeskWritter</div>
+                </div>-->
 
-function displayUnsupportedModal() {
-    var modal = document.getElementById('unsupportedModal');
-    modal.style.display = "block";
-}
+                <div class="template-card" onclick="window.location.href='capture.html?model=vide'">
+                    <div class="template-preview" style="background:#ffffff;"> <div class="fake-lines">
+                            <div class="line" style="background:#000000;"></div>
+                            <div class="line" style="background:#000000;"></div>
+                            <div class="line short" style="background:#000000;"></div>
+                        </div>
+                        <img src="Res/fichier (7).png" class="template-icon-overlay">
+                    </div>
+                    <div class="template-name">Vide</div>
+                    <div class="template-sub">Capture</div>
+                </div>
 
-// Fermer le modal lorsqu'on clique sur la croix
-var closeBtn = document.getElementsByClassName("close")[0];
-closeBtn.onclick = function() {
-    var modal = document.getElementById('unsupportedModal');
-    modal.style.display = "none";
-}
+                <div class="template-card" onclick="window.location.href='paper.html?model=vide'">
+                    <div class="template-preview" style="background:#ffffff;"> <div class="fake-lines">
+                            <div class="line" style="background:#000000;"></div>
+                            <div class="line" style="background:#000000;"></div>
+                            <div class="line short" style="background:#000000;"></div>
+                        </div>
+                        <img src="Res/fichier (2).png" class="template-icon-overlay">
+                    </div>
+                    <div class="template-name">Vide</div>
+                    <div class="template-sub">Paper</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-// Fermer le modal lorsqu'on clique en dehors de celui-ci
-window.onclick = function(event) {
-    var modal = document.getElementById('unsupportedModal');
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}
-// Appeler la fonction lors du clic sur les éléments
-toCode.addEventListener('click', redirectToDeskCodePage);
-tocodeleft.addEventListener('click', redirectToDeskCodePage);
-
-
-
-</script>
-<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-storage-compat.js"></script>
-<script>
-
-        //-----------------------------------------------------------------------Gestion de la connection a prismID-----------------------------------------------
-        var popupWindow;
-          
-          // Fonction pour ouvrir la fenêtre contextuelle
-          function openPopup() {
-              var width = 500;
-              var height = 600;
-              var left = (window.innerWidth - width) / 2;
-              var top = (window.innerHeight - height) / 2;
-              var options = 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + width + ', height=' + height + ', top=' + top + ', left=' + left;
-      
-              popupWindow = window.open('auth/0/Connection.html', 'Popup', options);
-          }
-      
-          // Fonction appelée après la connexion réussie dans la fenêtre contextuelle
-          function onLoginSuccess(userInfo) {
-                // Extrayez l'e-mail de l'utilisateur
-                var userEmail = userInfo.email;
-                const clsbtn = document.getElementById("search-box-button");
-                var UUIDRC = userInfo.uid;
-                setCookie('uuid-prism',UUIDRC, 1); // Cookie expire dans 1 heure
-                checkmodcookie()
-                UUID = UUIDRC;
-
-
-              if (popupWindow) {
-                  popupWindow.close();
-              }
-          }
-
-    function getUUID() {
-        return getCookie('uuid-prism');
-    }
-
-    let uuid = getUUID();
-    
-    if (!uuid) {
-        uuid = ' ';  // Générer un nouveau UUID si aucun n'est trouvé
-        eraseCookie();
-    }
-
-    
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyAqvHUxMhKKBgpZ1TSjwlh6FHP9OVpYkKk",
-        authDomain: "prism-project-id.firebaseapp.com",
-        projectId: "prism-project-id",
-        storageBucket: "prism-project-id.appspot.com",
-        messagingSenderId: "113073047107",
-        appId: "1:113073047107:web:c1c52e3f99a6e083e0f6f6",
-        measurementId: "G-KX60DSFW9Y"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const storage = firebase.storage();
-    const auth = firebase.auth();
-
-    function checkCookie(name) {
-    const cookieValue = getCookie(name);
-    if (cookieValue !== null) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-
-document.addEventListener("DOMContentLoaded", function() {
-    checkmodcookie();
-});
-
-
-function checkmodcookie() {
-    const NC = document.getElementById('connectt');
-    const CN = document.getElementById('connectk');
-    if(checkCookie('uuid-prism') === true) {
-        NC.style.display = 'none';
-        CN.style.display = 'block';
-        const userId = getUUID(); // Récupérer l'UUID de l'utilisateur
-        // Lister les fichiers dans le stockage
-        listFiles(userId);
-    }else {
-        NC.style.display = 'flex';
-        CN.style.display = 'none';
-    }
-}
-// Fonction pour définir un cookie avec une durée d'expiration en heures
-function setCookie(name, value, hours) {
-            const date = new Date();
-            date.setTime(date.getTime() + (hours * 60 * 60 * 1000));
-            const expires = "expires=" + date.toUTCString();
-            document.cookie = name + "=" + value + ";" + expires + ";path=/";
+    <script>
+        function updateOnlineStatus() {
+            const banner = document.getElementById('offline-banner');
+            if (!navigator.onLine) {
+                if(banner) banner.style.display = 'block';
+                console.log("Mode hors-ligne activé.");
+            } else {
+                if(banner) banner.style.display = 'none';
+            }
         }
 
-        // Fonction pour obtenir la valeur d'un cookie
-        function getCookie(name) {
-            const nameEQ = name + "=";
-            const ca = document.cookie.split(';');
-            for (let i = 0; i < ca.length; i++) {
-                let c = ca[i];
-                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+        // CONFIG FIREBASE
+        const firebaseConfig = {
+            apiKey: "AIzaSyAqvHUxMhKKBgpZ1TSjwlh6FHP9OVpYkKk",
+            authDomain: "prism-project-id.firebaseapp.com",
+            projectId: "prism-project-id",
+            storageBucket: "prism-project-id.appspot.com",
+            messagingSenderId: "113073047107",
+            appId: "1:113073047107:web:c1c52e3f99a6e083e0f6f6",
+            measurementId: "G-KX60DSFW9Y"
+        };
+
+        try {
+            if (navigator.onLine) {
+                firebase.initializeApp(firebaseConfig);
+            }
+        } catch (e) {
+            console.log("Firebase n'a pas pu démarrer (Hors-ligne)");
+        }
+
+        // --- GESTION PRINCIPALE ---
+        window.onload = function() {
+            
+            // Loader
+            setTimeout(() => {
+                const loader = document.getElementById('loader');
+                if(loader) {
+                    loader.style.opacity = '0';
+                    updateOnlineStatus();
+                    setTimeout(() => loader.style.display = 'none', 500);
+                }
+            }, 800);
+
+            checkAuth();
+        };
+
+        function checkAuth() {
+        const cachedName = localStorage.getItem('desk_username');
+        const cachedEmail = localStorage.getItem('desk_email');
+
+        // ÉTAPE 1 : Affichage immédiat depuis le cache (si dispo)
+        if (cachedName) {
+            showLoggedIn(cachedName, cachedEmail || "");
+        }
+
+        // ÉTAPE 2 : Tentative de connexion Firebase SEULEMENT si en ligne et si l'objet est chargé
+        if (navigator.onLine && typeof firebase !== 'undefined') {
+            try {
+                // On initialise seulement si pas déjà fait
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                }
+                
+                firebase.auth().onAuthStateChanged((user) => {
+                    if (user) {
+                        saveUserInfo(user);
+                        showLoggedIn(user.displayName || user.email.split('@')[0], user.email);
+                    } else if (!cachedName) {
+                        showLoggedOut();
+                    }
+                });
+            } catch (e) {
+                console.warn("Firebase n'a pas pu s'initialiser :", e);
+            }
+        } else {
+            // On est hors ligne : si on n'a rien en cache, on montre l'état déconnecté
+            if (!cachedName) {
+                showLoggedOut();
+            }
+        }
+}
+
+        // --- UI ---
+        function showLoggedIn(name, email) {
+            document.getElementById('btn-login').style.display = 'none';
+            const avatar = document.getElementById('user-avatar');
+            avatar.style.display = 'flex';
+            avatar.innerText = name.charAt(0).toUpperCase();
+            
+            // Mise à jour menu
+            document.getElementById('menu-name').innerText = name;
+            document.getElementById('menu-email').innerText = email;
+        }
+
+        function showLoggedOut() {
+            document.getElementById('btn-login').style.display = 'block';
+            document.getElementById('user-avatar').style.display = 'none';
+        }
+
+        function toggleProfileMenu() {
+            const menu = document.getElementById('profile-menu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Clic en dehors pour fermer le menu
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('profile-menu');
+            const avatar = document.getElementById('user-avatar');
+            if (!menu.contains(e.target) && !avatar.contains(e.target)) {
+                menu.style.display = 'none';
+            }
+        });
+
+        // --- AUTHENTIFICATION ---
+        var popupWindow;
+        function openPopup() {
+            var w = 500, h = 600;
+            var left = (window.innerWidth - w) / 2;
+            var top = (window.innerHeight - h) / 2;
+            popupWindow = window.open('auth/0/Connection.html', 'Popup', `width=${w},height=${h},top=${top},left=${left}`);
+        }
+
+        function onLoginSuccess(userInfo) {
+            if (popupWindow) popupWindow.close();
+            setCookie('uuid-prism', userInfo.uid, 24);
+            saveUserInfo(userInfo);
+            showLoggedIn(userInfo.displayName || userInfo.email.split('@')[0], userInfo.email);
+        }
+
+        function logout() {
+            if (navigator.onLine) {
+                firebase.auth().signOut().then(() => {
+                    clearLocalData();
+                });
+            } else {
+                clearLocalData();
+            }
+        }
+
+        function saveUserInfo(user) {
+            const name = user.displayName || user.email.split('@')[0];
+            localStorage.setItem('desk_username', name);
+            localStorage.setItem('desk_email', user.email);
+        }
+
+        // --- UTILS ---
+        function checkDeviceAndRedirect(url) {
+            if (window.innerWidth >= 900) window.location.href = url;
+            else alert("Cette application nécessite un écran plus large.");
+        }
+
+        // Cookies
+        function setCookie(n, v, h) {
+            const d = new Date(); d.setTime(d.getTime() + (h*60*60*1000));
+            document.cookie = n + "=" + v + ";expires=" + d.toUTCString() + ";path=/";
+        }
+        function getCookie(n) {
+            const name = n + "="; const ca = document.cookie.split(';');
+            for(let i=0; i<ca.length; i++) {
+                let c = ca[i]; while (c.charAt(0)==' ') c = c.substring(1);
+                if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
             }
             return null;
         }
+        function eraseCookie(n) { document.cookie = n + "=; Max-Age=-99999999; path=/"; }
 
-        // Fonction pour supprimer un cookie
-        function eraseCookie(name) {
-            document.cookie = name + "=; Max-Age=-99999999;";
-        }
-
-
-        function listFiles(userId) {
-    const storageRef = firebase.storage().ref();
-    const userFilesRef = storageRef.child('users/' + userId);
-
-    userFilesRef.listAll().then((res) => {
-        const connectkDiv = document.getElementById('connectk');
-        connectkDiv.innerHTML = ''; // Vider le contenu précédent
-
-        // Créer le tableau
-        const table = document.createElement('table');
-        table.id = 'fileTable';
-
-        // Créer l'en-tête du tableau
-        const thead = document.createElement('thead');
-        thead.innerHTML = `
-            <tr>
-                <th>Nom du fichier</th>
-                <th>Type</th>
-                <th>Date de modification</th>
-                <th>Utilisateur</th>
-            </tr>
-        `;
-        table.appendChild(thead);
-
-        // Créer le corps du tableau
-        const tbody = document.createElement('tbody');
-
-        // Parcourir chaque fichier
-        res.items.forEach((itemRef) => {
-            itemRef.getMetadata().then((metadata) => {
-                const fileName = metadata.name;
-                const fileType = fileName.split('.').pop();
-                const lastModified = new Date(metadata.updated).toLocaleDateString();
-                const user = metadata.customMetadata ? metadata.customMetadata['uploadedBy'] : userId;
-
-                // Vérifier l'extension de fichier
-                if (['podx', 'podb'].includes(fileType)) {
-                    // Créer une nouvelle ligne pour chaque fichier
-                    const row = document.createElement('tr');
-
-                    // Nom du fichier avec lien de téléchargement
-                    const fileLink = document.createElement('a');
-                    itemRef.getDownloadURL().then((url) => {
-                        let finalURL = url;
-
-                        // Vérifier le type de fichier et ajuster le lien en conséquence
-                        if (fileType === 'podx') {
-                            finalURL = `https://live-prism.web.app/DeskWritter.html?link=${encodeURIComponent(url)}`;
-                        } else if (fileType === 'podb') {
-                            finalURL = `https://live-prism.web.app/BlocText.html?link=${encodeURIComponent(url)}`;
-                        }
-
-                        // Créer le lien avec la bonne URL
-                        fileLink.href = finalURL;
-                        fileLink.textContent = fileName;
-                        fileLink.target = '_blank'; // Ouvrir dans un nouvel onglet
-                    });
-
-                    const nameCell = document.createElement('td');
-                    nameCell.appendChild(fileLink);
-
-                    // Type de fichier
-                    const typeCell = document.createElement('td');
-                    typeCell.textContent = fileType;
-
-                    // Date de modification
-                    const dateCell = document.createElement('td');
-                    dateCell.textContent = lastModified;
-
-                    // Utilisateur
-                    const userCell = document.createElement('td');
-                    const displayUser = (user === userId) ? 'Vous' : user;
-                    userCell.textContent = displayUser;
-
-                    // Ajouter les cellules à la ligne
-                    row.appendChild(nameCell);
-                    row.appendChild(typeCell);
-                    row.appendChild(dateCell);
-                    row.appendChild(userCell);
-
-                    // Ajouter la ligne au corps du tableau
-                    tbody.appendChild(row);
-                }
-            }).catch((error) => {
-                console.error("Erreur lors de la récupération des métadonnées :", error);
-            });
-        });
-
-        // Ajouter le corps au tableau
-        table.appendChild(tbody);
-
-        // Ajouter le tableau au div connectk
-        connectkDiv.appendChild(table);
-    }).catch((error) => {
-        console.error("Erreur lors de la liste des fichiers :", error);
-    });
-}
-</script>
+    </script>
 </body>
 </html>
