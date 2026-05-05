@@ -112,7 +112,7 @@
     <li id="menupast"><img src="Res/paste.png" alt="Icon 2" class="icon"> Coller</li>
     <li onmousedown="event.preventDefault(); addComment()"><img src="Res//commentaire.png" alt="Commenter" class="icon" onerror="this.src='Res/fichier-2.svg'"> Commenter</li>
     <li id="openModalpara"><img src="Res/setting.png" alt="Icon 2" class="icon"> Paramètre page</li>
-    <li><img src="Res/question.png" alt="Icon 2" class="icon"> Aide en ligne</li>
+    <li onmousedown="window.location.href = 'https://wiki.projet-prism.fr/?article=dt-paper.html#';" ><img src="Res/question.png" alt="Icon 2" class="icon"> Aide en ligne</li>
   </ul>
 </div>
   <div id="top-bar">
@@ -266,25 +266,27 @@
     <option value="512">512</option>
 </select>
   <button id="apply-stand" class="class2-button-solo"><img src="Res/bold.png" alt="img"></button>
-  <button class="class2-button-solo"><img src="Res/italic.png" alt="img"></button>
-  <button class="class2-button-solo"><img src="Res/underline.png" alt="img"></button>
+  <button class="class2-button-solo"><img src="Res/italique.png" alt="img"></button>
+  <button class="class2-button-solo"><img src="Res/horizontal.png" alt="img"></button>
+  <button onclick="document.execCommand('strikeThrough', false, null);" class="class2-button-solo"><img src="Res/barre.png" alt="img"></button>
+  <button onclick="toggleCase();" class="class2-button-solo"><img src="Res/taille-de-police.png" alt="img"></button>
   <div id="tool-container-text-b">
-    <button class="class1-button" id="unordered-list-button"><img src="Res/lister.png" alt="img"></button>
-    <button class="class1-button" id="ordered-list-button"><img src="Res/listern-um.png" alt="img"></button>
-    
+    <button class="class1-button" id="unordered-list-button" onclick="formatText('insertUnorderedList')" title="Liste à puces"><img src="Res/lister.png" alt="img"></button>
+    <button class="class1-button" id="ordered-list-button" onclick="formatText('insertOrderedList')" title="Liste numérotée"><img src="Res/listern-um.png" alt="img"></button>
   </div>
 </div>
 
 <div id="tool-contener-line2">
   <button onclick="handlePrint();" id="apply-stand-new-line" class="class2-button-solo"><img src="Res/print.png" alt="img"></button>
   <button onclick="clearFormatting();" class="class2-button-solo"><img src="Res/eraser.png" alt="img"></button>
+  <button class="class2-button-solo" onclick="toggleHighlight(event)" title="Surligneur (Jaune)"><img src="Res/surligner.png" alt="Surligner" onerror="this.src='Res/fichier-2.svg'"></button>
   <div id="tool-container-text">
     <button class="class1-button" style="margin-left: 5px;"><img src="Res/align-left.png" alt="img"></button>
     <button class="class1-button"><img src="Res/align-center.png" alt="img"></button>
     <button class="class1-button"><img src="Res/align-right.png" alt="img"></button>
     <button class="class1-button"><img src="Res/justified-text.png" alt="img"></button>
-    <button class="class1-button"><img src="Res/exposant.png" alt="img"></button>
-    <button class="class1-button"><img src="Res/indice.png" alt="img"></button>
+    <button class="class1-button" onclick="formatText('superscript')" title="Exposant"><img src="Res/exposant.png" alt="img"></button>
+    <button class="class1-button" onclick="formatText('subscript')" title="Indice"><img src="Res/indice.png" alt="img"></button>
 </div>
 <div id="tool-container-color">
   <button id="black" class="class1-color-button" data-color="black"></button>
@@ -397,8 +399,15 @@
 <div id="zoom-contener">
   <img id="zoom-image" src="Res/magnifier.png" alt="Zomm1">
   <input type="range" min="50" max="200" value="100" class="barre-zoom" id="zoomBar">
-  <span id="valeur-zoom">100%</span>
+  <span style="font-family: sans-serif;" id="valeur-zoom">100%</span>
 </div>
+
+<div id="status-bar">
+  <span id="page-count-display">Page 1 / 1</span>
+  <span class="separator">|</span>
+  <span id="word-count-display">0 mot</span>
+</div>
+
   <div id="content">
     <div id="pages-container">
         </div>
@@ -411,6 +420,7 @@
       <div class="tabs">
         <button class="tablinks" onclick="openTab(event, 'MiseEnPage')">Mise en page</button>
         <button class="tablinks" onclick="openTab(event, 'Proprietes')">Propriétés</button>
+        <button class="tablinks" onclick="openTab(event, 'Personalisation')">Personnalisation</button>
         <button class="tablinks" onclick="openTab(event, 'Autre')">Autre</button>
       </div>
       
@@ -492,7 +502,27 @@
             <input type="text" id="doc-keywords" placeholder="Ex: finance, 2026, rapport" style="width: 90%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;">
         </div>
       </div>
-      
+
+      <div id="Personalisation" class="tabcontent">
+        <h3>Personnalisation du texte</h3>
+        <h4>Polices d'écriture</h4>
+        <div style="margin-bottom: 12px;">
+          <button id="import-font-btn" style="padding: 10px; border-style: solid; border-color: #555; background-color: #d1d1d1; border-radius: 5px;" title="Importer une police locale (.ttf, .otf)">Ajouter une police personnalisé</button>
+          <input type="file" id="custom-font-input" accept=".ttf, .otf, .woff, .woff2" style="display: none;">
+        </div>
+        <div style="margin-bottom: 12px;">
+        <h4>Couleur du papier</h4>
+        <div style="margin-top: 20px; background-color: #fff3cd; color: #856404; padding: 10px; border-left: 5px solid #ffeeba; margin-bottom: 15px; border-radius: 4px; font-family: sans-serif; font-size: 13px;">
+          <strong>⚠️ Attention :</strong> [BETA 2.1] Cela ne s'appliquera que au page déja écrite, les nouvelle ne serons pas prise en compte
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 5px; padding: 20px; background-color: #e2e2e2; border-radius: 15px;">
+            <button onclick="setPaperColor('#ffffff', '#000000')" style="background: #ffffff; border: 1px solid #ccc; width: 30px; height: 30px; border-radius: 50%; cursor: pointer;" title="Blanc classique"></button>
+            <button onclick="setPaperColor('#fbf0d9', '#5f4b32')" style="background: #fbf0d9; border: 1px solid #ccc; width: 30px; height: 30px; border-radius: 50%; cursor: pointer;" title="Sépia (Reposant)"></button>
+            <button onclick="setPaperColor('#1e1e1e', '#e0e0e0')" style="background: #1e1e1e; border: 1px solid #ccc; width: 30px; height: 30px; border-radius: 50%; cursor: pointer;" title="Mode Sombre"></button>
+        </div>
+      </div>
+      </div>
+
       <div id="Autre" class="tabcontent">
         <h3 style="font-family: sans-serif;">Autre</h3>
         <h1 style="font-family: sans-serif;">Paper</h1>

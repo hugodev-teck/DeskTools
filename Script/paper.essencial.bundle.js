@@ -1416,6 +1416,7 @@ function setupFileIO() {
    const saveBtns = document.querySelectorAll('#save');
    const openBtns = document.querySelectorAll('#open');
    const fileInput = document.getElementById('file-input');
+   
    saveBtns.forEach(saveBtn => {
       saveBtn.onclick = () => {
          if (currentSelectedImage) {
@@ -1434,6 +1435,21 @@ function setupFileIO() {
          const dAuthor = document.getElementById('doc-author') ? document.getElementById('doc-author').value : "";
          const dSubject = document.getElementById('doc-subject') ? document.getElementById('doc-subject').value : "";
          const dKeywords = document.getElementById('doc-keywords') ? document.getElementById('doc-keywords').value : "";
+         
+         const pageElements = document.querySelectorAll('#pages-container .page');
+         
+         let fullHtml = '';
+         pageElements.forEach(page => { fullHtml += page.innerHTML; });
+         
+         const usedFonts = {};
+         if (window.customFonts) {
+             Object.keys(window.customFonts).forEach(fontKey => {
+                 if (fullHtml.includes(fontKey)) {
+                     usedFonts[fontKey] = window.customFonts[fontKey];
+                 }
+             });
+         }
+
          const documentData = {
             metadata: {
                creationDate: now.toLocaleDateString('fr-FR'),
@@ -1452,13 +1468,15 @@ function setupFileIO() {
             },
             pages: [],
             auxiliaryData: {
-               comments: window.documentComments
+               comments: window.documentComments,
+               customFonts: usedFonts
             }
          };
-         const pageElements = document.querySelectorAll('#pages-container .page');
+         
          pageElements.forEach(page => {
             documentData.pages.push(page.innerHTML);
          });
+         
          const jsonString = JSON.stringify(documentData, null, 2);
          const blob = new Blob([jsonString], {
             type: 'application/json'
@@ -1469,6 +1487,7 @@ function setupFileIO() {
          a.click();
       };
    });
+   
    if (fileInput) {
       openBtns.forEach(openBtn => {
          openBtn.onclick = () => fileInput.click();
@@ -1496,8 +1515,24 @@ function setupFileIO() {
                   if (document.getElementById('doc-keywords')) document.getElementById('doc-keywords').value = documentData.metadata.keywords || "";
                   if (typeof updateHeaderFooter === 'function') updateHeaderFooter();
                }
-               container.innerHTML = '';
+               
                window.documentComments = documentData.auxiliaryData?.comments || {};
+               
+               if (documentData.auxiliaryData && documentData.auxiliaryData.customFonts) {
+                   const importedFonts = documentData.auxiliaryData.customFonts;
+                   Object.keys(importedFonts).forEach(key => {
+                       if (!window.customFonts[key]) {
+                           window.customFonts[key] = importedFonts[key];
+                           if (typeof registerCustomFont === 'function') {
+                               registerCustomFont(key, importedFonts[key].displayName, importedFonts[key].dataUrl);
+                           }
+                       }
+                   });
+                   localStorage.setItem('dw_custom_fonts', JSON.stringify(window.customFonts));
+               }
+               
+               container.innerHTML = '';
+               
                if (documentData.pages && documentData.pages.length > 0) {
                   documentData.pages.forEach((pageHTML, index) => {
                      const newPage = document.createElement('div');
@@ -1508,7 +1543,7 @@ function setupFileIO() {
                      newPage.addEventListener('keydown', (e) => {
                         if (e.key === 'Backspace') handleBackspace(newPage, e);
                      });
-                     newPage.innerHTML = pageHTML;
+                     newPage.innerHTML = window.cleanHTML(pageHTML);
                      container.appendChild(newPage);
                   });
                }
@@ -1524,19 +1559,21 @@ function setupFileIO() {
                }
             }
             catch (error) {
-               console.log("Ancien format .dw détecté.");
-               container.innerHTML = content;
+               alert("Ancien format .dw détecté.");
+               container.innerHTML = window.cleanHTML(content);;
                container.querySelectorAll('.page').forEach(p => {
                   p.contentEditable = true;
                   p.addEventListener('input', () => rebalancePages(p));
                   p.addEventListener('focus', () => activePage = p);
                });
             }
+            updateStatusBar();
          };
          reader.readAsText(file);
       };
    }
 }
+
 if (importInput) {
    importInput.addEventListener('change', function (e) {
       const file = e.target.files[0];
@@ -2190,3 +2227,273 @@ function reattachPageListeners() {
         };
     });
 };
+
+window.customFonts = JSON.parse(localStorage.getItem('dw_custom_fonts')) || {};
+
+const importFontBtn = document.getElementById('import-font-btn');
+const customFontInput = document.getElementById('custom-font-input');
+const fontSelect = document.getElementById('font-family');
+
+window.registerCustomFont = async function(fontSystemName, displayName, dataUrl) {
+    try {
+        const customFont = new FontFace(fontSystemName, `url(${dataUrl})`);
+        const loadedFont = await customFont.load();
+        document.fonts.add(loadedFont);
+
+        let customGroup = document.getElementById('custom-fonts-optgroup');
+        if (!customGroup) {
+            customGroup = document.createElement('optgroup');
+            customGroup.id = 'custom-fonts-optgroup';
+            customGroup.label = 'Vos Polices (Importées)';
+            if (fontSelect) fontSelect.appendChild(customGroup);
+        }
+
+        if (!Array.from(customGroup.children).some(opt => opt.value === fontSystemName)) {
+            const newOption = document.createElement('option');
+            newOption.value = fontSystemName;
+            newOption.textContent = displayName;
+            newOption.style.fontFamily = fontSystemName; 
+            customGroup.appendChild(newOption);
+        }
+    } catch (err) {
+        console.error("Erreur lors de l'injection de la police :", err);
+    }
+};
+
+Object.keys(window.customFonts).forEach(key => {
+    registerCustomFont(key, window.customFonts[key].displayName, window.customFonts[key].dataUrl);
+});
+
+if (importFontBtn && customFontInput) {
+    importFontBtn.onclick = (e) => {
+        e.preventDefault();
+        customFontInput.click();
+    };
+
+    customFontInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const displayName = file.name.substring(0, file.name.lastIndexOf('.'));
+        const fontSystemName = 'CustomFont_' + Date.now();
+
+        const reader = new FileReader();
+        reader.onload = async (evt) => {
+            const dataUrl = evt.target.result;
+            
+            window.customFonts[fontSystemName] = { displayName, dataUrl };
+            localStorage.setItem('dw_custom_fonts', JSON.stringify(window.customFonts));
+
+            await registerCustomFont(fontSystemName, displayName, dataUrl);
+            if (fontSelect) fontSelect.value = fontSystemName;
+            document.execCommand('fontName', false, fontSystemName);
+
+            const activePage = document.querySelector('.page');
+            if (activePage && typeof rebalancePages === 'function') {
+                setTimeout(() => rebalancePages(activePage), 50);
+            }
+        };
+        reader.readAsDataURL(file); 
+        
+        e.target.value = '';
+    });
+}
+
+document.addEventListener('selectionchange', () => {
+    const sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0) return;
+
+    let node = sel.focusNode;
+    if (!node) return;
+    
+    if (node.nodeType === 3) node = node.parentNode; 
+
+    if (!node.closest('.page')) return;
+
+    const fontSelect = document.getElementById('font-family');
+    const sizeSelect = document.getElementById('font-size');
+
+    if (fontSelect) {
+        let fontName = document.queryCommandValue('fontName');
+        if (!fontName) {
+            fontName = window.getComputedStyle(node).fontFamily;
+        }
+        
+        if (fontName) {
+            fontName = fontName.replace(/['"]/g, '').split(',')[0].trim();
+            
+            for (let opt of fontSelect.options) {
+                if (opt.value.toLowerCase() === fontName.toLowerCase() || opt.text.toLowerCase() === fontName.toLowerCase()) {
+                    fontSelect.value = opt.value;
+                    break;
+                }
+            }
+        }
+    }
+
+    if (sizeSelect) {
+        let execSize = document.queryCommandValue('fontSize');
+        
+        const reverseSizeMap = { "1": "8", "2": "10", "3": "12", "4": "14", "5": "20", "6": "24", "7": "36" };
+        
+        if (execSize && reverseSizeMap[execSize]) {
+            sizeSelect.value = reverseSizeMap[execSize];
+        } else {
+            let pxSize = window.getComputedStyle(node).fontSize;
+            if (pxSize) {
+                let pxVal = parseFloat(pxSize);
+                let ptVal = Math.round(pxVal * 0.75); 
+                
+                let bestOption = "12";
+                let minDiff = Infinity;
+                for (let opt of sizeSelect.options) {
+                    let optVal = parseInt(opt.value);
+                    let diff = Math.abs(optVal - ptVal);
+                    if (diff < minDiff) {
+                        minDiff = diff;
+                        bestOption = opt.value;
+                    }
+                }
+                sizeSelect.value = bestOption;
+            }
+        }
+    }
+});
+
+window.formatText = function(command) {
+    event.preventDefault(); 
+
+    document.execCommand(command, false, null);
+    
+    const activePage = document.activeElement.closest('.page') || window.activePage || document.querySelector('.page');
+    if (activePage && typeof rebalancePages === 'function') {
+        setTimeout(() => rebalancePages(activePage), 50);
+    }
+};
+
+window.toggleHighlight = function(e) {
+    if (e) e.preventDefault();
+    
+    let currentColor = document.queryCommandValue('backColor');
+    
+    const isYellow = (currentColor === 'rgb(255, 255, 0)' || currentColor === 'yellow' || currentColor === '#ffff00');
+
+    if (isYellow) {
+        document.execCommand('hiliteColor', false, 'transparent'); // Pour Chrome/Safari
+        document.execCommand('backColor', false, 'transparent');   // Pour Firefox
+    } else {
+        document.execCommand('hiliteColor', false, 'yellow'); // Pour Chrome/Safari
+        document.execCommand('backColor', false, 'yellow');   // Pour Firefox
+    }
+};
+
+function toggleCase() {
+    const selection = window.getSelection();
+    if (!selection.rangeCount || selection.isCollapsed) return; 
+
+    const text = selection.toString();
+    
+    const newText = (text === text.toUpperCase()) ? text.toLowerCase() : text.toUpperCase();
+    
+    document.execCommand('insertText', false, newText);
+};
+
+function setPaperColor(bgColor, textColor) {
+    document.querySelectorAll('.page').forEach(page => {
+        page.style.backgroundColor = bgColor;
+        page.style.color = textColor;
+    });
+};
+
+function updateStatusBar() {
+    const pages = document.querySelectorAll('.page');
+    if (pages.length === 0) return;
+
+    let fullText = "";
+    pages.forEach(page => {
+        fullText += page.innerText + " ";
+    });
+    
+    const words = fullText.trim().split(/\s+/).filter(word => word.length > 0);
+    const wordCount = words.length;
+    
+    const wordDisplay = wordCount <= 1 ? `${wordCount} mot` : `${wordCount} mots`;
+    document.getElementById('word-count-display').textContent = wordDisplay;
+
+    const totalPages = pages.length;
+    let currentPageIndex = 0;
+
+    const selection = window.getSelection();
+    if (selection.rangeCount > 0) {
+        let node = selection.anchorNode;
+        if (node) {
+            const activePage = node.nodeType === 3 ? node.parentNode.closest('.page') : node.closest('.page');
+            if (activePage) {
+                currentPageIndex = Array.from(pages).indexOf(activePage);
+            }
+        }
+    }
+
+    document.getElementById('page-count-display').textContent = `Page ${currentPageIndex + 1} / ${totalPages}`;
+};
+
+function triggerIfPage(event) {
+    if (!event.target.closest('.page')) return;
+    
+    updateStatusBar();
+}
+
+window.cleanHTML = function(htmlString) {
+    if (!htmlString) return "";
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlString, 'text/html');
+
+    const badTags = ['script', 'iframe', 'object', 'embed', 'applet', 'meta', 'link', 'base', 'style'];
+    badTags.forEach(tag => {
+        doc.querySelectorAll(tag).forEach(el => el.remove());
+    });
+
+    const safeChartClick = /^(openEditChart|deleteChart)\('chart-\d+'\)$/;
+    const safeTocClick = /^document\.getElementById\('dw-heading-[\w-]+'\)\.scrollIntoView\(\{behavior:\s*'smooth',\s*block:\s*'center'\}\)$/;
+    const safeTocBtnClick = /^(generateTableOfContents\(\)|deleteTableOfContents\(\))$/;
+    const safeHoverColor = /^this\.style\.color='#[0-9a-fA-F]+'$/;
+
+    doc.querySelectorAll('*').forEach(el => {
+        
+        if (el.hasAttribute('href') && el.getAttribute('href').trim().toLowerCase().startsWith('javascript:')) {
+            el.removeAttribute('href');
+        }
+
+        Array.from(el.attributes).forEach(attr => {
+            const attrName = attr.name.toLowerCase();
+            
+            if (attrName.startsWith('on')) {
+                const attrValue = attr.value.trim();
+                let isSafe = false;
+
+                if (attrName === 'onclick') {
+                    if (safeChartClick.test(attrValue) || safeTocClick.test(attrValue) || safeTocBtnClick.test(attrValue)) {
+                        isSafe = true;
+                    }
+                } else if (attrName === 'onmouseover' || attrName === 'onmouseout') {
+                    if (safeHoverColor.test(attrValue)) {
+                        isSafe = true;
+                    }
+                }
+
+                if (!isSafe) {
+                    el.removeAttribute(attrName);
+                }
+            }
+        });
+    });
+
+    return doc.body.innerHTML;
+};
+
+document.addEventListener('input', triggerIfPage);
+document.addEventListener('keyup', triggerIfPage);
+document.addEventListener('mouseup', triggerIfPage);
+
+window.addEventListener('DOMContentLoaded', updateStatusBar);

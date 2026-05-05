@@ -1600,3 +1600,24 @@ html {
     transform: scale(1.1);
     box-shadow: 0 4px 6px rgba(14, 165, 233, 0.2);
 }
+
+#status-bar {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    background-color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    font-family: sans-serif;
+    font-size: 13px;
+    color: #4b5563; /* Gris foncé */
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    z-index: 1000;
+}
+
+#status-bar .separator {
+    color: #d1d5db; /* Gris très clair pour la barre verticale */
+}
