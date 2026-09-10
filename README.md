@@ -1,30 +1,29 @@
 # DeskTools
+> **Une suite d'outils polyvalente, moderne et open source conçue pour centraliser vos espaces de travail.**
+---
 
-![desktoolslogo](https://github.com/hugodev-teck/DeskTools/assets/84953759/4f835d91-4fe4-4bd3-893a-d90cf30f94b1)
+## À propos du projet
+DeskTools regroupe plusieurs fonctionnalités essentielles au sein d'une seule et même plateforme intuitive. Initialement pensé comme un éditeur de texte et de code performant (notamment avec notre application **Paper** et ses outils intégrés de traitement de documents, de formules mathématiques LaTeX et de graphiques), DeskTools a pour ambition d'évoluer vers une solution complète intégrant de puissants modules annexes.
 
-# A propos de ce code
-DeskTools est une suite d'outils polyvalente conçue pour offrir une expérience optimale aux utilisateurs, en regroupant plusieurs fonctionnalités essentielles au sein d'une seule plateforme. Initialement développé en tant qu'éditeur de texte et de code, DeskTools vise à évoluer vers une solution complète en intégrant un éventail de fonctionnalités supplémentaires, notamment un logiciel de traitement d'images alimenté par l'intelligence artificielle et un tableur.
-
-DeskTools s'engage à offrir des fonctionnalités de pointe tout en maintenant une interface utilisateur intuitive et facile à utiliser. En tant que projet open source, nous accueillons les contributions de la communauté pour enrichir et améliorer continuellement notre suite d'outils.
+Notre engagement : allier des fonctionnalités de pointe à une interface utilisateur fluide, épurée et accessible.
 
 > [!CAUTION]
-> Ce projet est encore en phase de développement et pourrait présenter quelques imperfections ou vulnérabilités. Cependant, nous travaillons activement pour minimiser ces risques
+> Ce projet est actuellement en cours de développement actif. Des imperfections ou des changements d'architecture peuvent survenir, mais nous travaillons continuellement pour stabiliser et enrichir l'expérience utilisateur.
 
-# A propos
-DeskTools s'engage à offrir des fonctionnalités de pointe tout en maintenant une interface utilisateur intuitive et facile à utiliser. En tant que projet open source, nous accueillons les contributions de la communauté pour enrichir et améliorer continuellement notre suite d'outils.
+---
 
-# Licence
-Prism 2 est distribué sous la licence CC BY-NC-ND (Attribution-NonCommercial-NoDerivs), ce qui signifie que vous pouvez partager ce contenu en le téléchargeant et en le diffusant, à condition de respecter les conditions suivantes :
+## Fonctionnalités clés
+* **Éditeur de documents multi-pages avancé (*Paper*)** : Gestion dynamique des pages, mise en page personnalisable (A4, A5, marges), en-têtes et pieds de page.
+* **Édition mathématique professionnelle** : Intégration de KaTeX avec une barre d'outils dédiée, des presets scientifiques complets (matrices, intégrales, symboles logiques) et un alignement dynamique.
+* **Insertion de graphiques interactifs** : Création et personnalisation de graphiques en barres, en lignes, camemberts ou diagrammes avancés.
+* **Outils collaboratifs et utilitaires** : Gestion des commentaires, tables des matières automatiques, tableurs intégrés et bien plus encore.
 
-* Attribution (BY) : Vous devez attribuer l'œuvre à son auteur original, en citant le nom de l'auteur.
-* NonCommercial (NC) : Vous n'êtes pas autorisé à utiliser ce contenu à des fins commerciales. Cela signifie qu'il ne peut pas être vendu ni utilisé pour générer des revenus.
-* NoDerivs (ND) : Vous ne pouvez pas créer d'œuvres dérivées à partir de ce contenu. Les modifications, transformations ou adaptations ne sont pas autorisées.
+---
 
-Nous vous encourageons à consulter le texte complet de la licence CC BY-NC-ND. Cette licence vise à protéger les droits de l'auteur tout en permettant le partage et la distribution non commerciale du contenu.
+## Licence
+Ce projet est distribué sous la licence **CC BY-NC-ND** (Attribution-NonCommercial-NoDerivs) :
+* **Attribution (BY)** : Vous devez créditer l'auteur original.
+* **NonCommercial (NC)** : Aucune utilisation commerciale ou génération de revenus n'est autorisée.
+* **NoDerivs (ND)** : Aucune modification ou œuvre dérivée n'est permise sans autorisation.
 
-# Liens Utiles
-[GitHub de Prism](https://github.com/hugodev-teck/Prism/) : Suivez le developement de PRISM OS
-
-[GitHub](https://github.com/hugodev-teck/DeskTools/) : DeskTools - Suivez notre développement, contribuez et donnez-nous votre avis !
-
-[SiteWeb](https://live-prism.web.app/) : Restez à jour avec les dernières fonctionnalités et annonces concernant DeskTools.
+Consultez le texte complet de la licence pour plus de détails.

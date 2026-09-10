@@ -5,6 +5,9 @@
   <link rel="icon" href="Res/fichier-2.svg" type="image/x-icon">
 <title>Nouveau document texte - Paper</title>
 <link rel="stylesheet" href="Styles/paper.essancial.style.css">
+<!-- KaTeX pour le rendu des formules mathématiques -->
+<link rel="stylesheet" href="Lib/katex.min.css">
+<script defer src="Lib/katex.min.js"></script>
 </head>
 <body>
   <div id="loader">
@@ -136,10 +139,6 @@
           <button class="menubtnm" id="open">
             <img src="Res/open.png" alt="arrow">
             <h1>Ouvrir</h1>
-          </button>
-          <button class="menubtnm" id="Conn-btn" onclick="openPopup(); toggleMenu();">
-            <img src="Res/profile-user.png" alt="arrow">
-            <h1>Connection à PRISMID</h1>
           </button>
           <button class="menubtnm" id="closebtn" onclick="toggleMenu();">
             <img src="Res/arrow.png" alt="arrow">
@@ -375,6 +374,11 @@
   <h1>spéciaux</h1>
 </button>
 
+<button class="tool-container-micro-btn" onclick="openLatexEditor()">
+  <img src="Res/pi.png" alt="LaTeX" onerror="this.src='Res/fichier-2.svg'">
+  <h1>Formule</h1>
+</button>
+
   </div>
 
   <div class="tool-group">
@@ -585,6 +589,166 @@
     <div style="text-align: right; margin-top: 20px;">
          <button onclick="saveChartData()" style="background-color: #0ea5e9; color: white; border: none; padding: 12px 25px; border-radius: 6px; cursor: pointer; font-weight: bold;">
           Appliquer au graphique
+        </button>
+    </div>
+  </div>
+</div>
+
+<!-- MENU ÉDITEUR LATEX -->
+<div id="modal-latex-edit" class="modal" style="z-index: 1000000;">
+  <div class="modal-content" style="width: 600px; padding: 25px; border-radius: 12px;">
+    <span class="closebtn" onclick="document.getElementById('modal-latex-edit').style.display='none'">&times;</span>
+    <h2 style="margin-top: 0; color: #333;">Éditeur d'équation (LaTeX)</h2>
+    
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 5px;">
+        <label style="font-weight: bold; font-size: 13px; color: #555;">Votre formule :</label>
+        
+        <div>
+            <label style="font-size: 12px; color: #666;">Alignement :</label>
+            <select id="latex-align" onchange="previewLatex()" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; margin-left: 5px;">
+                <option value="left">À gauche</option>
+                <option value="center" selected>Centré</option>
+                <option value="right">À droite</option>
+            </select>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 8px; margin-bottom: 5px; background: #e5e7eb; padding: 8px; border-radius: 4px; flex-wrap: wrap; align-items: center;">
+        
+        <button onclick="insertLatex('\\frac{}{} ', 2)" style="cursor:pointer; padding:4px 10px; border:1px solid #ccc; border-radius:4px; background:#fff; font-weight:bold;" title="Fraction">a/b</button>
+        <button onclick="insertLatex('^{} ', 2)" style="cursor:pointer; padding:4px 10px; border:1px solid #ccc; border-radius:4px; background:#fff; font-weight:bold;" title="Exposant">X²</button>
+        <button onclick="insertLatex('_{} ', 2)" style="cursor:pointer; padding:4px 10px; border:1px solid #ccc; border-radius:4px; background:#fff; font-weight:bold;" title="Indice">X_2</button>
+        <button onclick="insertLatex('\\sqrt{} ', 2)" style="cursor:pointer; padding:4px 10px; border:1px solid #ccc; border-radius:4px; background:#fff; font-weight:bold;" title="Racine carrée">√</button>
+        
+        <span style="color: #9ca3af; margin: 0 5px;">|</span>
+
+        <select id="latex-presets" onchange="handleLatexPreset(this)" style="padding: 5px; border: 1px solid #ccc; border-radius: 4px; flex-grow: 1; cursor: pointer; max-width: 300px;">
+            <option value="">+ Insérer un symbole ou une structure...</option>
+            
+            <optgroup label="Structures (Matrices & Systèmes)">
+                <option value="\begin{pmatrix} a & b \\ c & d \end{pmatrix} ">() Matrice (2x2)</option>
+                <option value="\begin{bmatrix} a & b \\ c & d \end{bmatrix} ">[] Matrice carrée</option>
+                <option value="\begin{vmatrix} a & b \\ c & d \end{vmatrix} ">|| Déterminant (2x2)</option>
+                <option value="\begin{cases} x & \text{si } A \\ y & \text{sinon} \end{cases} ">{ Système d'équations</option>
+            </optgroup>
+
+            <optgroup label="Analyse & Calcul">
+                <option value="\int_{}^{} |4">∫ Intégrale simple</option>
+                <option value="\iint_{}^{} |4">∬ Intégrale double</option>
+                <option value="\iiint_{}^{} |4">∭ Intégrale triple</option>
+                <option value="\oint_{}^{} |4">∮ Intégrale curviligne</option>
+                <option value="\sum_{i=1}^{n} ">∑ Somme (complète)</option>
+                <option value="\prod_{i=1}^{n} ">∏ Produit (complet)</option>
+                <option value="\lim_{x \to \infty} ">lim Limite</option>
+                <option value="\infty ">∞ Infini</option>
+                <option value="\partial ">∂ Dérivée partielle</option>
+                <option value="\nabla ">∇ Gradient (Nabla)</option>
+                <option value="\mathrm{d} ">d Différentielle</option>
+            </optgroup>
+
+            <optgroup label="Vecteurs & Décorations">
+                <option value="\vec{} |2">→ Vecteur</option>
+                <option value="\overrightarrow{AB} ">⟶ Vecteur long</option>
+                <option value="\bar{} |2">¯ Barre (Moyenne)</option>
+                <option value="\hat{} |2">^ Chapeau (Angle)</option>
+                <option value="\dot{} |2">. Point (Dérivée temps)</option>
+                <option value="\ddot{} |2">.. Double point</option>
+            </optgroup>
+
+            <optgroup label="Ensembles Numériques">
+                <option value="\mathbb{R} ">ℝ Réels</option>
+                <option value="\mathbb{N} ">ℕ Entiers naturels</option>
+                <option value="\mathbb{Z} ">ℤ Entiers relatifs</option>
+                <option value="\mathbb{Q} ">ℚ Rationnels</option>
+                <option value="\mathbb{C} ">ℂ Complexes</option>
+                <option value="\emptyset ">∅ Ensemble vide</option>
+            </optgroup>
+
+            <optgroup label="Logique & Ensembles">
+                <option value="\in ">∈ Appartient</option>
+                <option value="\notin ">∉ N'appartient pas</option>
+                <option value="\subset ">⊂ Inclus</option>
+                <option value="\subseteq ">⊆ Inclus ou égal</option>
+                <option value="\cup ">∪ Union</option>
+                <option value="\cap ">∩ Intersection</option>
+                <option value="\forall ">∀ Quel que soit</option>
+                <option value="\exists ">∃ Il existe</option>
+                <option value="\Rightarrow ">⇒ Implique</option>
+                <option value="\iff ">⇔ Équivaut</option>
+            </optgroup>
+
+            <optgroup label="Opérateurs & Relations">
+                <option value="\times ">× Multiplication</option>
+                <option value="\cdot ">· Point (Multiplication)</option>
+                <option value="\div ">÷ Division</option>
+                <option value="\pm ">± Plus ou moins</option>
+                <option value="\mp ">∓ Moins ou plus</option>
+                <option value="\neq ">≠ Différent</option>
+                <option value="\approx ">≈ Environ</option>
+                <option value="\equiv ">≡ Congru / Identique</option>
+                <option value="\propto ">∝ Proportionnel</option>
+                <option value="\le ">≤ Inférieur ou égal</option>
+                <option value="\ge ">≥ Supérieur ou égal</option>
+                <option value="\ll ">≪ Très inférieur</option>
+                <option value="\gg ">≫ Très supérieur</option>
+            </optgroup>
+            
+            <optgroup label="Grandes Parenthèses (Ajustables)">
+                <option value="\left(  \right) |8">( ) Parenthèses auto</option>
+                <option value="\left[  \right] |8">[ ] Crochets auto</option>
+                <option value="\left\{  \right\} |10">{ } Accolades auto</option>
+                <option value="\left|  \right| |8">| | Valeur absolue auto</option>
+            </optgroup>
+
+            <optgroup label="Lettres Grecques">
+                <option value="\alpha ">α Alpha</option>
+                <option value="\beta ">β Beta</option>
+                <option value="\gamma ">γ Gamma</option>
+                <option value="\Gamma ">Γ Gamma (Maj)</option>
+                <option value="\delta ">δ Delta</option>
+                <option value="\Delta ">Δ Delta (Maj)</option>
+                <option value="\epsilon ">ε Epsilon</option>
+                <option value="\theta ">θ Theta</option>
+                <option value="\Theta ">Θ Theta (Maj)</option>
+                <option value="\lambda ">λ Lambda</option>
+                <option value="\mu ">μ Mu</option>
+                <option value="\pi ">π Pi</option>
+                <option value="\sigma ">σ Sigma</option>
+                <option value="\Sigma ">Σ Sigma (Maj)</option>
+                <option value="\phi ">φ Phi</option>
+                <option value="\omega ">ω Omega</option>
+                <option value="\Omega ">Ω Omega (Maj)</option>
+            </optgroup>
+
+            <optgroup label="Trigonométrie & Fonctions">
+                <option value="\sin() |2">sin()</option>
+                <option value="\cos() |2">cos()</option>
+                <option value="\tan() |2">tan()</option>
+                <option value="\arcsin() |2">arcsin()</option>
+                <option value="\arccos() |2">arccos()</option>
+                <option value="\arctan() |2">arctan()</option>
+                <option value="\ln() |2">ln()</option>
+                <option value="\log_{} |2">log()</option>
+                <option value="\exp() |2">exp()</option>
+            </optgroup>
+        </select>
+    </div>
+
+    <textarea id="latex-input" rows="5" placeholder="Ex: E = mc^2&#10;(Appuyez sur Entrée pour passer à la ligne)" style="width: 100%; box-sizing: border-box; padding: 10px; margin-bottom: 15px; font-family: monospace; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;" oninput="previewLatex()"></textarea>
+
+    <label style="font-weight: bold; font-size: 13px; color: #555;">Prévisualisation :</label>
+    <div id="latex-preview" style="min-height: 70px; display: flex; align-items: center; justify-content: center; padding: 15px; background: #fdfdfd; border: 1px dashed #ccc; border-radius: 4px; margin-top: 5px; margin-bottom: 20px; font-size: 18px;">
+    </div>
+
+    <input type="hidden" id="current-latex-id" value="">
+
+    <div style="margin-top: 20px; background-color: #fff3cd; color: #856404; padding: 10px; border-left: 5px solid #ffeeba; margin-bottom: 15px; border-radius: 4px; font-family: sans-serif; font-size: 13px;">
+        <strong>⚠️ Attention :</strong> Une formule trop grande peut provoquer un blocage du navigateur. Il est recommandé de ne pas dépasser 4 lignes de formule.
+      </div>
+    
+    <div style="text-align: right;">
+         <button onclick="saveLatexFormula()" style="background-color: #0ea5e9; color: white; border: none; padding: 12px 25px; border-radius: 6px; cursor: pointer; font-weight: bold;">
+          Insérer l'équation
         </button>
     </div>
   </div>

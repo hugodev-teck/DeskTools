@@ -402,6 +402,19 @@ const rebalancePages = (startPage) => {
                     continue;
                 }
 
+                const isSpecialBlock = elToMove.classList && (
+                  elToMove.classList.contains('dw-html-chart') || 
+                  elToMove.classList.contains('dw-latex-wrapper') ||
+                  elToMove.classList.contains('dw-image-wrapper') || 
+                  elToMove.classList.contains('dw-toc-line')
+               );
+
+               if (isSpecialBlock) {
+                  nextPage.insertBefore(elToMove, nextPage.firstChild);
+                  if (isOnlyChild) break;
+                  continue;
+               }
+
                 const splittableTags = ['P', 'DIV', 'H1', 'H2', 'H3', 'H4', 'SPAN', 'B', 'I', 'U', 'LI']; 
                 
                 if (splittableTags.includes(elToMove.tagName)) {
@@ -492,15 +505,28 @@ const rebalancePages = (startPage) => {
                 
                 if (currentPage.scrollHeight > currentPage.clientHeight) {
                     const splittableTags = ['P', 'DIV', 'H1', 'H2', 'H3', 'H4', 'SPAN', 'B', 'I', 'U', 'LI'];
-                    const canBeCut = (splittableTags.includes(firstChild.tagName) && firstChild.textContent.trim() !== '') || firstChild.tagName === 'TABLE';
-                    
-                    if (canBeCut) {
+
+                    const isSpecialPull = firstChild.classList && (
+                        firstChild.classList.contains('dw-html-chart') || 
+                        firstChild.classList.contains('dw-latex-wrapper') ||
+                        firstChild.classList.contains('dw-image-wrapper') || 
+                        firstChild.classList.contains('dw-toc-line')
+                     );
+                
+
+
+                     const canBeCut = !isSpecialPull && (
+                        (splittableTags.includes(firstChild.tagName) && firstChild.textContent.trim() !== '') || 
+                        firstChild.tagName === 'TABLE'
+                     );
+                     
+                     if (canBeCut) {
                         overflowedDuringPull = true;
                         break; 
-                    } else {
+                     } else {
                         nextPage.insertBefore(firstChild, nextPage.firstChild);
                         break;
-                    }
+                     }
                 }
             }
 
@@ -2455,6 +2481,7 @@ window.cleanHTML = function(htmlString) {
     });
 
     const safeChartClick = /^(openEditChart|deleteChart)\('chart-\d+'\)$/;
+    const safeLatexClick = /^(openLatexEditor|deleteLatex)\('(latex-\d+)'\)$/; // <-- AJOUTÉ POUR LE LATEX
     const safeTocClick = /^document\.getElementById\('dw-heading-[\w-]+'\)\.scrollIntoView\(\{behavior:\s*'smooth',\s*block:\s*'center'\}\)$/;
     const safeTocBtnClick = /^(generateTableOfContents\(\)|deleteTableOfContents\(\))$/;
     const safeHoverColor = /^this\.style\.color='#[0-9a-fA-F]+'$/;
@@ -2473,7 +2500,7 @@ window.cleanHTML = function(htmlString) {
                 let isSafe = false;
 
                 if (attrName === 'onclick') {
-                    if (safeChartClick.test(attrValue) || safeTocClick.test(attrValue) || safeTocBtnClick.test(attrValue)) {
+                    if (safeChartClick.test(attrValue) || safeLatexClick.test(attrValue) || safeTocClick.test(attrValue) || safeTocBtnClick.test(attrValue)) {
                         isSafe = true;
                     }
                 } else if (attrName === 'onmouseover' || attrName === 'onmouseout') {
@@ -2491,6 +2518,253 @@ window.cleanHTML = function(htmlString) {
 
     return doc.body.innerHTML;
 };
+
+let savedLatexRange = null;
+
+window.openLatexEditor = function(id = null) {
+    const modal = document.getElementById('modal-latex-edit');
+    const input = document.getElementById('latex-input');
+    const preview = document.getElementById('latex-preview');
+    const idField = document.getElementById('current-latex-id');
+    const alignSelect = document.getElementById('latex-align');
+
+    // Mémorise la position exacte du curseur dans la page au moment d'ouvrir
+    const sel = window.getSelection();
+    if (sel && sel.rangeCount > 0 && !id) {
+        savedLatexRange = sel.getRangeAt(0);
+    } else if (!id) {
+        savedLatexRange = null;
+    }
+
+    if (id) {
+        // Mode Modification
+        const container = document.getElementById(id);
+        input.value = container.getAttribute('data-latex-raw').replace(/\\n/g, '\n');
+        idField.value = id;
+        alignSelect.value = container.getAttribute('data-latex-align') || 'center';
+    } else {
+        // Mode Création
+        input.value = "";
+        idField.value = "";
+        alignSelect.value = 'center';
+    }
+    
+    preview.innerHTML = "";
+    previewLatex(); 
+    modal.style.display = 'block';
+};
+
+window.previewLatex = function() {
+    const rawInput = document.getElementById('latex-input').value;
+    const preview = document.getElementById('latex-preview');
+    const alignVal = document.getElementById('latex-align').value;
+    const processedLatex = rawInput.replace(/\n/g, ' \\\\ ');
+
+    preview.style.textAlign = alignVal;
+
+    try {
+        katex.render(processedLatex, preview, { throwOnError: false, displayMode: true });
+    } catch (e) {
+        preview.innerHTML = "<span style='color:red; font-size:12px;'>Erreur de syntaxe LaTeX</span>";
+    }
+};
+
+window.saveLatexFormula = function() {
+    const rawLatex = document.getElementById('latex-input').value;
+    let elementId = document.getElementById('current-latex-id').value;
+    const alignVal = document.getElementById('latex-align').value;
+
+    if (!rawLatex.trim()) return;
+
+    if (!elementId) {
+        elementId = 'latex-' + Date.now();
+        const html = `
+            <div class="dw-html-chart dw-latex-wrapper" id="${elementId}" data-latex-raw="" data-latex-align="${alignVal}" contenteditable="false" style="position: relative; width: 100%; max-width: 100%; height: auto; min-height: 50px; text-align: ${alignVal}; background: transparent; border: none; box-shadow: none; padding: 10px 0; margin: 10px 0;" onmouseenter="showLatexOverlay(this, '${elementId}')" onmouseleave="hideLatexOverlay()">
+                <div class="latex-render-zone" style="font-size: 18px; width: 100%;"></div>
+            </div>&nbsp;
+        `;
+        
+        // On utilise la sélection mémorisée à l'ouverture de la modale
+        if (savedLatexRange) {
+            const page = savedLatexRange.startContainer.nodeType === 3 ? savedLatexRange.startContainer.parentNode.closest('.page') : savedLatexRange.startContainer.closest('.page');
+            if (page) {
+                savedLatexRange.deleteContents();
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                const frag = document.createDocumentFragment();
+                while (tempDiv.firstChild) {
+                    frag.appendChild(tempDiv.firstChild);
+                }
+                savedLatexRange.insertNode(frag);
+                savedLatexRange = null; // On réinitialise
+                
+                if (typeof rebalancePages === 'function') rebalancePages(page);
+            } else {
+                insertAtCursorHTML(html);
+            }
+        } else {
+            insertAtCursorHTML(html);
+        }
+    }
+
+    // MISE À JOUR DU RENDU
+    setTimeout(() => {
+        const container = document.getElementById(elementId);
+        if (container) {
+            container.setAttribute('data-latex-raw', rawLatex.replace(/"/g, '&quot;').replace(/\n/g, '\\n'));
+            container.setAttribute('data-latex-align', alignVal);
+            container.style.textAlign = alignVal;
+            
+            const renderZone = container.querySelector('.latex-render-zone');
+            const processedLatex = rawLatex.replace(/\n/g, ' \\\\ ');
+            
+            katex.render(processedLatex, renderZone, { throwOnError: false, displayMode: true });
+            
+            const page = container.closest('.page');
+            if (page && typeof rebalancePages === 'function') rebalancePages(page);
+        }
+    }, 50);
+
+    document.getElementById('modal-latex-edit').style.display = 'none';
+};
+
+window.deleteLatex = function(id) {
+    const element = document.getElementById(id);
+    if (element) {
+        const page = element.closest('.page');
+        
+        hideLatexOverlay();
+        const overlay = document.getElementById('global-latex-overlay');
+        if (overlay) overlay.style.display = 'none';
+
+        element.remove();
+        
+        if (page && typeof rebalancePages === 'function') {
+            rebalancePages(page);
+        }
+    }
+};
+
+window.latexHideTimeout = null;
+
+window.showLatexOverlay = function(wrapper, id) {
+    if (window.latexHideTimeout) {
+        clearTimeout(window.latexHideTimeout);
+    }
+
+    let overlay = document.getElementById('global-latex-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'global-latex-overlay';
+        overlay.style.cssText = "position: fixed; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(2px); display: flex; justify-content: center; align-items: center; gap: 15px; z-index: 2; border-radius: 6px;";
+        overlay.innerHTML = `
+            <button class="dw-chart-btn dw-btn-edit" id="latex-overlay-edit">Modifier</button>
+            <button class="dw-chart-btn dw-btn-delete" id="latex-overlay-delete">Supprimer</button>
+        `;
+        document.body.appendChild(overlay);
+
+        overlay.addEventListener('mouseenter', () => {
+            if (window.latexHideTimeout) clearTimeout(window.latexHideTimeout);
+        });
+        overlay.addEventListener('mouseleave', () => {
+            hideLatexOverlay();
+        });
+    }
+
+    document.getElementById('latex-overlay-edit').onclick = () => openLatexEditor(id);
+    document.getElementById('latex-overlay-delete').onclick = () => deleteLatex(id);
+
+    const rect = wrapper.getBoundingClientRect();
+    overlay.style.top = rect.top + 'px';
+    overlay.style.left = rect.left + 'px';
+    overlay.style.width = rect.width + 'px';
+    overlay.style.height = rect.height + 'px';
+    overlay.style.display = 'flex';
+};
+
+window.hideLatexOverlay = function() {
+    if (window.latexHideTimeout) clearTimeout(window.latexHideTimeout);
+    
+    window.latexHideTimeout = setTimeout(() => {
+        const overlay = document.getElementById('global-latex-overlay');
+        if (overlay) {
+            overlay.style.display = 'none';
+        }
+    }, 150);
+};
+
+window.addEventListener('scroll', () => {
+    const overlay = document.getElementById('global-latex-overlay');
+    if (overlay && overlay.style.display === 'flex') {
+        overlay.style.display = 'none';
+    }
+}, true);
+
+window.addEventListener('resize', () => {
+    const overlay = document.getElementById('global-latex-overlay');
+    if (overlay) overlay.style.display = 'none';
+});
+
+document.addEventListener('input', () => {
+    const overlay = document.getElementById('global-latex-overlay');
+    if (overlay) {
+        overlay.style.display = 'none';
+    }
+});
+
+window.insertLatex = function(latexString, offset = 0) {
+    const input = document.getElementById('latex-input');
+    const startPos = input.selectionStart;
+    const endPos = input.selectionEnd;
+    const text = input.value;
+    
+    input.value = text.substring(0, startPos) + latexString + text.substring(endPos);
+    
+    const newPos = startPos + latexString.length - offset;
+    input.selectionStart = newPos;
+    input.selectionEnd = newPos;
+    
+    input.focus(); 
+    previewLatex(); 
+};
+
+window.handleLatexPreset = function(selectElement) {
+    const val = selectElement.value;
+    if (!val) return;
+    
+    let latexText = val;
+    let offset = 0;
+    
+    if (val.includes('|')) {
+        const parts = val.split('|');
+        latexText = parts[0];
+        offset = parseInt(parts[1], 10);
+    }
+    
+    insertLatex(latexText, offset);
+    
+    selectElement.value = "";
+};
+
+document.addEventListener('keydown', function(e) {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'a') {
+        const activePage = document.activeElement.closest('.page');
+        if (activePage) {
+            e.preventDefault();
+            
+            const container = document.getElementById('pages-container');
+            if (!container) return;
+
+            const selection = window.getSelection();
+            const range = document.createRange();
+
+            range.selectNodeContents(container);
+            
+            selection.removeAllRanges();
+            selection.addRange(range);
+        }
+    }
+});
 
 document.addEventListener('input', triggerIfPage);
 document.addEventListener('keyup', triggerIfPage);

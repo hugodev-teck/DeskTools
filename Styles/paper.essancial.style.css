@@ -1611,7 +1611,7 @@ html {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
     font-family: sans-serif;
     font-size: 13px;
-    color: #4b5563; /* Gris foncé */
+    color: #4b5563;
     display: flex;
     gap: 10px;
     align-items: center;
@@ -1619,5 +1619,46 @@ html {
 }
 
 #status-bar .separator {
-    color: #d1d5db; /* Gris très clair pour la barre verticale */
+    color: #d1d5db;
+}
+
+.dw-latex-wrapper {
+    position: relative !important;
+}
+
+.dw-latex-wrapper:hover .dw-chart-overlay {
+    display: flex !important;
+}
+
+.dw-latex-wrapper .katex-display {
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-width: 100%;
+    padding: 5px 0;
+}
+
+.dw-latex-wrapper .katex {
+    max-width: 100%;
+    text-overflow: ellipsis;
+}
+
+.dw-latex-wrapper[data-latex-align="left"] .katex-display {
+    text-align: left !important;
+}
+.dw-latex-wrapper[data-latex-align="left"] .katex {
+    text-align: left !important;
+}
+
+.dw-latex-wrapper[data-latex-align="center"] .katex-display {
+    text-align: center !important;
+}
+.dw-latex-wrapper[data-latex-align="center"] .katex {
+    text-align: center !important;
+}
+
+.dw-latex-wrapper[data-latex-align="right"] .katex-display {
+    text-align: right !important;
+}
+.dw-latex-wrapper[data-latex-align="right"] .katex {
+    text-align: right !important;
 }
