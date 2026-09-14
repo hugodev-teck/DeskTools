@@ -1571,6 +1571,13 @@ function setupFileIO() {
                      });
                      newPage.innerHTML = window.cleanHTML(pageHTML);
                      container.appendChild(newPage);
+                     
+                     newPage.querySelectorAll('.dw-latex-wrapper').forEach(wrapper => {
+                        const latexId = wrapper.id;
+                        wrapper.setAttribute('contenteditable', 'false');
+                        wrapper.onmouseenter = () => showLatexOverlay(wrapper, latexId);
+                        wrapper.onmouseleave = () => hideLatexOverlay();
+                    });
                   });
                }
                else {
