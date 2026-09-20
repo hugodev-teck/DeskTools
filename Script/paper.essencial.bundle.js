@@ -298,6 +298,34 @@ const createNewPage = (after = null) => {
 const rebalancePages = (startPage) => {
     if (!startPage || !startPage.classList.contains('page')) return;
 
+    const protectedCanvases = [];
+    document.querySelectorAll('.page').forEach(p => {
+        let c = p.querySelector('.dw-page-canvas');
+        const savedData = p.getAttribute('data-draw-data');
+        
+        if (!c && savedData) {
+            c = document.createElement('canvas');
+            c.className = 'dw-page-canvas';
+            c.setAttribute('contenteditable', 'false');
+            c.style.pointerEvents = 'none';
+            c.style.userSelect = 'none';
+            c.width = p.clientWidth;
+            c.height = p.clientHeight;
+            
+            const ctx = c.getContext('2d');
+            const img = new Image();
+            img.onload = () => ctx.drawImage(img, 0, 0);
+            img.src = savedData;
+            
+            initCanvasEvents(c);
+        }
+
+        if (c) {
+            protectedCanvases.push({ page: p, canvas: c });
+            c.remove();
+        }
+    });
+
     const sel = window.getSelection();
     let markerId = null;
     if (sel.rangeCount > 0 && startPage.contains(sel.anchorNode)) {
@@ -566,6 +594,12 @@ const rebalancePages = (startPage) => {
             marker.remove(); 
         }
     }
+
+    protectedCanvases.forEach(item => {
+        if (document.body.contains(item.page)) { // Vérifie que la page n'a pas été supprimée entre temps
+            item.page.appendChild(item.canvas);
+        }
+    });
 };
 
 
@@ -1463,6 +1497,13 @@ function setupFileIO() {
          const dKeywords = document.getElementById('doc-keywords') ? document.getElementById('doc-keywords').value : "";
          
          const pageElements = document.querySelectorAll('#pages-container .page');
+
+         pageElements.forEach(page => {
+            const canvas = page.querySelector('.dw-page-canvas');
+            if (canvas) {
+               canvas.setAttribute('data-draw-data', canvas.toDataURL());
+            }
+         });
          
          let fullHtml = '';
          pageElements.forEach(page => { fullHtml += page.innerHTML; });
@@ -1571,6 +1612,23 @@ function setupFileIO() {
                      });
                      newPage.innerHTML = window.cleanHTML(pageHTML);
                      container.appendChild(newPage);
+
+                     const canvas = newPage.querySelector('.dw-page-canvas');
+                     if (canvas) {
+                        // Sécurités anti-blocage de texte
+                        canvas.setAttribute('contenteditable', 'false'); 
+                        canvas.style.pointerEvents = 'none'; 
+                        
+                        const dataUrl = canvas.getAttribute('data-draw-data');
+                        if (dataUrl) {
+                           const ctx = canvas.getContext('2d');
+                           const img = new Image();
+                           img.onload = () => {
+                                 ctx.drawImage(img, 0, 0);
+                           };
+                           img.src = dataUrl;
+                        }
+                     }
                      
                      newPage.querySelectorAll('.dw-latex-wrapper').forEach(wrapper => {
                         const latexId = wrapper.id;
@@ -1899,24 +1957,22 @@ window.clearFormatting = function () {
    }
 };
 let currentEditingGraphId = null;
+const chartColors = ['#0f766e', '#0ea5e9', '#f59e0b', '#e11d48', '#7c3aed', '#14b8a6', '#64748b'];
+const escapeChartText = value => String(value ?? '').replace(/[&<>"']/g, character => ({
+   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+}[character]));
 window.openChartSelection = function () {
-   document.getElementById('modal-chart-select').style.display = 'block';
+   const modal = document.getElementById('modal-chart-select');
+   modal.style.display = 'block';
+   modal.querySelector('.chart-type-card')?.focus();
 };
 window.insertNewChart = function (type) {
    document.getElementById('modal-chart-select').style.display = 'none';
-   const defaultData = [{
-      label: "A",
-      val: 10
-   }, {
-      label: "B",
-      val: 25
-   }, {
-      label: "C",
-      val: 15
-   }, {
-      label: "D",
-      val: 40
-   }];
+   const defaultData = type === 'math' ? [{ x: -2, y: 4 }, { x: -1, y: 1 }, { x: 0, y: 0 }, { x: 1, y: 1 }, { x: 2, y: 4 }] : [{
+      label: "A", val: 10
+   }, { label: "B", val: 25
+   }, { label: "C", val: 15
+   }, { label: "D", val: 40 }];
    const id = 'chart-' + Date.now();
    const dataJSON = JSON.stringify(defaultData).replace(/"/g, '&quot;');
    const html = `<p><br></p>
@@ -1947,18 +2003,21 @@ window.renderChartVisuals = function (id) {
       return;
    }
    const maxVal = Math.max(...data.map(d => parseFloat(d.val) || 0), 1);
-   const colors = ['#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#06b6d4'];
+   const colors = chartColors;
    renderZone.innerHTML = '';
-   if (type === 'bar') {
+   if (type === 'math') {
+      renderMathChart(renderZone, data);
+   }
+   else if (type === 'bar') {
       renderZone.style.borderBottom = '2px solid #9ca3af';
       renderZone.style.borderLeft = '2px solid #9ca3af';
       data.forEach(d => {
          const h = ((parseFloat(d.val) || 0) / maxVal) * 100;
          renderZone.innerHTML += `
                 <div class="dw-bar-col">
-                    <div class="dw-bar-val">${d.val}</div>
+                    <div class="dw-bar-val">${escapeChartText(d.val)}</div>
                     <div class="dw-bar-fill" style="height: ${h}%;"></div>
-                    <div class="dw-bar-label">${d.label}</div>
+                    <div class="dw-bar-label" title="${escapeChartText(d.label)}">${escapeChartText(d.label)}</div>
                 </div>
             `;
       });
@@ -1974,8 +2033,8 @@ window.renderChartVisuals = function (id) {
       let circlesHTML = data.map((d, index) => {
          let x = (index / Math.max(1, data.length - 1)) * 100;
          let y = 100 - (((parseFloat(d.val) || 0) / maxVal) * 100);
-         return `<circle cx="${x}" cy="${y}" r="2" fill="#ef4444"/>
-                    <text x="${x}" y="${y-4}" font-size="4" fill="#666" text-anchor="middle">${d.val}</text>`;
+         return `<circle cx="${x}" cy="${y}" r="2" fill="#e11d48"/>
+                    <text x="${x}" y="${y-4}" font-size="4" fill="#475569" text-anchor="middle">${escapeChartText(d.val)}</text>`;
       }).join('');
       renderZone.innerHTML = `
             <svg viewBox="0 -5 100 110" style="width:100%; height:100%; overflow:visible;">
@@ -1999,7 +2058,7 @@ window.renderChartVisuals = function (id) {
          currentPercent += percent;
          legendHTML += `<div style="display:flex; align-items:center; font-size:12px; margin-bottom:4px;">
                 <span style="display:inline-block; width:12px; height:12px; background:${color}; margin-right:8px; border-radius:3px;"></span>
-                ${d.label} (${val})
+                ${escapeChartText(d.label)} (${escapeChartText(val)})
             </div>`;
       });
       renderZone.innerHTML = `
@@ -2020,12 +2079,12 @@ window.renderChartVisuals = function (id) {
          const isSmall = w < 15;
          renderZone.innerHTML += `
                 <div class="dw-hbar-row">
-                    <div class="dw-hbar-label" title="${d.label}">${d.label}</div>
+                    <div class="dw-hbar-label" title="${escapeChartText(d.label)}">${escapeChartText(d.label)}</div>
                     <div class="dw-hbar-track">
                         <div class="dw-hbar-fill" style="width: ${w}%;">
-                            ${!isSmall ? `<span class="dw-hbar-val-in">${d.val}</span>` : ''}
+                            ${!isSmall ? `<span class="dw-hbar-val-in">${escapeChartText(d.val)}</span>` : ''}
                         </div>
-                        ${isSmall ? `<span class="dw-hbar-val-out">${d.val}</span>` : ''}
+                        ${isSmall ? `<span class="dw-hbar-val-out">${escapeChartText(d.val)}</span>` : ''}
                     </div>
                 </div>
             `;
@@ -2059,8 +2118,8 @@ window.renderChartVisuals = function (id) {
         `;
       let xLabelsHTML = data.map((d, index) => {
          let x = offsetX + (index / Math.max(1, data.length - 1)) * chartWidth;
-         let shortLabel = d.label.length > 6 ? d.label.substring(0, 5) + '.' : d.label;
-         return `<text x="${x}" y="${offsetY + chartHeight + 7}" font-size="4" fill="#4b5563" text-anchor="middle">${shortLabel}</text>`;
+         let shortLabel = String(d.label).length > 6 ? String(d.label).substring(0, 5) + '.' : d.label;
+         return `<text x="${x}" y="${offsetY + chartHeight + 7}" font-size="4" fill="#4b5563" text-anchor="middle">${escapeChartText(shortLabel)}</text>`;
       }).join('');
       renderZone.innerHTML = `
             <svg viewBox="0 0 115 105" style="width:100%; height:100%; overflow:visible; font-family: sans-serif;">
@@ -2073,6 +2132,58 @@ window.renderChartVisuals = function (id) {
         `;
    }
 };
+function renderMathChart(renderZone, data) {
+   const points = data
+      .map(point => ({ x: Number(point.x), y: Number(point.y) }))
+      .filter(point => Number.isFinite(point.x) && Number.isFinite(point.y));
+   if (!points.length) {
+      renderZone.innerHTML = '<div class="dw-chart-empty">Ajoutez des points pour afficher le repère.</div>';
+      return;
+   }
+   const xValues = points.map(point => point.x);
+   const yValues = points.map(point => point.y);
+   const minX = Math.min(0, ...xValues);
+   const maxX = Math.max(0, ...xValues);
+   const minY = Math.min(0, ...yValues);
+   const maxY = Math.max(0, ...yValues);
+   const xSpan = Math.max(maxX - minX, 1);
+   const ySpan = Math.max(maxY - minY, 1);
+   const padX = xSpan * 0.08;
+   const padY = ySpan * 0.08;
+   const left = minX - padX;
+   const right = maxX + padX;
+   const bottom = minY - padY;
+   const top = maxY + padY;
+   const height = 85;
+   const plotWidth = Math.max(140, Math.round((renderZone.clientWidth / Math.max(renderZone.clientHeight, 1)) * 84));
+   const toSvgX = x => ((x - left) / (right - left)) * plotWidth;
+   const toSvgY = y => height - ((y - bottom) / (top - bottom)) * height;
+   const xAxis = toSvgY(0);
+   const yAxis = toSvgX(0);
+   const curvePath = points.map((point, index) => `${index === 0 ? 'M' : 'L'} ${toSvgX(point.x)} ${toSvgY(point.y)}`).join(' ');
+   const circles = points.map(point => `<circle cx="${toSvgX(point.x)}" cy="${toSvgY(point.y)}" r="1.15" fill="#e11d48"><title>(${point.x}; ${point.y})</title></circle>`).join('');
+   const xLabels = points.filter((point, index, all) => index === 0 || index === all.length - 1 || point.x === 0).map(point => `<text x="${toSvgX(point.x)}" y="${Math.min(height + 5, xAxis + 5)}" text-anchor="middle">${escapeChartText(formatChartNumber(point.x))}</text>`).join('');
+   const yLabels = [bottom, 0, top].map(value => `<text x="${Math.max(2, yAxis - 2)}" y="${toSvgY(value) + 1.5}" text-anchor="end">${escapeChartText(formatChartNumber(value))}</text>`).join('');
+   const gridId = `math-grid-${Date.now()}`;
+   renderZone.className = 'dw-chart-render dw-math-render';
+   renderZone.innerHTML = `<svg viewBox="0 0 ${plotWidth} 84" preserveAspectRatio="none" aria-label="Repère cartésien">
+      <defs><pattern id="${gridId}" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="#dbe7e8" stroke-width="0.35"/></pattern></defs>
+      <rect x="0" y="0" width="${plotWidth}" height="78" fill="url(#${gridId})"/>
+      <line x1="0" y1="${xAxis}" x2="${plotWidth}" y2="${xAxis}" class="dw-math-axis"/>
+      <line x1="${yAxis}" y1="0" x2="${yAxis}" y2="78" class="dw-math-axis"/>
+      <path d="${curvePath}" class="dw-math-curve"/>
+      ${circles}${xLabels}${yLabels}
+   </svg>`;
+}
+function formatChartNumber(value) {
+   return Number.isInteger(value) ? String(value) : Number(value.toFixed(2)).toString();
+}
+function normalizeMathExpression(expression) {
+   return expression.trim()
+      .replace(/\^/g, '**')
+      .replace(/\b(sin|cos|tan|sqrt|abs|log|exp)\s*\(/g, 'Math.$1(')
+      .replace(/\bPI\b/g, 'Math.PI');
+}
 window.deleteChart = function (id) {
    const chart = document.getElementById(id);
    if (chart) {
@@ -2087,21 +2198,31 @@ window.openEditChart = function (id) {
    document.getElementById('edit-chart-title').value = container.querySelector('.dw-chart-title').innerText;
    const type = container.getAttribute('data-chart-type');
    const mathZone = document.getElementById('math-function-zone');
-   mathZone.style.display = (type === 'line') ? 'block' : 'none';
+   mathZone.style.display = (type === 'math') ? 'block' : 'none';
+   const headers = document.querySelectorAll('.chart-data-table thead th');
+   if (headers.length >= 2) {
+      headers[0].textContent = type === 'math' ? 'X' : 'Libellé';
+      headers[1].textContent = type === 'math' ? 'Y' : 'Valeur';
+   }
    const dataRaw = container.getAttribute('data-chart-json');
    let data = JSON.parse(dataRaw.replace(/&quot;/g, '"'));
    const tbody = document.getElementById('edit-chart-tbody');
    tbody.innerHTML = '';
-   data.forEach(d => addChartDataRow(d.label, d.val));
+   data.forEach(d => addChartDataRow(type === 'math' ? d.x : d.label, type === 'math' ? d.y : d.val));
    document.getElementById('modal-chart-edit').style.display = 'block';
 };
 window.addChartDataRow = function (label = "Nouv.", val = 10) {
    const tbody = document.getElementById('edit-chart-tbody');
    const tr = document.createElement('tr');
-   tr.innerHTML = `
-        <td><input type="text" class="edit-label-input" value="${label}" style="width:100%; padding:4px;"></td>
-        <td><input type="number" class="edit-val-input" value="${val}" style="width:100%; padding:4px;"></td>
-        <td><button onclick="this.closest('tr').remove()" style="color:red; cursor:pointer; background:none; border:none; font-weight:bold;">X</button></td>
+   const isMathChart = currentEditingGraphId && document.getElementById(currentEditingGraphId)?.getAttribute('data-chart-type') === 'math';
+   tr.innerHTML = isMathChart ? `
+         <td><input type="number" class="edit-x-input" value="${escapeChartText(label)}" step="any"></td>
+         <td><input type="number" class="edit-y-input" value="${escapeChartText(val)}" step="any"></td>
+         <td><button class="chart-row-delete" type="button" aria-label="Supprimer ce point" onclick="this.closest('tr').remove()">&times;</button></td>
+    ` : `
+         <td><input type="text" class="edit-label-input" value="${escapeChartText(label)}"></td>
+         <td><input type="number" class="edit-val-input" value="${escapeChartText(val)}"></td>
+         <td><button class="chart-row-delete" type="button" aria-label="Supprimer cette ligne" onclick="this.closest('tr').remove()">&times;</button></td>
     `;
    tbody.appendChild(tr);
 };
@@ -2109,33 +2230,41 @@ window.saveChartData = function () {
    if (!currentEditingGraphId) return;
    const container = document.getElementById(currentEditingGraphId);
    container.querySelector('.dw-chart-title').innerText = document.getElementById('edit-chart-title').value;
-   const labels = document.querySelectorAll('.edit-label-input');
-   const vals = document.querySelectorAll('.edit-val-input');
    let newData = [];
-   for (let i = 0; i < labels.length; i++) {
-      newData.push({
-         label: labels[i].value,
-         val: vals[i].value
-      });
+   if (container.getAttribute('data-chart-type') === 'math') {
+      const xs = document.querySelectorAll('.edit-x-input');
+      const ys = document.querySelectorAll('.edit-y-input');
+      for (let i = 0; i < xs.length; i++) newData.push({ x: Number(xs[i].value), y: Number(ys[i].value) });
+   } else {
+      const labels = document.querySelectorAll('.edit-label-input');
+      const vals = document.querySelectorAll('.edit-val-input');
+      for (let i = 0; i < labels.length; i++) newData.push({ label: labels[i].value, val: vals[i].value });
    }
    container.setAttribute('data-chart-json', JSON.stringify(newData).replace(/"/g, '&quot;'));
    renderChartVisuals(currentEditingGraphId);
    document.getElementById('modal-chart-edit').style.display = 'none';
 };
 window.generateMathFunction = function () {
-   const funcStr = document.getElementById('math-func-input').value;
+   const funcStr = normalizeMathExpression(document.getElementById('math-func-input').value);
    if (!funcStr) return;
+   if (!currentEditingGraphId || document.getElementById(currentEditingGraphId)?.getAttribute('data-chart-type') !== 'math') return;
    const tbody = document.getElementById('edit-chart-tbody');
    tbody.innerHTML = '';
-   for (let x = 1; x <= 10; x++) {
+   const start = Number(document.getElementById('math-x-min').value);
+   const end = Number(document.getElementById('math-x-max').value);
+   const step = Number(document.getElementById('math-x-step').value);
+   if (!Number.isFinite(start) || !Number.isFinite(end) || !Number.isFinite(step) || step <= 0 || start >= end) {
+      alert('Vérifiez les bornes et le pas du repère.');
+      return;
+   }
+   for (let x = start; x <= end && x < start + step * 250; x += step) {
       try {
          const mathFunc = new Function('x', `return ${funcStr};`);
          let y = mathFunc(x);
-         y = Math.round(y * 100) / 100;
-         addChartDataRow(`x=${x}`, y);
+         if (Number.isFinite(y)) addChartDataRow(formatChartNumber(x), Math.round(y * 100) / 100);
       }
       catch (e) {
-         alert("Erreur dans la formule mathématique. Essayez 'x * 2' ou 'Math.sin(x)'");
+         alert("Fonction invalide. Exemples : x^2, sin(x), cos(x) ou sqrt(abs(x)).");
          break;
       }
    }
@@ -2772,6 +2901,162 @@ document.addEventListener('keydown', function(e) {
         }
     }
 });
+
+let isDrawingMode = false;
+let currentTool = 'freehand';
+let currentColor = '#000000';
+let isDrawing = false;
+let canvasSnapshot = null;
+
+window.toggleDrawingMode = function() {
+    isDrawingMode = !isDrawingMode;
+    const pages = document.querySelectorAll('.page');
+    const toolbar = document.getElementById('drawing-floating-toolbar');
+    
+    if (toolbar) {
+        toolbar.style.display = isDrawingMode ? 'flex' : 'none';
+    }
+
+    pages.forEach(page => {
+        if (isDrawingMode) {
+            page.classList.add('drawing-active');
+            page.setAttribute('contenteditable', 'false');
+            
+            let canvas = page.querySelector('.dw-page-canvas');
+            if (!canvas) {
+                canvas = document.createElement('canvas');
+                canvas.className = 'dw-page-canvas';
+                canvas.setAttribute('contenteditable', 'false'); // <-- AJOUT CRUCIAL
+                canvas.width = page.clientWidth;
+                canvas.height = page.clientHeight;
+                page.appendChild(canvas);
+                initCanvasEvents(canvas);
+            }
+        } else {
+            page.classList.remove('drawing-active');
+            page.setAttribute('contenteditable', 'true'); // Sécurité principale
+        }
+    });
+
+    // SÉCURITÉ SUPPLÉMENTAIRE : Si on sort du mode dessin, on force TOUTES les pages à redevenir éditables
+    if (!isDrawingMode) {
+        document.querySelectorAll('.page').forEach(p => {
+            p.setAttribute('contenteditable', 'true');
+        });
+    }
+};
+
+// Gestion des clics sur les boutons de la barre flottante
+document.addEventListener('click', (e) => {
+    const toolBtn = e.target.closest('.draw-tool-btn');
+    if (toolBtn) {
+        document.querySelectorAll('.draw-tool-btn').forEach(b => b.classList.remove('active'));
+        toolBtn.classList.add('active');
+        currentTool = toolBtn.getAttribute('data-tool');
+    }
+
+    const colorBtn = e.target.closest('.draw-color-btn');
+    if (colorBtn) {
+        document.querySelectorAll('.draw-color-btn').forEach(b => b.classList.remove('active'));
+        colorBtn.classList.add('active');
+        currentColor = colorBtn.getAttribute('data-color');
+    }
+});
+
+function initCanvasEvents(canvas) {
+    const ctx = canvas.getContext('2d');
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    canvas.addEventListener('mousedown', (e) => {
+        if (!isDrawingMode) return;
+        isDrawing = true;
+        const rect = canvas.getBoundingClientRect();
+        startX = e.clientX - rect.left;
+        startY = e.clientY - rect.top;
+        
+        ctx.strokeStyle = currentColor;
+        ctx.fillStyle = currentColor;
+
+        if (currentTool === 'freehand') {
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+        } else {
+            // Sauvegarde l'état du canvas pour effacer le tracé temporaire pendant le glissement (preview)
+            canvasSnapshot = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        }
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+        if (!isDrawing || !isDrawingMode) return;
+        const rect = canvas.getBoundingClientRect();
+        const currentX = e.clientX - rect.left;
+        const currentY = e.clientY - rect.top;
+
+        if (currentTool === 'freehand') {
+            ctx.lineTo(currentX, currentY);
+            ctx.stroke();
+        } else {
+            // Restaure l'image propre avant de dessiner la forme en cours de glissement
+            ctx.putImageData(canvasSnapshot, 0, 0);
+            drawShape(ctx, currentTool, startX, startY, currentX, currentY);
+        }
+    });
+
+    canvas.addEventListener('mouseup', (e) => {
+        if (!isDrawing) return;
+        if (currentTool !== 'freehand') {
+            const rect = canvas.getBoundingClientRect();
+            const currentX = e.clientX - rect.left;
+            const currentY = e.clientY - rect.top;
+            ctx.putImageData(canvasSnapshot, 0, 0);
+            drawShape(ctx, currentTool, startX, startY, currentX, currentY);
+        }
+        isDrawing = false;
+        
+        // --- SÉCURITÉ : Sauvegarde instantanée sur la page ---
+        const page = canvas.closest('.page');
+        if (page) page.setAttribute('data-draw-data', canvas.toDataURL());
+    });
+
+    canvas.addEventListener('mouseleave', () => { 
+        if (isDrawing) {
+            const page = canvas.closest('.page');
+            if (page) page.setAttribute('data-draw-data', canvas.toDataURL());
+        }
+        isDrawing = false; 
+    });
+}
+
+function drawShape(ctx, tool, x1, y1, x2, y2) {
+    ctx.beginPath();
+    const width = x2 - x1;
+    const height = y2 - y1;
+
+    if (tool === 'rect') {
+        ctx.strokeRect(x1, y1, width, height);
+    } else if (tool === 'roundRect') {
+        const radius = 10;
+        ctx.roundRect ? ctx.roundRect(x1, y1, width, height, radius) : ctx.rect(x1, y1, width, height);
+        ctx.stroke();
+    } else if (tool === 'arrow') {
+        // Tracé de la ligne principale
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+
+        // Tête de flèche
+        const angle = Math.atan2(y2 - y1, x2 - x1);
+        const headLength = 12;
+        ctx.beginPath();
+        ctx.moveTo(x2, y2);
+        ctx.lineTo(x2 - headLength * Math.cos(angle - Math.PI / 6), y2 - headLength * Math.sin(angle - Math.PI / 6));
+        ctx.lineTo(x2 - headLength * Math.cos(angle + Math.PI / 6), y2 - headLength * Math.sin(angle + Math.PI / 6));
+        ctx.lineTo(x2, y2);
+        ctx.fill();
+    }
+}
 
 document.addEventListener('input', triggerIfPage);
 document.addEventListener('keyup', triggerIfPage);
