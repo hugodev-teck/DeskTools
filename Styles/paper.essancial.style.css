@@ -378,7 +378,7 @@ html {
 .modal {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 100000;
     left: 0;
     top: 0;
     width: 100%;
@@ -1278,7 +1278,7 @@ html {
     border-radius: 10px 0 0 10px;
     box-shadow: -2px 0 10px rgba(0,0,0,0.1);
     overflow-y: auto;
-    z-index: 9999;
+    z-index: 100000 !important;
     transition: right 0.3s ease;
     padding: 15px;
     font-family: sans-serif;

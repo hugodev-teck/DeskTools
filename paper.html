@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <link rel="icon" href="Res/fichier-2.svg" type="image/x-icon">
-<title>Nouveau document texte - Paper</title>
+<title>Paper</title>
 <link rel="stylesheet" href="Styles/paper.essancial.style.css">
 <!-- KaTeX pour le rendu des formules mathématiques -->
 <link rel="stylesheet" href="Lib/katex.min.css">
@@ -152,7 +152,6 @@
     <button id="open" class="button-with-image"><img src="Res/open.png" alt="Image 4"></button>
     <input type="file" id="file-input" style="display: none;">
     <button class="button-with-image" id="openModalBtn"><img src="Res/settings-sliders.png" alt="Image 3"></button>
-    <button class="button-with-image" onclick="openPopup()"><img src="Res/profile-user.png" alt="connexion au service"></button>
     <div id="menu" class="hidden" style="left: -100%;">
       <div id="emailDisplay">
           <input placeholder="Recherche ici..." id="textinpunmenu" type="text"></input>
@@ -424,6 +423,11 @@
     <img src="Res/word-logo.png" alt="Word Logo">
     <h1>Import DOCX</h1>
   </button>
+
+  <button id="btn-export-md" class="tool-container-micro-btn" onclick="exportToMarkdown()">
+    <img src="Res/markdown.png" alt="MD Logo">
+    <h1>Export MD</h1>
+  </button>
   
   <input type="file" id="import-word-input" accept=".docx, .odt" style="display: none;">
 </button>
@@ -451,7 +455,7 @@
 </div>
   <div id="menu-modal-content" class="modal">
     <div class="modal-content">
-      <span class="closebtn">&times;</span>
+      <span class="closebtn" onclick="document.getElementById('menu-modal-content').style.display = 'none';">&times;</span>
       
       <!-- Onglets -->
       <div class="tabs">

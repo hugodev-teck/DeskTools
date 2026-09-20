@@ -1,0 +1,27 @@
+{
+  "metadata": {
+    "creationDate": "20/09/2026",
+    "creationTime": "14:00",
+    "paperSize": "A4",
+    "orientation": "portrait",
+    "margins": "normal",
+    "version": "2.0",
+    "footerText": "Nom de l'entreprise - SIRET : 000 000 000 00000 - TVA Intracommunautaire : FR00000000000",
+    "showPageNum": true,
+    "headerText": "FACTURE",
+    "title": "Modèle de Facture",
+    "author": "Système",
+    "subject": "Facturation",
+    "keywords": "facture, template, professional"
+  },
+  "pages": [
+    "<div style=\"font-family: Arial, sans-serif; color: #333;\"><div style=\"display: flex; justify-content: space-between; margin-bottom: 30px;\"><div><h1 style=\"color: #0f766e; margin: 0 0 5px 0; font-size: 22px;\">VOTRE ENTREPRISE</h1><p style=\"margin: 0; color: #666; font-size: 12px; line-height: 1.4;\">123 Rue de l'Innovation<br>75001 Paris, France<br>contact@votre-entreprise.com</p></div><div style=\"text-align: right;\"><h2 style=\"margin: 0 0 5px 0; color: #111; font-size: 20px;\">FACTURE</h2><p style=\"margin: 0; font-size: 14px; font-weight: bold; color: #0f766e;\">N° FAC-2026-001</p><p style=\"margin: 5px 0 0 0; font-size: 12px; color: #666;\">Date : 20/09/2026<br>Échéance : 20/10/2026</p></div></div><div style=\"margin-bottom: 30px; background: #f9fafb; padding: 15px; border-radius: 6px; border: 1px solid #e5e7eb;\"><p style=\"margin: 0 0 5px 0; font-weight: bold; font-size: 11px; color: #4b5563; text-transform: uppercase; letter-spacing: 0.5px;\">Facturé à :</p><p style=\"margin: 0; font-size: 13px; line-height: 1.4;\"><strong>Nom du Client / Société</strong><br>456 Avenue des Clients<br>69002 Lyon, France</p></div><table class=\"dw-table\" style=\"width: 100%; border-collapse: collapse; margin-bottom: 30px;\"><thead><tr style=\"background: #0f766e; color: white;\"><th style=\"padding: 10px; text-align: left; font-size: 12px;\">Description</th><th style=\"padding: 10px; text-align: center; font-size: 12px;\">Qté</th><th style=\"padding: 10px; text-align: right; font-size: 12px;\">Prix Unit. HT</th><th style=\"padding: 10px; text-align: right; font-size: 12px;\">Total HT</th></tr></thead><tbody><tr><td style=\"padding: 10px; border-bottom: 1px solid #e5e7eb; font-size: 13px;\">Prestation de conception / Développement</td><td style=\"padding: 10px; border-bottom: 1px solid #e5e7eb; text-align: center; font-size: 13px;\">1</td><td style=\"padding: 10px; border-bottom: 1px solid #e5e7eb; text-align: right; font-size: 13px;\">1 200,00 €</td><td style=\"padding: 10px; border-bottom: 1px solid #e5e7eb; text-align: right; font-size: 13px;\">1 200,00 €</td></tr><tr><td style=\"padding: 10px; border-bottom: 1px solid #e5e7eb; font-size: 13px;\">Intégration de matériel électronique et tests</td><td style=\"padding: 10px; border-bottom: 1px solid #e5e7eb; text-align: center; font-size: 13px;\">3</td><td style=\"padding: 10px; border-bottom: 1px solid #e5e7eb; text-align: right; font-size: 13px;\">150,00 €</td><td style=\"padding: 10px; border-bottom: 1px solid #e5e7eb; text-align: right; font-size: 13px;\">450,00 €</td></tr></tbody></table><div style=\"display: flex; justify-content: flex-end; margin-bottom: 40px;\"><div style=\"width: 250px;\"><div style=\"display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #e5e7eb; font-size: 13px;\"><span style=\"color: #4b5563;\">Total HT :</span><strong>1 650,00 €</strong></div><div style=\"display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #e5e7eb; font-size: 13px;\"><span style=\"color: #4b5563;\">TVA (20%) :</span><strong>330,00 €</strong></div><div style=\"display: flex; justify-content: space-between; padding: 10px 0; font-size: 15px; color: #0f766e;\"><span>Total TTC :</span><strong>1 980,00 €</strong></div></div></div><div style=\"border-top: 1px solid #e5e7eb; padding-top: 15px; font-size: 11px; color: #6b7280; line-height: 1.4;\"><p style=\"margin: 0 0 5px 0;\"><strong>Conditions de règlement :</strong> Paiement à 30 jours net par virement bancaire.</p><p style=\"margin: 0;\">En cas de retard de paiement, application d'une pénalité de retard au taux légal. Aucun escompte consenti pour paiement anticipé.</p></div></div><p><br></p>"
+  ],
+  "drawings": [
+    null
+  ],
+  "auxiliaryData": {
+    "comments": {},
+    "customFonts": {}
+  }
+}

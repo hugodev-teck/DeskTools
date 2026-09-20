@@ -2,7 +2,7 @@ window.checkPageOverflow = window.rebalancePages;
 const btnOpenModal = document.getElementById('openModalBtn');
 const btnOpenInster = document.getElementById('openModalinster');
 const btnOpenPara = document.getElementById('openModalpara');
-const closeBtn = document.querySelector('.closebtn');
+const closeBtn = document.querySelector('.closebtnt');
 
 let currentSelectedImage = null;
 let isResizing = false;
@@ -66,11 +66,6 @@ if (btnOpenInster) {
 if (btnOpenPara) {
    btnOpenPara.addEventListener('click', () => {
       document.getElementById('menu-modal-content').style.display = 'block';
-   });
-}
-if (closeBtn) {
-   closeBtn.addEventListener('click', () => {
-      document.getElementById('menu-modal-content').style.display = 'none';
    });
 }
 window.addEventListener('click', (event) => {
@@ -297,34 +292,6 @@ const createNewPage = (after = null) => {
 
 const rebalancePages = (startPage) => {
     if (!startPage || !startPage.classList.contains('page')) return;
-
-    const protectedCanvases = [];
-    document.querySelectorAll('.page').forEach(p => {
-        let c = p.querySelector('.dw-page-canvas');
-        const savedData = p.getAttribute('data-draw-data');
-        
-        if (!c && savedData) {
-            c = document.createElement('canvas');
-            c.className = 'dw-page-canvas';
-            c.setAttribute('contenteditable', 'false');
-            c.style.pointerEvents = 'none';
-            c.style.userSelect = 'none';
-            c.width = p.clientWidth;
-            c.height = p.clientHeight;
-            
-            const ctx = c.getContext('2d');
-            const img = new Image();
-            img.onload = () => ctx.drawImage(img, 0, 0);
-            img.src = savedData;
-            
-            initCanvasEvents(c);
-        }
-
-        if (c) {
-            protectedCanvases.push({ page: p, canvas: c });
-            c.remove();
-        }
-    });
 
     const sel = window.getSelection();
     let markerId = null;
@@ -594,12 +561,6 @@ const rebalancePages = (startPage) => {
             marker.remove(); 
         }
     }
-
-    protectedCanvases.forEach(item => {
-        if (document.body.contains(item.page)) { // Vérifie que la page n'a pas été supprimée entre temps
-            item.page.appendChild(item.canvas);
-        }
-    });
 };
 
 
@@ -1497,13 +1458,6 @@ function setupFileIO() {
          const dKeywords = document.getElementById('doc-keywords') ? document.getElementById('doc-keywords').value : "";
          
          const pageElements = document.querySelectorAll('#pages-container .page');
-
-         pageElements.forEach(page => {
-            const canvas = page.querySelector('.dw-page-canvas');
-            if (canvas) {
-               canvas.setAttribute('data-draw-data', canvas.toDataURL());
-            }
-         });
          
          let fullHtml = '';
          pageElements.forEach(page => { fullHtml += page.innerHTML; });
@@ -1534,14 +1488,17 @@ function setupFileIO() {
                keywords: dKeywords
             },
             pages: [],
+            drawings: [], // NOUVEAU : On stocke les dessins séparément
             auxiliaryData: {
                comments: window.documentComments,
                customFonts: usedFonts
             }
          };
          
+         // On sauvegarde le texte et le dessin pour chaque page
          pageElements.forEach(page => {
             documentData.pages.push(page.innerHTML);
+            documentData.drawings.push(page.getAttribute('data-draw-data') || null);
          });
          
          const jsonString = JSON.stringify(documentData, null, 2);
@@ -1568,25 +1525,37 @@ function setupFileIO() {
             const container = document.getElementById('pages-container');
             try {
                const documentData = JSON.parse(content);
-               if (documentData.metadata) {
-                  if (document.getElementById('paper-size')) document.getElementById('paper-size').value = documentData.metadata.paperSize;
-                  if (document.getElementById('margin-size')) document.getElementById('margin-size').value = documentData.metadata.margins;
-                  const orientationRadio = document.querySelector(`input[name="orientation"][value="${documentData.metadata.orientation}"]`);
-                  if (orientationRadio) orientationRadio.checked = true;
-                  if (document.getElementById('header-text')) document.getElementById('header-text').value = documentData.metadata.headerText || "";
-                  if (document.getElementById('footer-text')) document.getElementById('footer-text').value = documentData.metadata.footerText || "";
-                  if (document.getElementById('show-page-num')) document.getElementById('show-page-num').checked = documentData.metadata.showPageNum !== false;
-                  if (document.getElementById('doc-title')) document.getElementById('doc-title').value = documentData.metadata.title || "";
-                  if (document.getElementById('doc-author')) document.getElementById('doc-author').value = documentData.metadata.author || "";
-                  if (document.getElementById('doc-subject')) document.getElementById('doc-subject').value = documentData.metadata.subject || "";
-                  if (document.getElementById('doc-keywords')) document.getElementById('doc-keywords').value = documentData.metadata.keywords || "";
-                  if (typeof updateHeaderFooter === 'function') updateHeaderFooter();
-               }
                
-               window.documentComments = documentData.auxiliaryData?.comments || {};
+               // --- SÉCURITÉ DE RÉTROCOMPATIBILITÉ TOTALE ---
+               const metadata = documentData.metadata || {};
+               const pagesData = documentData.pages || [];
+               const drawingsData = documentData.drawings || [];
+               const auxiliaryData = documentData.auxiliaryData || {};
+               // ---------------------------------------------
+
+               // Application des métadonnées avec valeurs de secours
+               if (document.getElementById('paper-size')) document.getElementById('paper-size').value = metadata.paperSize || 'A4';
+               if (document.getElementById('margin-size')) document.getElementById('margin-size').value = metadata.margins || 'normal';
                
-               if (documentData.auxiliaryData && documentData.auxiliaryData.customFonts) {
-                   const importedFonts = documentData.auxiliaryData.customFonts;
+               const orientationRadio = document.querySelector(`input[name="orientation"][value="${metadata.orientation || 'portrait'}"]`);
+               if (orientationRadio) orientationRadio.checked = true;
+               
+               if (document.getElementById('header-text')) document.getElementById('header-text').value = metadata.headerText || "";
+               if (document.getElementById('footer-text')) document.getElementById('footer-text').value = metadata.footerText || "";
+               if (document.getElementById('show-page-num')) document.getElementById('show-page-num').checked = metadata.showPageNum !== false;
+               if (document.getElementById('doc-title')) document.getElementById('doc-title').value = metadata.title || "";
+               if (document.getElementById('doc-author')) document.getElementById('doc-author').value = metadata.author || "";
+               if (document.getElementById('doc-subject')) document.getElementById('doc-subject').value = metadata.subject || "";
+               if (document.getElementById('doc-keywords')) document.getElementById('doc-keywords').value = metadata.keywords || "";
+               
+               if (typeof updateHeaderFooter === 'function') updateHeaderFooter();
+               
+               // Chargement sécurisé des commentaires
+               window.documentComments = auxiliaryData.comments || {};
+               
+               // Chargement sécurisé des polices personnalisées
+               if (auxiliaryData.customFonts) {
+                   const importedFonts = auxiliaryData.customFonts;
                    Object.keys(importedFonts).forEach(key => {
                        if (!window.customFonts[key]) {
                            window.customFonts[key] = importedFonts[key];
@@ -1600,8 +1569,9 @@ function setupFileIO() {
                
                container.innerHTML = '';
                
-               if (documentData.pages && documentData.pages.length > 0) {
-                  documentData.pages.forEach((pageHTML, index) => {
+               // Reconstruction des pages (gère aussi le cas des très vieux fichiers où pagesData pouvait être vide)
+               if (pagesData.length > 0) {
+                  pagesData.forEach((pageHTML, index) => {
                      const newPage = document.createElement('div');
                      newPage.className = 'page';
                      newPage.contentEditable = true;
@@ -1610,26 +1580,16 @@ function setupFileIO() {
                      newPage.addEventListener('keydown', (e) => {
                         if (e.key === 'Backspace') handleBackspace(newPage, e);
                      });
+                     
+                     // Restauration du dessin associé à la page s'il existe
+                     if (drawingsData[index]) {
+                         newPage.setAttribute('data-draw-data', drawingsData[index]);
+                     }
+                     
                      newPage.innerHTML = window.cleanHTML(pageHTML);
                      container.appendChild(newPage);
 
-                     const canvas = newPage.querySelector('.dw-page-canvas');
-                     if (canvas) {
-                        // Sécurités anti-blocage de texte
-                        canvas.setAttribute('contenteditable', 'false'); 
-                        canvas.style.pointerEvents = 'none'; 
-                        
-                        const dataUrl = canvas.getAttribute('data-draw-data');
-                        if (dataUrl) {
-                           const ctx = canvas.getContext('2d');
-                           const img = new Image();
-                           img.onload = () => {
-                                 ctx.drawImage(img, 0, 0);
-                           };
-                           img.src = dataUrl;
-                        }
-                     }
-                     
+                     // Restauration des événements LaTeX
                      newPage.querySelectorAll('.dw-latex-wrapper').forEach(wrapper => {
                         const latexId = wrapper.id;
                         wrapper.setAttribute('contenteditable', 'false');
@@ -1637,10 +1597,17 @@ function setupFileIO() {
                         wrapper.onmouseleave = () => hideLatexOverlay();
                     });
                   });
+                  
+                  // Synchronisation du calque fantôme pour les dessins
+                  if (typeof window.syncDrawingsLayer === 'function') {
+                      setTimeout(window.syncDrawingsLayer, 100);
+                  }
                }
                else {
+                  // Si vraiment le tableau de pages est vide, on crée une page par défaut
                   createNewPage();
                }
+
                if (typeof applyPageSettings === 'function') {
                   applyPageSettings();
                }
@@ -1650,13 +1617,9 @@ function setupFileIO() {
                }
             }
             catch (error) {
-               alert("Ancien format .dw détecté.");
-               container.innerHTML = window.cleanHTML(content);;
-               container.querySelectorAll('.page').forEach(p => {
-                  p.contentEditable = true;
-                  p.addEventListener('input', () => rebalancePages(p));
-                  p.addEventListener('focus', () => activePage = p);
-               });
+               // Ce bloc ne s'activera plus que si le fichier JSON est syntaxiquement invalide (corrompu)
+               alert("Erreur critique : Format .dw invalide ou corrompu.");
+               console.error(error);
             }
             updateStatusBar();
          };
@@ -2792,7 +2755,7 @@ window.showLatexOverlay = function(wrapper, id) {
     if (!overlay) {
         overlay = document.createElement('div');
         overlay.id = 'global-latex-overlay';
-        overlay.style.cssText = "position: fixed; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(2px); display: flex; justify-content: center; align-items: center; gap: 15px; z-index: 2; border-radius: 6px;";
+        overlay.style.cssText = "position: fixed; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(2px); display: flex; justify-content: center; align-items: center; gap: 15px; z-index: 100000; border-radius: 6px;";
         overlay.innerHTML = `
             <button class="dw-chart-btn dw-btn-edit" id="latex-overlay-edit">Modifier</button>
             <button class="dw-chart-btn dw-btn-delete" id="latex-overlay-delete">Supprimer</button>
@@ -2909,40 +2872,50 @@ let isDrawing = false;
 let canvasSnapshot = null;
 
 window.toggleDrawingMode = function() {
-    isDrawingMode = !isDrawingMode;
-    const pages = document.querySelectorAll('.page');
-    const toolbar = document.getElementById('drawing-floating-toolbar');
+    if (!document.getElementById('drawings-layer')) setupDrawingLayer();
     
-    if (toolbar) {
-        toolbar.style.display = isDrawingMode ? 'flex' : 'none';
-    }
-
-    pages.forEach(page => {
-        if (isDrawingMode) {
-            page.classList.add('drawing-active');
-            page.setAttribute('contenteditable', 'false');
+    window.isDrawingMode = !window.isDrawingMode;
+    const toolbar = document.getElementById('drawing-floating-toolbar');
+    if (toolbar) toolbar.style.display = window.isDrawingMode ? 'flex' : 'none';
+    
+    window.syncDrawingsLayer(); 
+    
+    const pages = document.querySelectorAll('.page');
+    const shadows = document.querySelectorAll('.dw-shadow-page');
+    
+    if (window.isDrawingMode) {
+        shadows.forEach((shadow, index) => {
+            shadow.style.pointerEvents = 'auto'; // La vitre capture la souris
+            shadow.style.backgroundImage = 'none'; 
             
-            let canvas = page.querySelector('.dw-page-canvas');
-            if (!canvas) {
-                canvas = document.createElement('canvas');
-                canvas.className = 'dw-page-canvas';
-                canvas.setAttribute('contenteditable', 'false'); // <-- AJOUT CRUCIAL
-                canvas.width = page.clientWidth;
-                canvas.height = page.clientHeight;
-                page.appendChild(canvas);
-                initCanvasEvents(canvas);
+            let canvas = document.createElement('canvas');
+            canvas.width = shadow.offsetWidth;
+            canvas.height = shadow.offsetHeight;
+            canvas.style.cssText = "position: absolute; top: 0; left: 0; cursor: crosshair;";
+            shadow.appendChild(canvas);
+            
+            // Restaure le tracé pour continuer
+            const savedData = pages[index].getAttribute('data-draw-data');
+            if (savedData) {
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+                img.onload = () => ctx.drawImage(img, 0, 0);
+                img.src = savedData;
             }
-        } else {
-            page.classList.remove('drawing-active');
-            page.setAttribute('contenteditable', 'true'); // Sécurité principale
-        }
-    });
-
-    // SÉCURITÉ SUPPLÉMENTAIRE : Si on sort du mode dessin, on force TOUTES les pages à redevenir éditables
-    if (!isDrawingMode) {
-        document.querySelectorAll('.page').forEach(p => {
-            p.setAttribute('contenteditable', 'true');
+            
+            initCanvasEvents(canvas, pages[index]);
         });
+    } else {
+        shadows.forEach((shadow, index) => {
+            shadow.style.pointerEvents = 'none'; 
+            const canvas = shadow.querySelector('canvas');
+            if (canvas) {
+                // Sauvegarde secrète sur la vraie page
+                pages[index].setAttribute('data-draw-data', canvas.toDataURL());
+                canvas.remove();
+            }
+        });
+        window.syncDrawingsLayer(); // Transforme les canvas en images intouchables
     }
 };
 
@@ -2963,14 +2936,14 @@ document.addEventListener('click', (e) => {
     }
 });
 
-function initCanvasEvents(canvas) {
+function initCanvasEvents(canvas, realPage) {
     const ctx = canvas.getContext('2d');
     ctx.lineWidth = 2;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 
     canvas.addEventListener('mousedown', (e) => {
-        if (!isDrawingMode) return;
+        if (!window.isDrawingMode) return;
         isDrawing = true;
         const rect = canvas.getBoundingClientRect();
         startX = e.clientX - rect.left;
@@ -2983,13 +2956,12 @@ function initCanvasEvents(canvas) {
             ctx.beginPath();
             ctx.moveTo(startX, startY);
         } else {
-            // Sauvegarde l'état du canvas pour effacer le tracé temporaire pendant le glissement (preview)
             canvasSnapshot = ctx.getImageData(0, 0, canvas.width, canvas.height);
         }
     });
 
     canvas.addEventListener('mousemove', (e) => {
-        if (!isDrawing || !isDrawingMode) return;
+        if (!isDrawing || !window.isDrawingMode) return;
         const rect = canvas.getBoundingClientRect();
         const currentX = e.clientX - rect.left;
         const currentY = e.clientY - rect.top;
@@ -2998,7 +2970,6 @@ function initCanvasEvents(canvas) {
             ctx.lineTo(currentX, currentY);
             ctx.stroke();
         } else {
-            // Restaure l'image propre avant de dessiner la forme en cours de glissement
             ctx.putImageData(canvasSnapshot, 0, 0);
             drawShape(ctx, currentTool, startX, startY, currentX, currentY);
         }
@@ -3008,23 +2979,16 @@ function initCanvasEvents(canvas) {
         if (!isDrawing) return;
         if (currentTool !== 'freehand') {
             const rect = canvas.getBoundingClientRect();
-            const currentX = e.clientX - rect.left;
-            const currentY = e.clientY - rect.top;
             ctx.putImageData(canvasSnapshot, 0, 0);
-            drawShape(ctx, currentTool, startX, startY, currentX, currentY);
+            drawShape(ctx, currentTool, startX, startY, e.clientX - rect.left, e.clientY - rect.top);
         }
         isDrawing = false;
-        
-        // --- SÉCURITÉ : Sauvegarde instantanée sur la page ---
-        const page = canvas.closest('.page');
-        if (page) page.setAttribute('data-draw-data', canvas.toDataURL());
+        // Sauvegarde instantanée (anti-perte)
+        if (realPage) realPage.setAttribute('data-draw-data', canvas.toDataURL());
     });
 
     canvas.addEventListener('mouseleave', () => { 
-        if (isDrawing) {
-            const page = canvas.closest('.page');
-            if (page) page.setAttribute('data-draw-data', canvas.toDataURL());
-        }
+        if (isDrawing && realPage) realPage.setAttribute('data-draw-data', canvas.toDataURL());
         isDrawing = false; 
     });
 }
@@ -3057,6 +3021,145 @@ function drawShape(ctx, tool, x1, y1, x2, y2) {
         ctx.fill();
     }
 }
+
+function setupDrawingLayer() {
+    document.getElementById('content').style.position = 'relative';
+    let drawingsLayer = document.getElementById('drawings-layer');
+    
+    if (!drawingsLayer) {
+        drawingsLayer = document.createElement('div');
+        drawingsLayer.id = 'drawings-layer';
+        // Ce conteneur flotte au-dessus de tout le document
+        drawingsLayer.style.cssText = "position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50;";
+        document.getElementById('content').appendChild(drawingsLayer);
+        
+        // Les "yeux" du calque : si les pages bougent, le calque suit automatiquement
+        new ResizeObserver(() => window.syncDrawingsLayer()).observe(document.getElementById('pages-container'));
+        new MutationObserver(() => window.syncDrawingsLayer()).observe(document.getElementById('pages-container'), { childList: true });
+    }
+}
+
+window.syncDrawingsLayer = function() {
+    let drawingsLayer = document.getElementById('drawings-layer');
+    if (!drawingsLayer) return;
+    
+    const pages = document.querySelectorAll('.page');
+    
+    pages.forEach((page, index) => {
+        const shadowId = 'shadow-page-' + index;
+        let shadowPage = document.getElementById(shadowId);
+        
+        if (!shadowPage) {
+            shadowPage = document.createElement('div');
+            shadowPage.id = shadowId;
+            shadowPage.className = 'dw-shadow-page';
+            shadowPage.style.position = 'absolute';
+            drawingsLayer.appendChild(shadowPage);
+        }
+        
+        // On aligne parfaitement le calque fantôme sur la vraie page
+        shadowPage.style.top = page.offsetTop + 'px';
+        shadowPage.style.left = page.offsetLeft + 'px';
+        shadowPage.style.width = page.offsetWidth + 'px';
+        shadowPage.style.height = page.offsetHeight + 'px';
+        
+        // Affichage du dessin (si on n'est pas en train de dessiner)
+        if (!window.isDrawingMode) {
+            const dataUrl = page.getAttribute('data-draw-data');
+            shadowPage.style.backgroundImage = dataUrl ? `url(${dataUrl})` : 'none';
+            shadowPage.style.backgroundSize = '100% 100%';
+        }
+    });
+    
+    // Nettoyage si on a effacé des pages
+    const shadows = document.querySelectorAll('.dw-shadow-page');
+    if (shadows.length > pages.length) {
+        for (let i = pages.length; i < shadows.length; i++) shadows[i].remove();
+    }
+};
+
+window.addEventListener('DOMContentLoaded', () => {
+    setupDrawingLayer();
+    setTimeout(window.syncDrawingsLayer, 500); // Synchro initiale
+});
+
+window.exportToMarkdown = function() {
+    const pages = document.querySelectorAll('.page');
+    let mdContent = "";
+    
+    // Récupération des métadonnées pour l'en-tête du fichier (Frontmatter)
+    const title = document.getElementById('doc-title') ? document.getElementById('doc-title').value : "Document sans titre";
+    const author = document.getElementById('doc-author') ? document.getElementById('doc-author').value : "";
+    
+    if (title || author) {
+        mdContent += `---\nTitle: ${title}\nAuthor: ${author}\nDate: ${new Date().toLocaleDateString('fr-FR')}\n---\n\n`;
+    }
+
+    pages.forEach((page, index) => {
+        // On clone la page pour la manipuler sans toucher au document visible
+        let clone = page.cloneNode(true);
+
+        // 1. Sauvetage du LaTeX : on remplace la balise par le texte brut de l'équation
+        clone.querySelectorAll('.dw-latex-wrapper').forEach(latex => {
+            const raw = latex.getAttribute('data-latex-raw') || '';
+            const textNode = document.createTextNode(`\n\n$$ ${raw.replace(/\\n/g, ' ')} $$\n\n`);
+            latex.parentNode.replaceChild(textNode, latex);
+        });
+
+        // 2. Suppression des éléments non-exportables en texte (Dessins, Sommaire automatique)
+        clone.querySelectorAll('.dw-page-canvas, .dw-drawing-overlay, .dw-toc-header, .dw-toc-line').forEach(el => el.remove());
+
+        let html = clone.innerHTML;
+        
+        // 3. Remplacements HTML vers Markdown (Regex)
+        // Titres
+        html = html.replace(/<h1[^>]*>(.*?)<\/h1>/gi, '\n# $1\n\n');
+        html = html.replace(/<h2[^>]*>(.*?)<\/h2>/gi, '\n## $1\n\n');
+        html = html.replace(/<h3[^>]*>(.*?)<\/h3>/gi, '\n### $1\n\n');
+        html = html.replace(/<h4[^>]*>(.*?)<\/h4>/gi, '\n#### $1\n\n');
+        
+        // Formatage de base
+        html = html.replace(/<(b|strong)[^>]*>(.*?)<\/\1>/gi, '**$2**');
+        html = html.replace(/<(i|em)[^>]*>(.*?)<\/\1>/gi, '*$2*');
+        html = html.replace(/<u[^>]*>(.*?)<\/u>/gi, '$1'); // Le MD ne gère pas le souligné nativement
+        
+        // Listes
+        html = html.replace(/<li[^>]*>(.*?)<\/li>/gi, '- $1\n');
+        html = html.replace(/<ul[^>]*>/gi, '\n');
+        html = html.replace(/<\/ul>/gi, '\n');
+        html = html.replace(/<ol[^>]*>/gi, '\n');
+        html = html.replace(/<\/ol>/gi, '\n');
+        
+        // Tableaux (Conversion simplifiée : on extrait juste le texte avec des séparateurs)
+        html = html.replace(/<tr[^>]*>/gi, '\n| ');
+        html = html.replace(/<\/tr>/gi, ' |');
+        html = html.replace(/<(td|th)[^>]*>/gi, ' ');
+        html = html.replace(/<\/(td|th)>/gi, ' |');
+        
+        // Paragraphes et retours chariot
+        html = html.replace(/<p[^>]*>(.*?)<\/p>/gi, '$1\n\n');
+        html = html.replace(/<br\s*[\/]?>/gi, '\n');
+        html = html.replace(/<div>(.*?)<\/div>/gi, '$1\n');
+        html = html.replace(/&nbsp;/g, ' ');
+
+        // Nettoyage final : on supprime toutes les balises HTML restantes
+        html = html.replace(/<[^>]+>/g, '');
+        
+        // Décodage des entités HTML (&amp; -> &)
+        html = html.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+
+        // On ajoute le contenu de la page nettoyée, avec un séparateur horizontal Markdown
+        mdContent += html.trim() + "\n\n---\n\n";
+    });
+
+    // Téléchargement du fichier
+    const fileName = (title !== "Document sans titre" ? title : 'Document_Paper') + '.md';
+    const blob = new Blob([mdContent], { type: 'text/markdown;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = fileName.replace(/[^a-z0-9]/gi, '_').toLowerCase() + '.md';
+    a.click();
+};
 
 document.addEventListener('input', triggerIfPage);
 document.addEventListener('keyup', triggerIfPage);
