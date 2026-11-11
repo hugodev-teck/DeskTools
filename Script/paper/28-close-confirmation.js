@@ -1,15 +1,23 @@
 (function () {
     let hasUnsavedChanges = false;
     let documentVersion = 0;
+    const electronBridge = window.prismDesktop;
+    const usesElectronCloseGuard = Boolean(
+        electronBridge &&
+        electronBridge.isElectron &&
+        typeof electronBridge.setPaperDocumentDirty === "function"
+    );
 
     function markDocumentDirty() {
         hasUnsavedChanges = true;
         documentVersion += 1;
+        if (usesElectronCloseGuard) electronBridge.setPaperDocumentDirty(true);
     }
 
     function markDocumentSaved(savedVersion) {
         if (savedVersion !== undefined && savedVersion !== documentVersion) return;
         hasUnsavedChanges = false;
+        if (usesElectronCloseGuard) electronBridge.setPaperDocumentDirty(false);
     }
 
     function isDocumentEdit(target) {
@@ -31,11 +39,15 @@
         if (isDocumentEdit(event.target)) markDocumentDirty();
     }, true);
 
-    window.addEventListener("beforeunload", event => {
-        if (!hasUnsavedChanges) return;
-        event.preventDefault();
-        event.returnValue = "";
-    });
+    if (usesElectronCloseGuard) {
+        electronBridge.setPaperDocumentDirty(false);
+    } else {
+        window.addEventListener("beforeunload", event => {
+            if (!hasUnsavedChanges) return;
+            event.preventDefault();
+            event.returnValue = "";
+        });
+    }
 
     window.markPaperDocumentDirty = markDocumentDirty;
     window.markPaperDocumentSaved = markDocumentSaved;
