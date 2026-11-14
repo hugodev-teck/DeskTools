@@ -96,23 +96,31 @@
 </div>
 
 <div id="table-floating-toolbar" style="display: none;">
-    <button onclick="addTableRow()" title="Ajouter une ligne en bas">Ajouter une ligne en bas</button>
-    <button onclick="addColumn()" title="Ajouter une colonne à droite">Ajouter une colonne à gauche</button>
+    <strong class="table-toolbar-title">Tableau</strong>
+    <span class="table-resize-hint">Survolez un bord du tableau et glissez pour le redimensionner</span>
+    <button type="button" data-table-action="row-above">Insérer une ligne au-dessus</button>
+    <button type="button" data-table-action="row-below">Insérer une ligne en dessous</button>
+    <button type="button" data-table-action="column-left">Insérer une colonne à gauche</button>
+    <button type="button" data-table-action="column-right">Insérer une colonne à droite</button>
     <div class="separator"></div>
-    <button onclick="deleteTableRow()" title="Supprimer la ligne">Supprimer une ligne</button>
-    <button onclick="deleteTableColumn()" title="Supprimer la colonne">supprimer une colonne</button>
+    <button type="button" data-table-action="delete-row">Supprimer la ligne</button>
+    <button type="button" data-table-action="delete-column">Supprimer la colonne</button>
+    <button type="button" class="table-delete-action" data-table-action="delete-table">Supprimer le tableau</button>
+    <p id="table-toolbar-status" role="status" hidden></p>
 </div>
-<div id="table-creator-modal" style="display: none;">
-    <h4>Insérer un tableau</h4>
+<div id="table-creator-modal" role="dialog" aria-labelledby="table-creator-title" aria-hidden="true">
+    <h4 id="table-creator-title">Insérer un tableau</h4>
     <div class="input-group">
-        <label>Lignes :</label>
-        <input type="number" id="tbl-rows" min="1" value="3">
+        <label for="tbl-rows">Lignes :</label>
+        <input type="number" id="tbl-rows" min="1" max="30" value="3">
     </div>
     <div class="input-group">
-        <label>Colonnes :</label>
-        <input type="number" id="tbl-cols" min="1" value="3">
+        <label for="tbl-cols">Colonnes :</label>
+        <input type="number" id="tbl-cols" min="1" max="20" value="3">
     </div>
-    <button onclick="confirmInsertTable()">Insérer</button>
+    <label class="table-header-option"><input id="tbl-header" type="checkbox" checked> Première ligne d’en-tête</label>
+    <p id="table-creator-error" role="alert" hidden></p>
+    <button type="button" onclick="confirmInsertTable()">Insérer</button>
 </div>
 
 <div id="image-floating-toolbar" style="display: none;">
@@ -129,6 +137,26 @@
 <div id="comments-panel">
     <h3 style="margin-top:0; font-size: 16px; color: #555; border-bottom: 1px solid #ddd; padding-bottom: 10px;">Commentaires</h3>
     <div id="comments-list"></div>
+</div>
+
+<div id="comment-modal" class="comment-modal" aria-hidden="true">
+    <section class="comment-dialog" role="dialog" aria-modal="true" aria-labelledby="comment-modal-title">
+        <h2 id="comment-modal-title">Ajouter un commentaire</h2>
+        <label class="comment-dialog-label" for="comment-selection-preview">Texte commenté</label>
+        <div id="comment-selection-preview" class="comment-selection-preview"></div>
+        <div class="comment-author-row">
+            <span class="comment-dialog-label">Commentaire de</span>
+            <strong id="comment-author-name"></strong>
+            <button id="comment-edit-profile" type="button">Modifier mon profil</button>
+        </div>
+        <label class="comment-dialog-label" for="comment-input">Votre commentaire</label>
+        <textarea id="comment-input" rows="5" placeholder="Saisissez votre commentaire…"></textarea>
+        <p id="comment-modal-error" role="alert" hidden></p>
+        <div class="comment-dialog-actions">
+            <button id="comment-cancel" type="button">Annuler</button>
+            <button id="comment-submit" type="button">Ajouter le commentaire</button>
+        </div>
+    </section>
 </div>
 
 <div id="tool-container-micro-act">
@@ -152,6 +180,10 @@
     <button id="open" class="button-with-image"><img src="Res/open.png" alt="Image 4"></button>
     <input type="file" id="file-input" style="display: none;">
     <button class="button-with-image" id="openModalBtn"><img src="Res/settings-sliders.png" alt="Image 3"></button>
+    <button class="button-with-image" id="prism-profile-button" title="Profil auteur" aria-label="Profil auteur"><img src="Res/profile-user.png" alt=""></button>
+    <label class="paper-document-title-control" for="paper-document-title">
+      <input id="paper-document-title" type="text" placeholder="Document sans titre" maxlength="160" autocomplete="off" aria-label="Titre du document en cours">
+    </label>
     <div id="menu" class="hidden" style="left: -100%;">
       <div id="emailDisplay">
           <input placeholder="Recherche ici..." id="textinpunmenu" type="text"></input>
@@ -372,7 +404,7 @@
 </button>
 <input type="file" id="image-input" accept="image/*" style="display: none;">
 
-<button class="tool-container-micro-btn" onclick="toggleTableCreator(event)">
+<button class="tool-container-micro-btn" onmousedown="event.preventDefault(); toggleTableCreator(event)">
   <img src="Res/tab.png" alt="Tableau">
   <h1>Tableau</h1>
 </button>
@@ -567,7 +599,7 @@
       <div id="Autre" class="tabcontent">
         <h3 style="font-family: sans-serif;">Autre</h3>
         <h1 style="font-family: sans-serif;">Paper</h1>
-        <h3 style="font-family: sans-serif;">V.2.1.6 By PRISM / Hugo PIROUX</h3>
+        <h3 style="font-family: sans-serif;">V.2.5.1 By PRISM / Hugo PIROUX</h3>
         <div style="font-family: sans-serif; margin-top: 20px; background-color: #fff3cd; color: #856404; padding: 10px; border-left: 5px solid #ffeeba; margin-bottom: 15px; border-radius: 4px; font-family: sans-serif; font-size: 13px;">
         <strong>⚠️ Attention :</strong> Cette version est une version bêta, elle peut contenir des bug.
       </div>
@@ -815,6 +847,36 @@
     </div>
   </div>
 </div>
-<script src="Script/paper.essencial.bundle.js" defer></script>
+<script src="Script/paper/00-shared-state.js" defer></script>
+<script src="Script/paper/01-ui-settings.js" defer></script>
+<script src="Script/paper/02-page-creation.js" defer></script>
+<script src="Script/paper/03-pagination.js" defer></script>
+<script src="Script/paper/04-page-navigation.js" defer></script>
+<script src="Script/paper/05-editor-controls.js" defer></script>
+<script src="Script/paper/06-page-tools.js" defer></script>
+<script src="Script/paper/07-tables.js" defer></script>
+<script src="Script/paper/08-image-selection.js" defer></script>
+<script src="Script/paper/09-image-layout.js" defer></script>
+<script src="Script/paper/10-pdf-export.js" defer></script>
+<script src="Script/paper/11-comments.js" defer></script>
+<script src="Script/paper/12-integrations.js" defer></script>
+<script src="Script/paper/13-file-io.js" defer></script>
+<script src="Script/paper/14-search-replace.js" defer></script>
+<script src="Script/paper/15-document-tools.js" defer></script>
+<script src="Script/paper/16-chart-rendering.js" defer></script>
+<script src="Script/paper/17-chart-editing.js" defer></script>
+<script src="Script/paper/18-special-characters.js" defer></script>
+<script src="Script/paper/19-history.js" defer></script>
+<script src="Script/paper/20-fonts.js" defer></script>
+<script src="Script/paper/21-formatting-status.js" defer></script>
+<script src="Script/paper/22-html-cleanup.js" defer></script>
+<script src="Script/paper/23-latex-editor.js" defer></script>
+<script src="Script/paper/24-latex-overlay.js" defer></script>
+<script src="Script/paper/25-drawing.js" defer></script>
+<script src="Script/paper/26-markdown-export.js" defer></script>
+<script src="Script/paper/27-document-title.js" defer></script>
+<script src="Script/paper/28-close-confirmation.js" defer></script>
+<script src="Script/profile.js" defer></script>
+<script src="Script/paper/99-initialize.js" defer></script>
 </body>
 </html>
