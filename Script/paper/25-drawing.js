@@ -71,16 +71,26 @@ document.addEventListener('click', (e) => {
 
 function initCanvasEvents(canvas, realPage) {
     const ctx = canvas.getContext('2d');
+    let startX = 0;
+    let startY = 0;
     ctx.lineWidth = 2;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 
+    const getCanvasPoint = (event) => {
+        const rect = canvas.getBoundingClientRect();
+        return {
+            x: (event.clientX - rect.left) * canvas.width / rect.width,
+            y: (event.clientY - rect.top) * canvas.height / rect.height
+        };
+    };
+
     canvas.addEventListener('mousedown', (e) => {
         if (!window.isDrawingMode) return;
         isDrawing = true;
-        const rect = canvas.getBoundingClientRect();
-        startX = e.clientX - rect.left;
-        startY = e.clientY - rect.top;
+        const point = getCanvasPoint(e);
+        startX = point.x;
+        startY = point.y;
         
         ctx.strokeStyle = currentColor;
         ctx.fillStyle = currentColor;
@@ -95,25 +105,23 @@ function initCanvasEvents(canvas, realPage) {
 
     canvas.addEventListener('mousemove', (e) => {
         if (!isDrawing || !window.isDrawingMode) return;
-        const rect = canvas.getBoundingClientRect();
-        const currentX = e.clientX - rect.left;
-        const currentY = e.clientY - rect.top;
+        const point = getCanvasPoint(e);
 
         if (currentTool === 'freehand') {
-            ctx.lineTo(currentX, currentY);
+            ctx.lineTo(point.x, point.y);
             ctx.stroke();
         } else {
             ctx.putImageData(canvasSnapshot, 0, 0);
-            drawShape(ctx, currentTool, startX, startY, currentX, currentY);
+            drawShape(ctx, currentTool, startX, startY, point.x, point.y);
         }
     });
 
     canvas.addEventListener('mouseup', (e) => {
         if (!isDrawing) return;
         if (currentTool !== 'freehand') {
-            const rect = canvas.getBoundingClientRect();
+            const point = getCanvasPoint(e);
             ctx.putImageData(canvasSnapshot, 0, 0);
-            drawShape(ctx, currentTool, startX, startY, e.clientX - rect.left, e.clientY - rect.top);
+            drawShape(ctx, currentTool, startX, startY, point.x, point.y);
         }
         isDrawing = false;
         // Sauvegarde instantanée (anti-perte)
@@ -162,19 +170,20 @@ function drawShape(ctx, tool, x1, y1, x2, y2) {
 }
 
 function setupDrawingLayer() {
-    document.getElementById('content').style.position = 'relative';
+    const pagesContainer = document.getElementById('pages-container');
+    if (!pagesContainer) return;
+
+    pagesContainer.style.position = 'relative';
     let drawingsLayer = document.getElementById('drawings-layer');
     
     if (!drawingsLayer) {
         drawingsLayer = document.createElement('div');
         drawingsLayer.id = 'drawings-layer';
-        // Ce conteneur flotte au-dessus de tout le document
         drawingsLayer.style.cssText = "position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50;";
-        document.getElementById('content').appendChild(drawingsLayer);
+        pagesContainer.appendChild(drawingsLayer);
         
-        // Les "yeux" du calque : si les pages bougent, le calque suit automatiquement
-        new ResizeObserver(() => window.syncDrawingsLayer()).observe(document.getElementById('pages-container'));
-        new MutationObserver(() => window.syncDrawingsLayer()).observe(document.getElementById('pages-container'), { childList: true });
+        new ResizeObserver(() => window.syncDrawingsLayer()).observe(pagesContainer);
+        new MutationObserver(() => window.syncDrawingsLayer()).observe(pagesContainer, { childList: true });
     }
 }
 
@@ -196,7 +205,7 @@ window.syncDrawingsLayer = function() {
             drawingsLayer.appendChild(shadowPage);
         }
         
-        // On aligne parfaitement le calque fantôme sur la vraie page
+        // Le calque partage le zoom du conteneur des pages.
         shadowPage.style.top = page.offsetTop + 'px';
         shadowPage.style.left = page.offsetLeft + 'px';
         shadowPage.style.width = page.offsetWidth + 'px';
