@@ -21,6 +21,13 @@ async function exportToPDF() {
    }
 
    document.body.classList.add('pdf-export-mode');
+   if (typeof window.syncDrawingsLayer === 'function') window.syncDrawingsLayer();
+
+   const restorePageLayout = () => {
+      document.body.classList.remove('pdf-export-mode');
+      if (typeof window.syncDrawingsLayer === 'function') window.syncDrawingsLayer();
+   };
+
    const pdfKeywords = [
       profileMetadata.email,
       profileMetadata.firstName,
@@ -40,7 +47,25 @@ async function exportToPDF() {
       html2canvas: {
          scale: 2,
          useCORS: true,
-         scrollY: 0
+         scrollY: 0,
+         onclone: clonedDocument => {
+            const clonedPagesContainer = clonedDocument.getElementById('pages-container');
+            const clonedDrawingLayer = clonedPagesContainer && clonedPagesContainer.querySelector('#drawings-layer');
+            if (!clonedPagesContainer || !clonedDrawingLayer) return;
+
+            const pages = clonedPagesContainer.querySelectorAll('.page');
+            const shadows = clonedDrawingLayer.querySelectorAll('.dw-shadow-page');
+            pages.forEach((page, index) => {
+               const shadow = shadows[index];
+               if (!shadow) return;
+               shadow.style.top = '0';
+               shadow.style.left = '0';
+               shadow.style.width = '100%';
+               shadow.style.height = '100%';
+               page.appendChild(shadow);
+            });
+            clonedDrawingLayer.remove();
+         }
       },
       jsPDF: {
          unit: 'mm',
@@ -60,9 +85,9 @@ async function exportToPDF() {
    html2pdf().set(opt).from(container).toPdf().get('pdf').then(pdf => {
       pdf.setProperties(pdfProperties);
    }).save().then(() => {
-      document.body.classList.remove('pdf-export-mode');
+      restorePageLayout();
    }).catch(err => {
       console.error("Erreur lors de la génération du PDF", err);
-      document.body.classList.remove('pdf-export-mode');
+      restorePageLayout();
    });
 };

@@ -65,6 +65,22 @@ const setupZoom = () => {
       container.style.transformOrigin = 'top center';
    };
    if (zoomBar) zoomBar.oninput = () => setZ(zoomBar.value / 100);
+   const middleBar = document.getElementById('middle-bar');
+   if (middleBar) {
+      middleBar.addEventListener('wheel', (e) => {
+         const deltaY = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? middleBar.clientWidth : 1);
+         if (Math.abs(deltaY) <= Math.abs(e.deltaX)) return;
+
+         const maxScrollLeft = middleBar.scrollWidth - middleBar.clientWidth;
+         const currentScrollLeft = middleBar.scrollLeft;
+         if (maxScrollLeft <= 0 ||
+             (deltaY > 0 && currentScrollLeft >= maxScrollLeft - 1) ||
+             (deltaY < 0 && currentScrollLeft <= 1)) return;
+
+         e.preventDefault();
+         middleBar.scrollLeft = Math.max(0, Math.min(maxScrollLeft, currentScrollLeft + deltaY));
+      }, { passive: false });
+   }
    document.addEventListener('wheel', (e) => {
       if (e.ctrlKey) {
          e.preventDefault();

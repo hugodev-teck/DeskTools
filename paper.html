@@ -35,34 +35,6 @@
   </div>
 </div>
 
-<div id="drawing-floating-toolbar">
-    <div class="drawing-tools-group">
-      <button class="draw-tool-btn active" data-tool="freehand" title="Trait libre">
-          <img src="Res/trais.png" alt="Trait libre">
-      </button>
-      <button class="draw-tool-btn" data-tool="rect" title="Rectangle">
-          <img src="Res/rectangle.png" alt="Rectangle">
-      </button>
-      <button class="draw-tool-btn" data-tool="roundRect" title="Rectangle arrondi">
-          <img src="Res/rounded-rectangle.png" alt="Rectangle arrondi">
-      </button>
-      <button class="draw-tool-btn" data-tool="arrow" title="Flèche">
-          <img src="Res/flech.png" alt="Flèche">
-      </button>
-  </div>
-    <div class="separator"></div>
-    <div class="drawing-colors-group">
-        <button class="draw-color-btn active" data-color="#000000" style="background:#000000" title="Noir"></button>
-        <button class="draw-color-btn" data-color="#ef4444" style="background:#ef4444" title="Rouge"></button>
-        <button class="draw-color-btn" data-color="#10b981" style="background:#10b981" title="Vert"></button>
-        <button class="draw-color-btn" data-color="#3b82f6" style="background:#3b82f6" title="Bleu"></button>
-        <button class="draw-color-btn" data-color="#f59e0b" style="background:#f59e0b" title="Jaune"></button>
-        <button class="draw-color-btn" data-color="#8b5cf6" style="background:#8b5cf6" title="Violet"></button>
-    </div>
-    <div class="separator"></div>
-    <button onclick="toggleDrawingMode()" title="Fermer" style="background:#fee2e2; color:#dc2626; border:none; padding:6px 10px; border-radius:4px; cursor:pointer; font-weight:bold;">✖</button>
-</div>
-
 <div id="special-char-modal" class="modal" style="z-index: 1000000;">
   <div class="modal-content" style="width: 450px; padding: 25px; border-radius: 12px;">
     <span class="closebtn" onclick="document.getElementById('special-char-modal').style.display='none'">&times;</span>
@@ -463,6 +435,64 @@
   
   <input type="file" id="import-word-input" accept=".docx, .odt" style="display: none;">
 </button>
+  </div>
+
+  <div id="drawing-tool-group" class="tool-group drawing-toolbar" aria-label="Outils de dessin">
+    <div class="group-label">Dessin</div>
+    <button type="button" id="drawing-return-button" class="tool-container-micro-btn drawing-exit-btn" onclick="toggleDrawingMode()" title="Revenir au mode normal">
+      <img src="Res/left-arrow.png" alt="">
+      <h1>Retour</h1>
+    </button>
+    <div class="drawing-toolbar-content">
+      <section class="drawing-toolbar-section" aria-label="Outils">
+        <div class="drawing-tools-group">
+          <button type="button" class="tool-container-micro-btn draw-tool-btn active" data-tool="freehand" title="Crayon" aria-pressed="true">
+            <img src="Res/stylo-modifier.png" alt="">
+            <h1>Crayon</h1>
+          </button>
+          <button type="button" class="tool-container-micro-btn draw-tool-btn" data-tool="bucket" title="Pot de peinture" aria-pressed="false">
+            <img src="Res/paintbrush.png" alt="">
+            <h1>Remplir</h1>
+          </button>
+          <button type="button" class="tool-container-micro-btn draw-tool-btn" data-tool="text" title="Zone de texte" aria-pressed="false">
+            <img src="Res/text.png" alt="">
+            <h1>Texte</h1>
+          </button>
+          <button type="button" class="tool-container-micro-btn draw-tool-btn" data-tool="eraser" title="Gomme" aria-pressed="false">
+            <img src="Res/eraser.png" alt="">
+            <h1>Gomme</h1>
+          </button>
+        </div>
+      </section>
+      <section class="drawing-toolbar-section" aria-label="Formes">
+        <div id="drawing-shape-options" class="drawing-shape-options" role="group" aria-label="Choisir une forme">
+          <button type="button" class="tool-container-micro-btn draw-shape-btn" data-shape="rect" title="Rectangle" aria-pressed="false">
+            <img src="Res/rectangle.png" alt="">
+            <h1>Carre</h1>
+          </button>
+          <button type="button" class="tool-container-micro-btn draw-shape-btn" data-shape="roundRect" title="Rectangle arrondi" aria-pressed="false">
+            <img src="Res/rounded-rectangle.png" alt="">
+            <h1>Arrondi</h1>
+          </button>
+          <button type="button" class="tool-container-micro-btn draw-shape-btn" data-shape="arrow" title="Flèche" aria-pressed="false">
+            <img src="Res/flech.png" alt="">
+            <h1>Flèche</h1>
+          </button>
+        </div>
+      </section>
+        <div id="tool-container-color-2">
+            <button type="button" class="draw-color-btn active" data-color="#000000" style="background:#000000" title="Noir" aria-label="Noir" aria-pressed="true"></button>
+            <button type="button" class="draw-color-btn" data-color="#ef4444" style="background:#ef4444" title="Rouge" aria-label="Rouge" aria-pressed="false"></button>
+            <button type="button" class="draw-color-btn" data-color="#10b981" style="background:#10b981" title="Vert" aria-label="Vert" aria-pressed="false"></button>
+            <button type="button" class="draw-color-btn" data-color="#3b82f6" style="background:#3b82f6" title="Bleu" aria-label="Bleu" aria-pressed="false"></button>
+            <button type="button" class="draw-color-btn" data-color="#f59e0b" style="background:#f59e0b" title="Jaune" aria-label="Jaune" aria-pressed="false"></button>
+            <button type="button" class="draw-color-btn" data-color="#8b5cf6" style="background:#8b5cf6" title="Violet" aria-label="Violet" aria-pressed="false"></button>
+            <button type="button" class="draw-color-btn" data-color="#5b5b5b" style="background:#5b5b5b" title="Gris" aria-label="Gris" aria-pressed="true"></button>
+            <button type="button" class="draw-color-btn" data-color="#4a2222" style="background:#4a2222" title="Marron" aria-label="Marron" aria-pressed="false"></button>
+            <button type="button" class="draw-color-btn" data-color="#10b981" style="background:#10a5b9" title="Bleu turquoise" aria-label="Bleu turquoise" aria-pressed="false"></button>
+            <button type="button" class="draw-color-btn" data-color="#3b82f6" style="background:#12009e" title="Bleu foncé" aria-label="Bleu foncé" aria-pressed="false"></button>
+        </div>
+    </div>
   </div>
 
 
