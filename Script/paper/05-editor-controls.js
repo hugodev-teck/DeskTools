@@ -57,17 +57,49 @@ const bindControls = () => {
    }
 };
 const setupZoom = () => {
+   const content = document.getElementById('content');
+   const syncScrollExtent = () => {
+      if (!content) return;
+
+      let spacer = Array.from(content.children).find(child => child.id === 'zoom-scroll-spacer');
+      const currentSpacerHeight = spacer ? parseFloat(spacer.style.height) || 0 : 0;
+      const containerRect = container.getBoundingClientRect();
+      const contentRect = content.getBoundingClientRect();
+      const requiredHeight = containerRect.bottom - contentRect.top + content.scrollTop;
+      const extraHeight = Math.ceil(requiredHeight - (content.scrollHeight - currentSpacerHeight));
+
+      if (extraHeight <= 1) {
+         if (spacer) spacer.remove();
+         return;
+      }
+
+      if (!spacer) {
+         spacer = document.createElement('div');
+         spacer.id = 'zoom-scroll-spacer';
+         spacer.setAttribute('aria-hidden', 'true');
+         spacer.style.cssText = 'flex: 0 0 auto; width: 1px; visibility: hidden; pointer-events: none;';
+         content.appendChild(spacer);
+      }
+      spacer.style.height = `${extraHeight}px`;
+   };
+   const scheduleScrollExtentSync = () => requestAnimationFrame(syncScrollExtent);
    const setZ = (v) => {
       const f = Math.min(Math.max(0.5, v), 2);
       if (valeurZoom) valeurZoom.textContent = Math.floor(f * 100) + '%';
       if (zoomBar) zoomBar.value = f * 100;
       container.style.transform = `scale(${f})`;
       container.style.transformOrigin = 'top center';
+      scheduleScrollExtentSync();
    };
    if (zoomBar) zoomBar.oninput = () => setZ(zoomBar.value / 100);
+   if (window.ResizeObserver && container) {
+      new ResizeObserver(scheduleScrollExtentSync).observe(container);
+   }
+   scheduleScrollExtentSync();
    const middleBar = document.getElementById('middle-bar');
    if (middleBar) {
       middleBar.addEventListener('wheel', (e) => {
+         if (e.ctrlKey) return;
          const deltaY = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? middleBar.clientWidth : 1);
          if (Math.abs(deltaY) <= Math.abs(e.deltaX)) return;
 

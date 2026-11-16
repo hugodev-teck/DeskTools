@@ -69,7 +69,8 @@ html {
     width: 100%;
     z-index: 9999;
     touch-action: manipulation;
-    overflow: auto
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .button-with-image {
@@ -1585,6 +1586,10 @@ html {
     align-items: flex-start !important;
 }
 
+.pdf-export-mode #zoom-scroll-spacer {
+    display: none !important;
+}
+
 .pdf-export-mode .page {
     box-shadow: none !important;
     margin: 0 !important;
@@ -1624,6 +1629,10 @@ html {
         margin: 0 !important;
         width: max-content !important;
         align-items: flex-start !important;
+    }
+
+    #zoom-scroll-spacer {
+        display: none !important;
     }
 
     .page {
